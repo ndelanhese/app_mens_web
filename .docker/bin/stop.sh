@@ -4,4 +4,4 @@ set -e
 
 source ../.env
 
-docker stop "next-app_$CURRENT_BUILD"
+docker stop "mens_modas_$CURRENT_BUILD"

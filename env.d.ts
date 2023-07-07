@@ -1,5 +1,5 @@
 declare namespace NodeJS {
   export interface ProcessEnv {
-    TESTE: string;
+    NEXT_PUBLIC_BASE_URL: string;
   }
 }

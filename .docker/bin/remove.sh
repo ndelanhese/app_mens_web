@@ -12,5 +12,5 @@ if [ -z "$BUILD_ID" ]; then
 elif [ "$CURRENT_BUILD" == "$BUILD_ID" ]; then
   echo "Current build cannot be deleted."
 else
-  docker rm "next-app_$BUILD_ID"
+  docker rm "mens_modas_$BUILD_ID"
 fi

@@ -4,4 +4,4 @@ set -e
 
 source ../.env
 
-docker exec -it "next-app_$CURRENT_BUILD" sh
+docker exec -it "mens_modas_$CURRENT_BUILD" sh

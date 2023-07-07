@@ -6,8 +6,8 @@ source ../.env
 
 BUILD=$((BUILD + 1))
 
-docker build ../.. -f ../Dockerfile -t "next-app_image_$BUILD"
-docker create --name "next-app_$BUILD" -p 3000:3000 "next-app_image_$BUILD"
+docker build ../.. -f ../Dockerfile -t "mens_modas_image_$BUILD"
+docker create --name "mens_modas_$BUILD" -p 3000:3000 "mens_modas_image_$BUILD"
 
 if [ "$CURRENT_BUILD" == "0" ]; then
   CURRENT_BUILD=$BUILD

@@ -10,10 +10,10 @@ else
   PREVIOUS_BUILD=$CURRENT_BUILD
   CURRENT_BUILD=$((CURRENT_BUILD + 1))
 
-  docker stop "next-app_$PREVIOUS_BUILD"
+  docker stop "mens_modas_$PREVIOUS_BUILD"
 fi
 
-docker start "next-app_$CURRENT_BUILD"
+docker start "mens_modas_$CURRENT_BUILD"
 
 echo "BUILD=${BUILD}
 CURRENT_BUILD=${CURRENT_BUILD}
