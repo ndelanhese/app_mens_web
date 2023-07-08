@@ -5,6 +5,6 @@ export const metadata: Metadata = {
 }
 
 const SignIn = () => {
-  return <section>SignIn</section>
+  return <section className="font-2xl text-2xl">SignIn</section>
 }
 export default SignIn
