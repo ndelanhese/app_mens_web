@@ -4,14 +4,14 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value
   const ONE_MINUTE_IN_SECONDS = 60
   const { pathname } = request.nextUrl
-  if (!token && pathname !== '/login') {
-    return NextResponse.redirect(new URL('/login', request.url), {
+  if (!token && pathname !== '/signin') {
+    return NextResponse.redirect(new URL('/signin', request.url), {
       headers: {
         'Set-Cookie': `redirectTo=${request.url}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
       },
     })
   }
-  if (pathname === '/login' && token) {
+  if (pathname === '/signin' && token) {
     return NextResponse.redirect(new URL('/', request.url), {
       headers: {
         'Set-Cookie': `redirectTo=${request.nextUrl.basePath}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
@@ -39,5 +39,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/login/:path*'],
+  matcher: ['/', '/signin/:path*'],
 }

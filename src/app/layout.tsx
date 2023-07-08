@@ -12,13 +12,13 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Mens Modas',
-    default: 'Mens Modas',
+    template: '%s | Mens Moda Masculina',
+    default: 'Mens Moda Masculina',
   },
-  applicationName: 'Mens Modas referral',
+  applicationName: 'Mens Moda Masculina',
   keywords: [
     'Mens',
-    'Mens Modas',
+    'Mens Moda Masculina',
     'Moda Masculina',
     'Alto Piquiri',
     'Nathan',
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL),
   openGraph: {
     title: {
-      template: '%s | Mens Modas',
-      default: 'Mens Modas',
+      template: '%s | Mens Moda Masculina',
+      default: 'Mens Moda Masculina',
     },
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo nam minima repellat numquam architecto! Atque officia deleniti tempora sed. Quam est maiores voluptate ad ducimus quo eos minima, rerum ea.',

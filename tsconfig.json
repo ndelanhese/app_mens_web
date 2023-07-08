@@ -24,12 +24,9 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@contexts/*": [
-        "./src/contexts/*"
-      ],
+      "@/*": ["./src/*"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@axios": ["./src/services/axios.ts"],
     }
   },
   "include": [
