@@ -19,3 +19,4 @@ export const ControlledInput = (props: InputProps) => {
     </div>
   )
 }
+// Adicionar as props padrao do html
