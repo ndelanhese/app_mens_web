@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react'
-import { Input } from './input'
+import { ControlledInput as Input } from './controlledInput'
 
 const meta: Meta = {
   title: 'Mens Lib/ui/inputs',
@@ -10,6 +10,8 @@ export default meta
 
 type Story = StoryObj<typeof Input>
 
-export const InputDefault: Story = {
-  args: {},
+export const ControlledInput: Story = {
+  args: {
+    label: 'teste',
+  },
 }
