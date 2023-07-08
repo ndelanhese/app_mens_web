@@ -4,7 +4,8 @@
     "@rocketseat/eslint-config/react",
     "plugin:import/typescript",
     "plugin:import/errors",
-    "plugin:import/warnings"
+    "plugin:import/warnings",
+    "plugin:storybook/recommended"
   ],
   "ignorePatterns": [
     "*.d.ts"
@@ -64,7 +65,7 @@
             "pattern": "@axios/**",
             "group": "internal",
             "position": "after"
-          }, 
+          },
           {
             "pattern": "@contexts/**",
             "group": "internal",
