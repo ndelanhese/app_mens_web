@@ -1,9 +1,10 @@
 'use client'
 
 import React from 'react'
+
 import { Bounce, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { ToastProviderProps } from './ToastProvider.types'
+import { ToastProviderProps } from './toastProvider.types'
 
 export const ToastProvider = ({ children }: ToastProviderProps) => {
   return (
