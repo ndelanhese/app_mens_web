@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 import { tv, type VariantProps } from 'tailwind-variants'
 
 const button = tv({
@@ -11,9 +13,9 @@ const button = tv({
       white: 'bg-white-100 text-black-100 hover:bg-black-5',
     },
     size: {
-      sm: 'text-md px-2 py-1',
-      md: 'text-lg px-4 py-2',
-      lg: 'text-lg px-6 py-4',
+      sm: 'text-md px-2 py-1 gap-1',
+      md: 'text-lg px-4 py-2 gap-2',
+      lg: 'text-lg px-6 py-4 gap-2 rounded-2xl',
     },
     disabled: {
       true: 'bg-opacity-5 text-opacity-10 cursor-not-allowed text-black-100',
@@ -52,7 +54,7 @@ const button = tv({
 type ButtonVariants = VariantProps<typeof button>
 
 interface ButtonProps extends ButtonVariants {
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export const Button = (props: ButtonProps) => {
