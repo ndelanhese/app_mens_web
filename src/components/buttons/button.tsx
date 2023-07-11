@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ButtonHTMLAttributes, FC, ReactNode } from 'react'
 
 import { tv, type VariantProps } from 'tailwind-variants'
 
@@ -52,13 +52,23 @@ const button = tv({
   },
 })
 
-type ButtonVariants = VariantProps<typeof button>
-
-interface ButtonProps extends ButtonVariants {
+// TODO -> verificar a tipagem com problema
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export interface ButtonVariants
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof button> {
   children: ReactNode
 }
 
-export const Button = (props: ButtonProps) => {
-  return <button className={button(props)}>{props.children}</button>
+export const Button: FC<ButtonVariants> = ({
+  className,
+  children,
+  ...props
+}) => {
+  return (
+    <button className={button({ className })} {...props}>
+      {children}
+    </button>
+  )
 }
-// Adicionar as props padrao do html

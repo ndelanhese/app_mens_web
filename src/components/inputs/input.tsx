@@ -1,3 +1,5 @@
+import React, { FC, InputHTMLAttributes } from 'react'
+
 import { tv, type VariantProps } from 'tailwind-variants'
 
 const input = tv({
@@ -9,11 +11,10 @@ const input = tv({
   },
 })
 
-type InputVariants = VariantProps<typeof input>
+export interface InputVariants
+  extends InputHTMLAttributes<HTMLInputElement>,
+    VariantProps<typeof input> {}
 
-type InputProps = InputVariants
-
-export const Input = (props: InputProps) => {
-  return <input className={input(props)} />
+export const Input: FC<InputVariants> = ({ className, ...props }) => {
+  return <input className={input({ className })} {...props} />
 }
-// Adicionar as props padrao do html
