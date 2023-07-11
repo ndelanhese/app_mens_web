@@ -50,8 +50,8 @@ module.exports = {
         '2xl': ['3rem', '3.625rem'],
         xl: ['1.5rem', '2.25rem'],
         lg: ['1.125rem', '1.5rem'],
-        md: ['.875rem', '1.25rem'],
-        sm: ['.75rem', '1.125rem'],
+        md: ['0.875rem', '1.25rem'],
+        sm: ['0.75rem', '1.125rem'],
       },
       fontWeight: {
         sb: '600',

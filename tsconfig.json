@@ -27,6 +27,7 @@
       "@/*": ["./src/*"],
       "@contexts/*": ["./src/contexts/*"],
       "@axios": ["./src/services/axios.ts"],
+      "@components/*": ["./src/components/*"],
     }
   },
   "include": [
