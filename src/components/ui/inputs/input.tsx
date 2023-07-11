@@ -1,4 +1,4 @@
-import React, { FC, InputHTMLAttributes } from 'react'
+import { FC, InputHTMLAttributes } from 'react'
 
 import { tv, type VariantProps } from 'tailwind-variants'
 
@@ -13,8 +13,29 @@ const input = tv({
 
 export interface InputVariants
   extends InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof input> {}
+    VariantProps<typeof input> {
+  id: string
+  register?: any
+  errorMessage?: string
+}
 
-export const Input: FC<InputVariants> = ({ className, ...props }) => {
-  return <input className={input({ className })} {...props} />
+export const Input: FC<InputVariants> = ({
+  id,
+  register,
+  errorMessage,
+  className,
+  ...props
+}) => {
+  return (
+    <div className="flex flex-col gap-1">
+      <input
+        className={input({ className })}
+        {...props}
+        {...(register ? register(id) : {})}
+      />
+      {errorMessage && (
+        <span className="text-sm text-red-600">{errorMessage}</span>
+      )}
+    </div>
+  )
 }
