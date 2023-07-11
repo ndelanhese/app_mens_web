@@ -45,29 +45,29 @@ const button = tv({
     },
   ],
   defaultVariants: {
-    size: 'md',
     color: 'primary',
-    fontSize: 'md',
+    size: 'md',
     disabled: false,
   },
 })
 
-// TODO -> verificar a tipagem com problema
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 export interface ButtonVariants
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof button> {
   children: ReactNode
+  color?: 'primary' | 'outline' | 'opaque' | 'white'
 }
 
 export const Button: FC<ButtonVariants> = ({
   className,
+  color,
+  size,
+  disabled,
   children,
   ...props
 }) => {
   return (
-    <button className={button({ className })} {...props}>
+    <button className={button({ className, color, size, disabled })} {...props}>
       {children}
     </button>
   )

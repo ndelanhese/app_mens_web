@@ -21,8 +21,8 @@ const SignIn = () => {
       </div>
       <form className="flex w-[24.25rem] flex-col gap-7">
         <div className="flex flex-col gap-4">
-          <Input />
-          <Input />
+          <Input placeholder="e-mail" />
+          <Input placeholder="senha" />
         </div>
         <Button size="lg" color="primary">
           Acessar
