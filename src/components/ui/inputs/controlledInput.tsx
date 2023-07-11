@@ -10,18 +10,20 @@ const controlledInput = tv({
 export interface InputVariants
   extends InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof controlledInput> {
+  id: string
   label: string
 }
 
 export const ControlledInput: FC<InputVariants> = ({
-  className,
+  id,
   label,
+  className,
   ...props
 }) => {
   return (
     <div className={controlledInput({ className })}>
       <label className="text-lg text-black-40">{label}</label>
-      <Input hasLabel {...props} />
+      <Input id={id} hasLabel {...props} />
     </div>
   )
 }
