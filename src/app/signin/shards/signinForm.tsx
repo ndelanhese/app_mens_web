@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+import { Spinner } from '@components/icons/spinner'
 import { Input } from '@components/ui/inputs/input'
 import { Button } from '@components/ui/buttons/button'
 
@@ -30,7 +31,6 @@ export const SigninForm = () => {
     if (redirectTo) {
       return redirectTo
     }
-    return '/'
   }
 
   const onSubmit: SubmitHandler<SigninSchema> = async (data) => {
@@ -38,7 +38,7 @@ export const SigninForm = () => {
     setIsLoading(true)
     try {
       await signin(email, password)
-      router.push(getRedirectTo())
+      router.push(getRedirectTo() ?? '/')
     } catch (error: Error | any) {
       toast.error(error?.response?.data?.message)
     } finally {
@@ -67,7 +67,7 @@ export const SigninForm = () => {
         />
       </div>
       <Button size="lg" color="primary">
-        Acessar
+        {isLoading ? <Spinner className="dark:text-white" /> : 'Acessar'}
       </Button>
     </form>
   )

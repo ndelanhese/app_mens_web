@@ -15,7 +15,7 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
         autoClose={5000}
         transition={Bounce}
         icon
-        theme="colored"
+        theme="dark"
       />
     </>
   )
