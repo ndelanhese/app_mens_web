@@ -1,8 +1,11 @@
-import { ReactNode } from 'react'
 import { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { ReactNode } from 'react'
 
-import { ToastProvider } from '@contexts/toast/toastProvider'
+import { Toaster } from '@/components/ui/shadcn/toast/toaster'
+
+import { ThemeProvider } from '@contexts/theme'
+
 import './globals.css'
 
 const inter = Inter({
@@ -52,7 +55,10 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       <body
         className={`${inter.variable} flex min-h-[100svh] w-screen font-sans antialiased`}
       >
-        <ToastProvider>{children}</ToastProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   )
