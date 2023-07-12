@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+import { Spinner } from '@components/icons/spinner'
 import { Input } from '@components/ui/inputs/input'
 import { Button } from '@components/ui/buttons/button'
 
@@ -67,7 +68,7 @@ export const SigninForm = () => {
         />
       </div>
       <Button size="lg" color="primary">
-        Acessar
+        {isLoading ? <Spinner className="dark:text-white" /> : 'Acessar'}
       </Button>
     </form>
   )

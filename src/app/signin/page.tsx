@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const SignIn = () => {
   return (
-    <section className="z-10 flex h-full w-full flex-col items-center justify-center gap-7">
+    <section className="flex h-full w-full flex-col items-center justify-center gap-7">
       <User className="h-[6rem] w-[6rem] rounded-full border border-black-80 p-4 dark:border-white-40 dark:text-white-40" />
       <div className="flex flex-col items-center justify-center gap-2">
         <h1 className="dark:text-white text-xl font-sb">Entrar no sistema</h1>
