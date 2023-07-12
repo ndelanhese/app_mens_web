@@ -31,7 +31,6 @@ export const SigninForm = () => {
     if (redirectTo) {
       return redirectTo
     }
-    return '/'
   }
 
   const onSubmit: SubmitHandler<SigninSchema> = async (data) => {
@@ -39,7 +38,7 @@ export const SigninForm = () => {
     setIsLoading(true)
     try {
       await signin(email, password)
-      router.push(getRedirectTo())
+      router.push(getRedirectTo() ?? '/')
     } catch (error: Error | any) {
       toast.error(error?.response?.data?.message)
     } finally {
