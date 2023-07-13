@@ -1,7 +1,7 @@
 const Home = () => (
-  <main>
-    <h1>hello world</h1>
-  </main>
+  <div>
+    <h1>hello world!!!</h1>
+  </div>
 )
 
 export default Home

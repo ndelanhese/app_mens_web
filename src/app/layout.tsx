@@ -66,7 +66,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
               <Sidebar />
               <main className="flex flex-1 flex-col gap-4">
                 <nav className="flex h-16 w-full items-center justify-between border-b border-black-10 px-7 py-5 dark:border-white-10">
-                  <div className="invisible w-12 sm:visible sm:w-auto sm:pl-14">
+                  <div className="invisible w-12 sm:visible sm:w-auto">
                     Dashboard / ...
                   </div>
                   <div className="inline-flex items-center space-x-4">
