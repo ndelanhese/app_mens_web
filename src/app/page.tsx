@@ -1,35 +1,32 @@
-import { ToggleTheme } from '@/components/shared/toggleTheme/toggleTheme'
+import { CommandKey } from '@components/shared/commandKey/commandKey'
+import { Sidebar } from '@components/shared/sidebar/sidebar'
+import { ToggleTheme } from '@components/shared/toggleTheme/toggleTheme'
+import { Input } from '@components/ui/shadcn/input'
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@components/ui/shadcn/avatar'
-
-import { Sidebar } from 'lucide-react'
+import { Search } from 'lucide-react'
 
 const Home = () => (
   <div className="flex h-screen w-screen flex-col">
     <div className="flex flex-1">
-      <aside className="w-48 border-r border-black-10 px-4 py-5 dark:border-white-10">
-        <div className="flex items-center gap-2">
-          <Avatar className="h-6 w-6">
-            <AvatarImage
-              src="https://github.com/ndelanhese.png"
-              alt="@ndelanhese"
-            />
-            <AvatarFallback>ND</AvatarFallback>
-          </Avatar>
-          <span className="text-md font-re dark:text-white-100">Nathan</span>
-        </div>
-        <nav className="mt-10 space-y-5">nav link</nav>
-      </aside>
+      <Sidebar />
       <main className="flex flex-1 flex-col gap-4">
         <nav className="flex h-16 w-full items-center justify-between border-b border-black-10 px-7 py-5 dark:border-white-10">
-          <div>
-            <Sidebar className="h-5 w-5" />
+          <div className="invisible w-12 sm:block sm:w-auto sm:pl-14">
+            Dashboard / ...
           </div>
-          <div>
+          <div className="inline-flex items-center space-x-4">
+            <div className="relative flex items-center">
+              <div className="absolute left-2 flex flex-row items-center gap-1">
+                <Search className="h-4 w-4" />
+              </div>
+              <Input
+                className="border border-white-10 bg-zinc-800 pl-8 pr-11 dark:bg-black-100"
+                placeholder="Pesquisar..."
+              />
+              <div className="absolute right-2 flex flex-row items-center gap-1">
+                <CommandKey />
+              </div>
+            </div>
             <ToggleTheme />
           </div>
         </nav>
