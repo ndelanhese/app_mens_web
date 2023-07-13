@@ -56,11 +56,11 @@ module.exports = {
         layer: '#FFF',
       },
       fontSize: {
-        '2xl': ['3rem', '3.625rem'],
-        xl: ['1.5rem', '2.25rem'],
-        lg: ['1.125rem', '1.5rem'],
-        md: ['0.875rem', '1.25rem'],
-        sm: ['0.75rem', '1.125rem'],
+        '2xl': ['3rem', '3.625rem'], // 48px
+        xl: ['1.5rem', '2.25rem'], // 24px
+        lg: ['1.125rem', '1.5rem'], // 18px
+        md: ['0.875rem', '1.25rem'], // 14px
+        sm: ['0.75rem', '1.125rem'], // 12px
       },
       fontWeight: {
         sb: '600',
