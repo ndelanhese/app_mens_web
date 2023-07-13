@@ -19,7 +19,7 @@ export const Sidebar = () => {
   return isSidebarOpen ? (
     <aside
       className={twMerge(
-        'absolute z-10 h-screen w-screen border-r border-black-10 bg-white-100 px-4 py-5 dark:border-white-10 dark:bg-black-100 sm:relative sm:w-48 sm:bg-black-100',
+        'absolute z-10 h-screen w-screen border-r border-black-10 bg-white-100 px-4 py-5 dark:border-white-10 dark:bg-black-100 sm:relative sm:w-48',
         isSidebarOpen ? 'block' : 'hidden',
       )}
     >
