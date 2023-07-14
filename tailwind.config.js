@@ -1,15 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: ['class'],
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
   theme: {
-    extend: {
-      fontFamily: {
-        sans: 'var(--font-inter)',
+    fontFamily: {
+      sans: 'var(--font-inter)',
+    },
+    container: {
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px',
       },
+    },
+    extend: {
       colors: {
         black: {
           100: '#1C1C1C',
@@ -47,17 +56,31 @@ module.exports = {
         layer: '#FFF',
       },
       fontSize: {
-        '2xl': ['3rem', '3.625rem'],
-        xl: ['1.5rem', '2.25rem'],
-        lg: ['1.125rem', '1.5rem'],
-        md: ['0.875rem', '1.25rem'],
-        sm: ['0.75rem', '1.125rem'],
+        '2xl': ['3rem', '3.625rem'], // 48px
+        xl: ['1.5rem', '2.25rem'], // 24px
+        lg: ['1.125rem', '1.5rem'], // 18px
+        md: ['0.875rem', '1.25rem'], // 14px
+        sm: ['0.75rem', '1.125rem'], // 12px
       },
       fontWeight: {
         sb: '600',
         re: '400',
       },
+      keyframes: {
+        'accordion-down': {
+          from: { height: 0 },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: 0 },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+      },
     },
   },
-  plugins: [],
+  plugins: [require('tailwindcss-animate')],
 }

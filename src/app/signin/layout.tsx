@@ -10,3 +10,4 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
   )
 }
 export default RootLayout
+// FIXME: remove root layout from home
