@@ -125,10 +125,7 @@ export const Sidebar = () => {
           </Accordion>
         </div>
         <Link href="api/auth/signout" passHref prefetch={false} shallow={true}>
-          <Button
-            variant="ghost"
-            className="text-red-500 hover:bg-transparent hover:text-black-100 dark:hover:bg-transparent dark:hover:text-white-100"
-          >
+          <Button variant="destructive" className="w-full text-md">
             <LogOut className="mr-2 h-5 w-5" /> Sair
           </Button>
         </Link>
