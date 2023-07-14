@@ -37,7 +37,7 @@ export const SigninForm = () => {
     const { email, password } = data
     setIsLoading(true)
     try {
-      await signin(email, password)
+      await signin(email.toLowerCase().trim(), password)
       router.push(getRedirectTo() ?? '/')
     } catch (error: Error | any) {
       toast.error(error?.response?.data?.message)
@@ -57,6 +57,7 @@ export const SigninForm = () => {
           placeholder="e-mail"
           register={register}
           errorMessage={errors?.email?.message}
+          transform="lowercase"
         />
         <Input
           id="password"

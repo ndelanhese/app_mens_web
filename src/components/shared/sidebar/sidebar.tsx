@@ -1,17 +1,25 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 import { Button } from '@/components/ui/shadcn/button'
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@components/ui/shadcn/accordion'
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from '@components/ui/shadcn/avatar'
 
-import { twMerge } from 'tailwind-merge'
 import { SidebarOpen, X } from 'lucide-react'
+import { twMerge } from 'tailwind-merge'
+import { SidebarLink } from './sidebarLink'
 
 export const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
@@ -43,7 +51,72 @@ export const Sidebar = () => {
           <X className="h-5 w-5" />
         </Button>
       </div>
-      <nav className="mt-10 space-y-5">nav link</nav>
+      <div className="mt-10 overflow-y-scroll sm:mt-14 sm:h-[calc(100vh-12.5rem)]">
+        <Link href="/" passHref>
+          <nav className="border-b pb-4 font-medium hover:underline ">
+            Dashboard
+          </nav>
+        </Link>
+        <Accordion type="multiple">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Administração</AccordionTrigger>
+            <AccordionContent>
+              <div className="flex w-full flex-col gap-2">
+                <SidebarLink href="/users" title="Usuários" />
+                <SidebarLink
+                  href="/roles-permissions"
+                  title="Papéis e Permissões"
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Gestão de Dados</AccordionTrigger>
+            <AccordionContent>
+              <div className="flex w-full flex-col gap-2">
+                <SidebarLink href="/brands" title="Marcas" />
+                <SidebarLink href="/categories" title="Categorias" />
+                <SidebarLink href="/products" title="Produtos" />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-3">
+            <AccordionTrigger>Clientes</AccordionTrigger>
+            <AccordionContent>
+              <div className="flex w-full flex-col gap-2">
+                <SidebarLink href="/orders" title="Pedidos" />
+                <SidebarLink href="/sales" title="Vendas" />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-4">
+            <AccordionTrigger>Colaboradores</AccordionTrigger>
+            <AccordionContent>
+              <div className="flex w-full flex-col gap-2">
+                <SidebarLink href="/employees" title="Funcionários" />
+                <SidebarLink href="/suppliers" title="Fornecedores" />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-5">
+            <AccordionTrigger>Financeiro</AccordionTrigger>
+            <AccordionContent>
+              <div className="flex w-full flex-col gap-2">
+                <SidebarLink href="/summaries" title="Relatórios financeiros" />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-6">
+            <AccordionTrigger>Promoções</AccordionTrigger>
+            <AccordionContent>
+              <div className="flex w-full flex-col gap-2">
+                <SidebarLink href="/promotions-categories" title="Categorias" />
+                <SidebarLink href="/promotions" title="Promoções" />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
     </aside>
   ) : (
     <Button

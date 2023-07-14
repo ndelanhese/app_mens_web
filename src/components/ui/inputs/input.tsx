@@ -8,6 +8,16 @@ const input = tv({
     hasLabel: {
       true: 'border-none w-full px-0 py-0',
     },
+    transform: {
+      none: 'normal-case',
+      uppercase: 'uppercase',
+      lowercase: 'lowercase',
+      capitalize: 'capitalize',
+    },
+  },
+  defaultVariants: {
+    transform: 'none',
+    hasLabel: false,
   },
 })
 
