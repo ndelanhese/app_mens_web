@@ -115,7 +115,7 @@ export const Sidebar = () => {
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
                   <SidebarLink
-                    href="/promotions-categories"
+                    href="/promotion-categories"
                     title="Categorias"
                   />
                   <SidebarLink href="/promotions" title="Promoções" />
