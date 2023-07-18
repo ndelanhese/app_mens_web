@@ -11,7 +11,7 @@ export const CommandKeySearchBar = () => {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="relative flex items-center">
+    <div className="relative hidden items-center sm:flex">
       <div className="absolute left-2 flex flex-row items-center gap-1">
         <Search className="h-4 w-4" />
       </div>
