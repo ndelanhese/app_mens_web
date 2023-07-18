@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/shadcn/button'
@@ -41,9 +41,12 @@ import { parseCookies } from 'nookies'
 
 export const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
-  const { user } = parseCookies()
-
-  const userName = getFirstName(JSON.parse(user).name)
+  const [userName, setUserName] = useState('')
+  useEffect(() => {
+    const { user } = parseCookies()
+    const name = getFirstName(JSON?.parse(user)?.name)
+    setUserName(name)
+  }, [])
 
   return isSidebarOpen ? (
     <aside

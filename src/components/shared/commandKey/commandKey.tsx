@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import {
   CommandDialog,
@@ -14,13 +14,14 @@ import {
 } from '@/components/ui/shadcn/command/command'
 
 import { CreditCard, Settings, User } from 'lucide-react'
+import { CommandKeyProps } from './commandKey.types'
 import { CommandKeyItems } from './commandKeyItems'
 
-export function CommandKey({ open, setOpen }) {
+export function CommandKey({ open, setOpen }: CommandKeyProps) {
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && e.ctrlKey) {
-        setOpen((open) => !open)
+        setOpen(!open)
         e.preventDefault()
       }
     }

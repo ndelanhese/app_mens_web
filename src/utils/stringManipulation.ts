@@ -1,1 +1,6 @@
-export const getFirstName = (fullName: string) => fullName.split(' ')[0]
+export const getFirstName = (fullName?: string) => {
+  if (fullName) {
+    return fullName.split(' ')[0]
+  }
+  return 'Usuário'
+}

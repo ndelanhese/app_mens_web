@@ -5,3 +5,8 @@ export type CommandKeyItemProps = {
   route: string
   title: string
 }
+
+export type CommandKeyProps = {
+  open: boolean
+  setOpen: (open: boolean) => void
+}
