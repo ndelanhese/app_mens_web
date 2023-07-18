@@ -18,7 +18,23 @@ import {
   AvatarImage,
 } from '@components/ui/shadcn/avatar'
 
-import { LogOut, SidebarOpen, X } from 'lucide-react'
+import {
+  LogOut,
+  SidebarOpen,
+  X,
+  ClipboardList,
+  Container,
+  Library,
+  Newspaper,
+  PackageOpen,
+  Percent,
+  PersonStanding,
+  ScrollText,
+  ShoppingCart,
+  Tags,
+  Users,
+  WalletCards,
+} from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
 import { SidebarLink } from './sidebarLink'
 import { parseCookies } from 'nookies'
@@ -32,7 +48,7 @@ export const Sidebar = () => {
   return isSidebarOpen ? (
     <aside
       className={twMerge(
-        'absolute z-10 h-screen w-screen border-r border-black-10 bg-white-100 px-4 py-5 dark:border-white-10 dark:bg-black-100 sm:relative sm:w-48',
+        'absolute z-10 h-screen w-screen border-r border-black-10 bg-white-100 px-4 py-5 dark:border-white-10 dark:bg-black-100 sm:relative sm:w-56',
         isSidebarOpen ? 'block' : 'hidden',
       )}
     >
@@ -70,10 +86,11 @@ export const Sidebar = () => {
               <AccordionTrigger>Administração</AccordionTrigger>
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
-                  <SidebarLink href="/users" title="Usuários" />
+                  <SidebarLink href="/users" title="Usuários" icon={Users} />
                   <SidebarLink
                     href="/roles-permissions"
                     title="Papéis e Permissões"
+                    icon={ScrollText}
                   />
                 </div>
               </AccordionContent>
@@ -82,9 +99,17 @@ export const Sidebar = () => {
               <AccordionTrigger>Gestão de Dados</AccordionTrigger>
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
-                  <SidebarLink href="/brands" title="Marcas" />
-                  <SidebarLink href="/categories" title="Categorias" />
-                  <SidebarLink href="/products" title="Produtos" />
+                  <SidebarLink href="/brands" title="Marcas" icon={Tags} />
+                  <SidebarLink
+                    href="/categories"
+                    title="Categorias"
+                    icon={Library}
+                  />
+                  <SidebarLink
+                    href="/products"
+                    title="Produtos"
+                    icon={PackageOpen}
+                  />
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -92,8 +117,16 @@ export const Sidebar = () => {
               <AccordionTrigger>Clientes</AccordionTrigger>
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
-                  <SidebarLink href="/orders" title="Pedidos" />
-                  <SidebarLink href="/sales" title="Vendas" />
+                  <SidebarLink
+                    href="/orders"
+                    title="Pedidos"
+                    icon={Newspaper}
+                  />
+                  <SidebarLink
+                    href="/sales"
+                    title="Vendas"
+                    icon={ShoppingCart}
+                  />
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -101,8 +134,16 @@ export const Sidebar = () => {
               <AccordionTrigger>Colaboradores</AccordionTrigger>
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
-                  <SidebarLink href="/employees" title="Funcionários" />
-                  <SidebarLink href="/suppliers" title="Fornecedores" />
+                  <SidebarLink
+                    href="/employees"
+                    title="Funcionários"
+                    icon={PersonStanding}
+                  />
+                  <SidebarLink
+                    href="/suppliers"
+                    title="Fornecedores"
+                    icon={Container}
+                  />
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -113,6 +154,7 @@ export const Sidebar = () => {
                   <SidebarLink
                     href="/summaries"
                     title="Relatórios financeiros"
+                    icon={ClipboardList}
                   />
                 </div>
               </AccordionContent>
@@ -124,8 +166,13 @@ export const Sidebar = () => {
                   <SidebarLink
                     href="/promotion-categories"
                     title="Categorias"
+                    icon={WalletCards}
                   />
-                  <SidebarLink href="/promotions" title="Promoções" />
+                  <SidebarLink
+                    href="/promotions"
+                    title="Promoções"
+                    icon={Percent}
+                  />
                 </div>
               </AccordionContent>
             </AccordionItem>
