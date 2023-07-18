@@ -40,19 +40,27 @@ import { SidebarLink } from './sidebarLink'
 import { parseCookies } from 'nookies'
 
 export const Sidebar = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const isMobile = window.innerWidth < 640
+  const [isSidebarOpen, setIsSidebarOpen] = useState(!isMobile)
   const [userName, setUserName] = useState('')
+
   useEffect(() => {
     const { user } = parseCookies()
     const name = getFirstName(JSON?.parse(user)?.name)
     setUserName(name)
   }, [])
 
+  const handleLinkClick = () => {
+    if (isMobile) {
+      setIsSidebarOpen(!isSidebarOpen)
+    }
+  }
+
   return isSidebarOpen ? (
     <aside
       className={twMerge(
         'absolute z-10 h-screen w-screen border-r border-black-10 bg-white-100 px-4 py-5 dark:border-white-10 dark:bg-black-100 sm:relative sm:w-56',
-        isSidebarOpen ? 'block' : 'hidden',
+        isSidebarOpen ? 'block' : 'hidden sm:block',
       )}
     >
       <div className="flex h-full w-full flex-col justify-between">
@@ -73,14 +81,17 @@ export const Sidebar = () => {
             variant="outline"
             size="icon"
             className="bg-white-100 dark:bg-black-100 sm:hidden"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            onClick={handleLinkClick}
           >
             <X className="h-5 w-5" />
           </Button>
         </div>
         <div className="overflow-y-auto sm:mt-6 sm:h-[calc(100vh-13rem)]">
           <Link href="/" passHref>
-            <nav className="border-b pb-4 font-medium hover:underline ">
+            <nav
+              className="border-b pb-4 font-medium hover:underline"
+              onClick={handleLinkClick}
+            >
               Dashboard
             </nav>
           </Link>
@@ -89,11 +100,17 @@ export const Sidebar = () => {
               <AccordionTrigger>Administração</AccordionTrigger>
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
-                  <SidebarLink href="/users" title="Usuários" icon={Users} />
+                  <SidebarLink
+                    href="/users"
+                    title="Usuários"
+                    icon={Users}
+                    onClick={handleLinkClick}
+                  />
                   <SidebarLink
                     href="/roles-permissions"
                     title="Papéis e Permissões"
                     icon={ScrollText}
+                    onClick={handleLinkClick}
                   />
                 </div>
               </AccordionContent>
@@ -102,16 +119,23 @@ export const Sidebar = () => {
               <AccordionTrigger>Gestão de Dados</AccordionTrigger>
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
-                  <SidebarLink href="/brands" title="Marcas" icon={Tags} />
+                  <SidebarLink
+                    href="/brands"
+                    title="Marcas"
+                    icon={Tags}
+                    onClick={handleLinkClick}
+                  />
                   <SidebarLink
                     href="/categories"
                     title="Categorias"
                     icon={Library}
+                    onClick={handleLinkClick}
                   />
                   <SidebarLink
                     href="/products"
                     title="Produtos"
                     icon={PackageOpen}
+                    onClick={handleLinkClick}
                   />
                 </div>
               </AccordionContent>
@@ -124,11 +148,13 @@ export const Sidebar = () => {
                     href="/orders"
                     title="Pedidos"
                     icon={Newspaper}
+                    onClick={handleLinkClick}
                   />
                   <SidebarLink
                     href="/sales"
                     title="Vendas"
                     icon={ShoppingCart}
+                    onClick={handleLinkClick}
                   />
                 </div>
               </AccordionContent>
@@ -141,11 +167,13 @@ export const Sidebar = () => {
                     href="/employees"
                     title="Funcionários"
                     icon={PersonStanding}
+                    onClick={handleLinkClick}
                   />
                   <SidebarLink
                     href="/suppliers"
                     title="Fornecedores"
                     icon={Container}
+                    onClick={handleLinkClick}
                   />
                 </div>
               </AccordionContent>
@@ -158,6 +186,7 @@ export const Sidebar = () => {
                     href="/summaries"
                     title="Relatórios financeiros"
                     icon={ClipboardList}
+                    onClick={handleLinkClick}
                   />
                 </div>
               </AccordionContent>
@@ -170,11 +199,13 @@ export const Sidebar = () => {
                     href="/promotion-categories"
                     title="Categorias"
                     icon={WalletCards}
+                    onClick={handleLinkClick}
                   />
                   <SidebarLink
                     href="/promotions"
                     title="Promoções"
                     icon={Percent}
+                    onClick={handleLinkClick}
                   />
                 </div>
               </AccordionContent>
