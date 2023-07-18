@@ -75,7 +75,7 @@ export const Sidebar = () => {
             <X className="h-5 w-5" />
           </Button>
         </div>
-        <div className="overflow-y-scroll sm:mt-6 sm:h-[calc(100vh-13rem)]">
+        <div className="overflow-y-auto sm:mt-6 sm:h-[calc(100vh-13rem)]">
           <Link href="/" passHref>
             <nav className="border-b pb-4 font-medium hover:underline ">
               Dashboard
