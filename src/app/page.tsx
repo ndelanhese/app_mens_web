@@ -1,9 +1,6 @@
-import { CommandKey } from '@components/shared/commandKey/commandKey'
+import { CommandKeySearchBar } from '@components/shared/commandKey/commandKeySearchBar'
 import { Sidebar } from '@components/shared/sidebar/sidebar'
 import { ToggleTheme } from '@components/shared/toggleTheme/toggleTheme'
-import { Input } from '@components/ui/shadcn/input'
-
-import { Search } from 'lucide-react'
 
 const Home = () => (
   <div className="flex h-screen w-screen flex-col">
@@ -15,18 +12,7 @@ const Home = () => (
             Tela Inicial
           </div>
           <div className="inline-flex items-center space-x-4">
-            <div className="relative flex items-center">
-              <div className="absolute left-2 flex flex-row items-center gap-1">
-                <Search className="h-4 w-4" />
-              </div>
-              <Input
-                className="border border-black-10 bg-white-100 pl-8 pr-11 dark:border-white-10 dark:bg-black-100"
-                placeholder="Pesquisar..."
-              />
-              <div className="absolute right-2 flex flex-row items-center gap-1">
-                <CommandKey />
-              </div>
-            </div>
+            <CommandKeySearchBar />
             <ToggleTheme />
           </div>
         </nav>

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/shadcn/button'
+import { getFirstName } from '@/utils/stringManipulation'
 
 import {
   Accordion,
@@ -20,9 +21,13 @@ import {
 import { LogOut, SidebarOpen, X } from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
 import { SidebarLink } from './sidebarLink'
+import { parseCookies } from 'nookies'
 
 export const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const { user } = parseCookies()
+
+  const userName = getFirstName(JSON.parse(user).name)
 
   return isSidebarOpen ? (
     <aside
@@ -36,12 +41,14 @@ export const Sidebar = () => {
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
               <AvatarImage
-                src="https://github.com/ndelanhese.png"
+                src="https://source.unsplash.com/random/24x24"
                 alt="@ndelanhese"
               />
-              <AvatarFallback>ND</AvatarFallback>
+              <AvatarFallback></AvatarFallback>
             </Avatar>
-            <span className="text-md font-re dark:text-white-100">Nathan</span>
+            <span className="text-md font-re dark:text-white-100">
+              {userName}
+            </span>
           </div>
           <Button
             variant="outline"
@@ -125,7 +132,10 @@ export const Sidebar = () => {
           </Accordion>
         </div>
         <Link href="api/auth/signout" passHref prefetch={false} shallow={true}>
-          <Button variant="destructive" className="w-full text-md">
+          <Button
+            variant="destructive"
+            className="w-full bg-opacity-80 text-md dark:bg-opacity-40"
+          >
             <LogOut className="mr-2 h-5 w-5" /> Sair
           </Button>
         </Link>
