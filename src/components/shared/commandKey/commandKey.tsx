@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import {
   CommandDialog,
@@ -13,22 +13,15 @@ import {
   CommandShortcut,
 } from '@/components/ui/shadcn/command/command'
 
-import {
-  Calculator,
-  Calendar,
-  CreditCard,
-  Settings,
-  Smile,
-  User,
-} from 'lucide-react'
+import { CreditCard, Settings, User } from 'lucide-react'
+import { CommandKeyProps } from './commandKey.types'
+import { CommandKeyItems } from './commandKeyItems'
 
-export function CommandKey() {
-  const [open, setOpen] = useState(false)
-
+export function CommandKey({ open, setOpen }: CommandKeyProps) {
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && e.ctrlKey) {
-        setOpen((open) => !open)
+        setOpen(!open)
         e.preventDefault()
       }
     }
@@ -45,23 +38,10 @@ export function CommandKey() {
         </kbd>
       </p>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput placeholder="Aperte um comando ou pesquise..." />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Calendar className="mr-2 h-4 w-4" />
-              <span>Calendar</span>
-            </CommandItem>
-            <CommandItem>
-              <Smile className="mr-2 h-4 w-4" />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem>
-              <Calculator className="mr-2 h-4 w-4" />
-              <span>Calculator</span>
-            </CommandItem>
-          </CommandGroup>
+          <CommandEmpty>Sem resultados.</CommandEmpty>
+          <CommandKeyItems />
           <CommandSeparator />
           <CommandGroup heading="Settings">
             <CommandItem>

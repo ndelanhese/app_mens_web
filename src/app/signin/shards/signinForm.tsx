@@ -1,27 +1,27 @@
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { Spinner } from '@components/icons/spinner'
-import { Input } from '@components/ui/inputs/input'
-import { Button } from '@components/ui/buttons/button'
+import { useToast } from '@/components/ui/shadcn/toast/use-toast'
 
-import { SigninSchema, signinSchema } from './signinForm.schema'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Spinner } from '@components/icons/spinner'
+import { Button } from '@components/ui/buttons/button'
+import { Input } from '@components/ui/inputs/input'
+
 import { zodResolver } from '@hookform/resolvers/zod'
-import { toast } from 'react-toastify'
-import { signin } from './api'
 import { parseCookies } from 'nookies'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { signin } from './api'
+import { SigninSchema, signinSchema } from './signinForm.schema'
 
 export const SigninForm = () => {
-  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const { toast } = useToast()
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SigninSchema>({
     resolver: zodResolver(signinSchema),
   })
@@ -31,18 +31,20 @@ export const SigninForm = () => {
     if (redirectTo) {
       return redirectTo
     }
+    return '/'
   }
 
   const onSubmit: SubmitHandler<SigninSchema> = async (data) => {
     const { email, password } = data
-    setIsLoading(true)
     try {
       await signin(email.toLowerCase().trim(), password)
-      router.push(getRedirectTo() ?? '/')
+      router.push(getRedirectTo())
     } catch (error: Error | any) {
-      toast.error(error?.response?.data?.message)
-    } finally {
-      setIsLoading(false)
+      toast({
+        title: 'Erro ao acessar',
+        description: error?.response?.data?.message,
+        variant: 'destructive',
+      })
     }
   }
 
@@ -68,7 +70,7 @@ export const SigninForm = () => {
         />
       </div>
       <Button size="lg" color="primary">
-        {isLoading ? <Spinner className="dark:text-white" /> : 'Acessar'}
+        {isSubmitting ? <Spinner className="dark:text-white" /> : 'Acessar'}
       </Button>
     </form>
   )
