@@ -1,5 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+const isAProtectedRoute = (pathname: string) => {
+  return (
+    pathname.includes('/users') ||
+    pathname.includes('/roles-permissions') ||
+    pathname.includes('/roles-permissions') ||
+    pathname.includes('/brands') ||
+    pathname.includes('/brands') ||
+    pathname.includes('/categories') ||
+    pathname.includes('/products') ||
+    pathname.includes('/orders') ||
+    pathname.includes('/sales') ||
+    pathname.includes('/employees') ||
+    pathname.includes('/suppliers') ||
+    pathname.includes('/summaries') ||
+    pathname.includes('/promotion-categories') ||
+    pathname.includes('/promotions')
+  )
+}
+
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value
   const ONE_MINUTE_IN_SECONDS = 60
@@ -25,8 +44,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  const isProtectedRoute =
-    pathname.includes('/usuarios') || pathname.includes('/financeiro')
+  const isProtectedRoute = isAProtectedRoute(pathname)
   if (isProtectedRoute) {
     return NextResponse.redirect(new URL('/', request.url), {
       headers: {
@@ -39,5 +57,20 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/signin/:path*'],
+  matcher: [
+    '/',
+    '/signin',
+    '/users/:path*',
+    '/roles-permissions/:path*',
+    '/brands/:path*',
+    '/categories/:path*',
+    '/products/:path*',
+    '/orders/:path*',
+    '/sales/:path*',
+    '/employees/:path*',
+    '/suppliers/:path*',
+    '/summaries/:path*',
+    '/promotion-categories/:path*',
+    '/promotions/:path*',
+  ],
 }

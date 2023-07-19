@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
   const redirectUrl = new URL('/', request.url)
+  const TOKEN_COOKIE = 'token=; Path=/; max-age=0;'
+  const REDIRECT_TO_COOKIE = 'redirectTo=; Path=/; max-age=0;'
+  const header = new Headers()
+  header.append('Set-Cookie', TOKEN_COOKIE)
+  header.append('Set-Cookie', REDIRECT_TO_COOKIE)
   return NextResponse.redirect(redirectUrl, {
-    headers: {
-      'Set-Cookie': `token=; Path=/; max-age=0;`,
-    },
+    headers: header,
   })
 }

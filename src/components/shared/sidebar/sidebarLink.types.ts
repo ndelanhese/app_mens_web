@@ -4,4 +4,5 @@ export type SidebarLinkProps = {
   title: string
   href: string
   icon?: ElementType
+  onClick?: () => void
 }

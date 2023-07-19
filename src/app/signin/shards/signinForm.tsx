@@ -2,17 +2,16 @@
 
 import { useRouter } from 'next/navigation'
 
-import { useToast } from '@/components/ui/shadcn/toast/use-toast'
-
 import { Spinner } from '@components/icons/spinner'
 import { Button } from '@components/ui/buttons/button'
 import { Input } from '@components/ui/inputs/input'
+import { useToast } from '@components/ui/shadcn/toast/use-toast'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { parseCookies } from 'nookies'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { signin } from './api'
 import { SigninSchema, signinSchema } from './signinForm.schema'
+import { parseCookies } from 'nookies'
 
 export const SigninForm = () => {
   const router = useRouter()
@@ -26,19 +25,19 @@ export const SigninForm = () => {
     resolver: zodResolver(signinSchema),
   })
 
-  const getRedirectTo = () => {
+  const redirectTo = () => {
     const { redirectTo } = parseCookies()
-    if (redirectTo) {
-      return redirectTo
+    if (!redirectTo) {
+      router.push('/')
     }
-    return '/'
+    router.push(redirectTo)
   }
 
   const onSubmit: SubmitHandler<SigninSchema> = async (data) => {
     const { email, password } = data
     try {
       await signin(email.toLowerCase().trim(), password)
-      router.push(getRedirectTo())
+      redirectTo()
     } catch (error: Error | any) {
       toast({
         title: 'Erro ao acessar',

@@ -14,7 +14,7 @@ export const CommandKeyItem = ({
 }: CommandKeyItemProps) => {
   const router = useRouter()
   return (
-    <Link href={'teste'} passHref prefetch={true}>
+    <Link href={route} passHref prefetch={true}>
       <CommandItem
         onSelect={() => {
           router.push(route)
