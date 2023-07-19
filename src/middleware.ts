@@ -1,23 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const isAProtectedRoute = (pathname: string) => {
-  return (
-    pathname.includes('/users') ||
-    pathname.includes('/roles-permissions') ||
-    pathname.includes('/roles-permissions') ||
-    pathname.includes('/brands') ||
-    pathname.includes('/brands') ||
-    pathname.includes('/categories') ||
-    pathname.includes('/products') ||
-    pathname.includes('/orders') ||
-    pathname.includes('/sales') ||
-    pathname.includes('/employees') ||
-    pathname.includes('/suppliers') ||
-    pathname.includes('/summaries') ||
-    pathname.includes('/promotion-categories') ||
-    pathname.includes('/promotions')
-  )
-}
+// This is a function to verify if the route is a protected route
+// const isAProtectedRoute = (pathname: string) => {
+//   return (
+//     pathname.includes('/users') ||
+//     pathname.includes('/roles-permissions') ||
+//     pathname.includes('/roles-permissions') ||
+//     pathname.includes('/brands') ||
+//     pathname.includes('/brands') ||
+//     pathname.includes('/categories') ||
+//     pathname.includes('/products') ||
+//     pathname.includes('/orders') ||
+//     pathname.includes('/sales') ||
+//     pathname.includes('/employees') ||
+//     pathname.includes('/suppliers') ||
+//     pathname.includes('/summaries') ||
+//     pathname.includes('/promotion-categories') ||
+//     pathname.includes('/promotions')
+//   )
+// }
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value
@@ -30,6 +31,7 @@ export function middleware(request: NextRequest) {
       },
     })
   }
+
   if (pathname === '/signin' && token) {
     return NextResponse.redirect(new URL('/', request.url), {
       headers: {
@@ -44,7 +46,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  const isProtectedRoute = isAProtectedRoute(pathname)
+  // caller function to verify if the route is a protected route
+  // const isProtectedRoute = isAProtectedRoute(pathName)
+  const isProtectedRoute = false
   if (isProtectedRoute) {
     return NextResponse.redirect(new URL('/', request.url), {
       headers: {
@@ -59,7 +63,7 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/',
-    '/signin',
+    '/signin/:path*',
     '/users/:path*',
     '/roles-permissions/:path*',
     '/brands/:path*',
