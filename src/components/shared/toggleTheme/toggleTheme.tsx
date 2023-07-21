@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@components/ui/shadcn/dropdown-menu'
+} from '@components/ui/shadcn/dropdownMenu'
 import { Button } from '@components/ui/shadcn/button'
 
 import { Moon, Sun } from 'lucide-react'

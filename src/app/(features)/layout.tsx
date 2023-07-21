@@ -6,7 +6,7 @@ import { ToggleTheme } from '@components/shared/toggleTheme/toggleTheme'
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex h-screen w-screen flex-col">
+    <div className="flex h-screen w-full flex-col">
       <div className="flex flex-1">
         <Sidebar />
         <main className="flex flex-1 flex-col gap-4">
