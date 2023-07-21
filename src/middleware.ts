@@ -40,22 +40,16 @@ export function middleware(request: NextRequest) {
     })
   }
 
-  const permission = request.cookies.get('permission')?.value
-  const ADMIN_PERMISSION = '1'
-  if (permission === ADMIN_PERMISSION) {
-    return NextResponse.next()
-  }
-
   // caller function to verify if the route is a protected route
   // const isProtectedRoute = isAProtectedRoute(pathName)
-  const isProtectedRoute = false
-  if (isProtectedRoute) {
-    return NextResponse.redirect(new URL('/', request.url), {
-      headers: {
-        'Set-Cookie': `redirectTo=${request.nextUrl.basePath}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
-      },
-    })
-  }
+  // const isProtectedRoute = false
+  // if (isProtectedRoute) {
+  //   return NextResponse.redirect(new URL('/', request.url), {
+  //     headers: {
+  //       'Set-Cookie': `redirectTo=${request.nextUrl.basePath}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
+  //     },
+  //   })
+  // }
 
   return NextResponse.next()
 }
