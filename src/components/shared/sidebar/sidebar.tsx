@@ -89,10 +89,10 @@ export const Sidebar = () => {
             <X className="h-5 w-5" />
           </Button>
         </div>
-        <div className="overflow-y-auto sm:mt-6 sm:h-[calc(100vh-13rem)]">
+        <div className="overflow-y-auto sm:mt-6 sm:h-[calc(100vh-13rem)] ">
           <Link href="/" passHref>
             <nav
-              className="border-b pb-4 font-medium hover:underline"
+              className="rounded-lg p-4 font-medium hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
               onClick={handleLinkClick}
             >
               Dashboard
