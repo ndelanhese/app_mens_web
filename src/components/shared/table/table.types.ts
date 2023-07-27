@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { Column } from '@tanstack/react-table'
+import { Column, ColumnDef } from '@tanstack/react-table'
 
 export type TableColumnHeaderProps = {
   column: Column<any>
@@ -15,4 +15,18 @@ export type TablePaginationProps = {
     onClick: () => void
     disabled: boolean
   }
+}
+
+export type TableColumn<T> = {
+  header: ({ column }: { column: Column<T> }) => JSX.Element
+  accessorKey: string
+  id: string
+}
+
+export type UserTableProps<T> = {
+  rows: Array<T>
+  tableColumns: Array<TableColumn<T>>
+  filter: string
+  actionLabel: string
+  actionCallback: (row: T) => void
 }

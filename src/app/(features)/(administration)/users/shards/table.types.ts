@@ -7,6 +7,5 @@ export type Representative = {
 }
 
 export type UserTableProps = {
-  columns: Array<string>
   rows: Array<Representative>
 }
