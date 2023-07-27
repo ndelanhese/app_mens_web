@@ -148,7 +148,7 @@ const iterateResponse = () => {
 const Users = () => {
   const rows = iterateResponse()
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="h-[calc(100vh-5.5rem)] w-screen overflow-x-auto pr-12 sm:w-[calc(100vw-16.5rem)] sm:overflow-y-hidden sm:pr-0">
       <UserTable rows={rows} />
     </div>
   )

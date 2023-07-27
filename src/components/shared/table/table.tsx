@@ -67,7 +67,7 @@ export function Table<T>({
       <div className="flex w-full flex-row items-end justify-between">
         <Input
           id="search"
-          className="max-w-xl"
+          className="max-w-xs"
           placeholder="Pesquisar..."
           value={(table.getColumn(filter)?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
