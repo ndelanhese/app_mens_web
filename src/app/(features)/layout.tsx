@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { Breadcrumb } from '@components/shared/breadcrumb/breadcrumb'
 import { CommandKeySearchBar } from '@components/shared/commandKey/commandKeySearchBar'
 import { Sidebar } from '@components/shared/sidebar/sidebar'
 import { ToggleTheme } from '@components/shared/toggleTheme/toggleTheme'
@@ -11,7 +12,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         <Sidebar />
         <main className="flex flex-1 flex-col gap-4">
           <nav className="flex h-16 w-full items-center justify-end border-b border-black-10 px-7 py-5 pr-20 dark:border-white-10 sm:justify-between sm:pr-7">
-            <div className="hidden w-auto sm:block sm:w-auto">Tela Inicial</div>
+            <Breadcrumb />
             <div className="inline-flex items-center space-x-4">
               <CommandKeySearchBar />
               <ToggleTheme />
