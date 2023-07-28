@@ -25,7 +25,7 @@ export const SigninForm = () => {
     resolver: zodResolver(signinSchema),
   })
 
-  const redirectTo = () => {
+  const redirect = () => {
     const { redirectTo } = parseCookies()
     if (!redirectTo) {
       router.push('/')
@@ -37,7 +37,7 @@ export const SigninForm = () => {
     const { email, password } = data
     try {
       await signin(email.toLowerCase().trim(), password)
-      redirectTo()
+      redirect()
     } catch (error: Error | any) {
       toast({
         title: 'Erro ao acessar',

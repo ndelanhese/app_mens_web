@@ -62,13 +62,13 @@ export const Sidebar = () => {
   return isSidebarOpen ? (
     <aside
       className={twMerge(
-        'absolute z-10 h-[100svh] w-screen border-r border-black-10 bg-white-100 px-4 py-5 dark:border-white-10 dark:bg-black-100 sm:relative sm:w-56',
+        'absolute z-10 h-[100svh] w-screen border-r border-black-10 bg-white-100 p-5 dark:border-white-10 dark:bg-black-100 sm:relative sm:w-56',
         isSidebarOpen ? 'block' : 'hidden sm:block',
       )}
     >
       <div className="flex h-full w-full flex-col justify-between">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 px-4 pt-2">
             <Avatar className="h-6 w-6">
               <AvatarImage
                 src="https://source.unsplash.com/random/24x24"
@@ -89,10 +89,10 @@ export const Sidebar = () => {
             <X className="h-5 w-5" />
           </Button>
         </div>
-        <div className="overflow-y-auto sm:mt-6 sm:h-[calc(100vh-13rem)]">
+        <div className="overflow-y-auto sm:mt-6 sm:h-[calc(100vh-13rem)] ">
           <Link href="/" passHref>
             <nav
-              className="border-b pb-4 font-medium hover:underline"
+              className="rounded-lg p-4 font-medium hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
               onClick={handleLinkClick}
             >
               Dashboard
@@ -229,7 +229,7 @@ export const Sidebar = () => {
     <Button
       variant="outline"
       size="icon"
-      className="absolute left-4 top-3 flex bg-white-100 dark:bg-black-100 sm:hidden"
+      className="absolute left-5 top-3 flex bg-white-100 dark:bg-black-100 sm:hidden"
       onClick={() => setIsSidebarOpen(!isSidebarOpen)}
     >
       <SidebarOpen className="h-5 w-5" />

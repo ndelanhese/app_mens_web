@@ -23,7 +23,6 @@ export async function POST(request: NextRequest) {
     const header = new Headers()
     header.append('Set-Cookie', TOKEN_COOKIE)
     header.append('Set-Cookie', USER_COOKIE)
-    // header.append('Set-Cookie', PERMISSION_COOKIE)
     return NextResponse.redirect(redirectUrl, {
       headers: header,
     })

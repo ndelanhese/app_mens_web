@@ -52,7 +52,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="pt-BR">
       <body
-        className={`${inter.variable} flex min-h-[100svh] w-screen bg-white-100 font-sans antialiased dark:bg-black-100`}
+        className={`${inter.variable} flex min-h-[100svh] w-screen overflow-x-hidden bg-white-100 font-sans antialiased dark:bg-black-100`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
