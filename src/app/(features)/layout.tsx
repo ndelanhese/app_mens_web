@@ -18,7 +18,9 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
             </div>
           </nav>
           <section className="flex h-full w-full overflow-y-auto px-5">
-            {children}
+            <div className="h-[calc(100vh-5.5rem)] w-screen overflow-x-auto pr-12 sm:w-[calc(100vw-16.5rem)] sm:overflow-y-hidden sm:pr-0">
+              {children}
+            </div>
           </section>
         </main>
       </div>

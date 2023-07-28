@@ -7,58 +7,51 @@ import { TableColumn } from '@/components/shared/table/table.types'
 
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader'
 
-import { Representative, UserTableProps } from './table.types'
+import { User, UserTableProps } from './table.types'
 
 export const UserTable = ({ rows }: UserTableProps) => {
-  const tableColumns: Array<TableColumn<Representative>> = useMemo(
+  const tableColumns: Array<TableColumn<User>> = useMemo(
     () => [
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="Representante" />
+          <TableColumnHeader column={column} title="Nome" />
         ),
-        accessorKey: 'representative',
-        id: 'Representante',
+        accessorKey: 'name',
+        id: 'Nome',
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="CPF/CNPJ" />
+          <TableColumnHeader column={column} title="CPF" />
         ),
-        accessorKey: 'cpfCnpj',
-        id: 'CPF/CNPJ',
+        accessorKey: 'cpf',
+        id: 'CPF',
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="Registro" />
+          <TableColumnHeader column={column} title="E-mail" />
         ),
-        accessorKey: 'registration',
-        id: 'Registro',
+        accessorKey: 'email',
+        id: 'E-mail',
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="Equipe" />
+          <TableColumnHeader column={column} title="Celular" />
         ),
-        accessorKey: 'teamCode',
-        id: 'Equipe',
-      },
-      {
-        header: ({ column }) => (
-          <TableColumnHeader column={column} title="Filial" />
-        ),
-        accessorKey: 'branchCode',
-        id: 'Filial',
+        accessorKey: 'phone',
+        id: 'Celular',
       },
     ],
     [],
   )
 
-  const handleRowClick = (row: Representative) => {
+  const handleRowClick = (row: User) => {
     console.log(row)
   }
 
   return (
     <Table
       tableColumns={tableColumns}
-      filter="Representante"
+      filter="Nome"
       rows={rows}
       actionLabel="Ação"
       actionCallback={handleRowClick}
