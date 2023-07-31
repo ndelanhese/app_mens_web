@@ -215,7 +215,7 @@ export const Sidebar = () => {
             </AccordionItem>
           </Accordion>
         </div>
-        <Link href="api/auth/signout" passHref prefetch={false} shallow={true}>
+        <Link href="/api/auth/signout" passHref prefetch={false} shallow={true}>
           <Button
             variant="destructive"
             className="w-full bg-opacity-80 text-md dark:bg-opacity-40"
