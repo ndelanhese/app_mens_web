@@ -148,7 +148,7 @@ export function Table<T>({
             <TableRow>
               <TableCell
                 colSpan={tableColumns.length}
-                className="h-full text-center"
+                className="h-full w-full text-center"
               >
                 Sem resultados
               </TableCell>
