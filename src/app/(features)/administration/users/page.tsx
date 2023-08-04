@@ -1,5 +1,7 @@
 import { api } from '@axios'
 
+import { toast } from '@components/ui/shadcn/toast/use-toast'
+
 import { Users } from './page.types'
 import { UserTable } from './shards/table'
 
@@ -17,8 +19,12 @@ const getUsers = async () => {
   try {
     const { data } = await api.get<Users>('/users')
     return data
-  } catch (error) {
-    console.log(error)
+  } catch (error: Error | any) {
+    toast({
+      title: 'Erro ao carregar usuários',
+      description: error?.response?.data?.message,
+      variant: 'destructive',
+    })
   }
 }
 

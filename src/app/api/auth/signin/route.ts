@@ -16,12 +16,15 @@ export async function POST(request: NextRequest) {
     const redirectUrl = redirectTo ?? new URL('/', request.url)
     const currentDate = new Date()
     currentDate.setHours(currentDate.getHours() + 24)
-    const TOKEN_COOKIE = `token=${data.token}; Path=/; max-age=${currentDate};`
+    const expirationTimeInSeconds = Math.floor(
+      (currentDate.getTime() - Date.now()) / 1000,
+    )
+    const TOKEN_COOKIE = `token=${data.token}; Path=/; Max-Age=${expirationTimeInSeconds};`
     const USER_COOKIE = `user=${JSON.stringify(
       data.user_data,
-    )}; Path=/; max-age=${currentDate};`
+    )}; Path=/; Max-Age=${expirationTimeInSeconds};`
     // TODO -> Adicionar cookie de permissão
-    // const PERMISSION_COOKIE = `permission=${response.permissao.profile}; Path=/; max-age=${ONE_DAY_IN_SECONDS}; HttpOnly;`
+    // const PERMISSION_COOKIE = `permission=${response.permissao.profile}; Path=/; Max-Age=${ONE_DAY_IN_SECONDS}; HttpOnly;`
     const header = new Headers()
     header.append('Set-Cookie', TOKEN_COOKIE)
     header.append('Set-Cookie', USER_COOKIE)
