@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     const expirationTimeInSeconds = Math.floor(
       (currentDate.getTime() - Date.now()) / 1000,
     )
-    const TOKEN_COOKIE = `token=${data.token}; Path=/; Max-Age=${expirationTimeInSeconds};`
+    const TOKEN_COOKIE = `token=${data.token}; Path=/; Max-Age=${expirationTimeInSeconds}; HttpOnly;`
     const USER_COOKIE = `user=${JSON.stringify(
       data.user_data,
     )}; Path=/; Max-Age=${expirationTimeInSeconds};`

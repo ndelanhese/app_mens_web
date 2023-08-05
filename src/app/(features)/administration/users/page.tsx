@@ -1,6 +1,6 @@
-import { api } from '@axios'
+import { cookies } from 'next/headers'
 
-import { toast } from '@components/ui/shadcn/toast/use-toast'
+import { api } from '@axios'
 
 import { Users } from './page.types'
 import { UserTable } from './shards/table'
@@ -17,14 +17,16 @@ const iterateResponse = (users?: Users) => {
 
 const getUsers = async () => {
   try {
-    const { data } = await api.get<Users>('/users')
+    const cookiesStore = cookies()
+    const token = cookiesStore.get('token')?.value
+    const { data } = await api.get<Users>('/users', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     return data
   } catch (error: Error | any) {
-    toast({
-      title: 'Erro ao carregar usuários',
-      description: error?.response?.data?.message,
-      variant: 'destructive',
-    })
+    console.log(error?.response?.data?.message)
   }
 }
 
