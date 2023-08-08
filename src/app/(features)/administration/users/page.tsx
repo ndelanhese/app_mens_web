@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import { cache } from 'react'
 
 import { api } from '@axios'
 
@@ -15,7 +16,9 @@ const iterateResponse = (users?: Users) => {
   }))
 }
 
-const getUsers = async () => {
+export const revalidate = 3600
+
+const getUsers = cache(async () => {
   try {
     const cookiesStore = cookies()
     const token = cookiesStore.get('token')?.value
@@ -28,7 +31,7 @@ const getUsers = async () => {
   } catch (error: Error | any) {
     console.log(error?.response?.data?.message)
   }
-}
+})
 
 const Users = async () => {
   const users = await getUsers()
