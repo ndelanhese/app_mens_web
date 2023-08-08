@@ -56,7 +56,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
-
           <Toaster />
         </ThemeProvider>
       </body>

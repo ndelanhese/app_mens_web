@@ -104,13 +104,13 @@ export const Sidebar = () => {
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
                   <SidebarLink
-                    href="/users"
+                    href="/administration/users"
                     title="Usuários"
                     icon={Users}
                     onClick={handleLinkClick}
                   />
                   <SidebarLink
-                    href="/roles-permissions"
+                    href="/administration/roles-permissions"
                     title="Papéis e Permissões"
                     icon={ScrollText}
                     onClick={handleLinkClick}
@@ -123,19 +123,19 @@ export const Sidebar = () => {
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
                   <SidebarLink
-                    href="/brands"
+                    href="/data-management/brands"
                     title="Marcas"
                     icon={Tags}
                     onClick={handleLinkClick}
                   />
                   <SidebarLink
-                    href="/categories"
+                    href="/data-management/categories"
                     title="Categorias"
                     icon={Library}
                     onClick={handleLinkClick}
                   />
                   <SidebarLink
-                    href="/products"
+                    href="/data-management/products"
                     title="Produtos"
                     icon={PackageOpen}
                     onClick={handleLinkClick}
@@ -148,13 +148,13 @@ export const Sidebar = () => {
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
                   <SidebarLink
-                    href="/orders"
+                    href="/customers/orders"
                     title="Pedidos"
                     icon={Newspaper}
                     onClick={handleLinkClick}
                   />
                   <SidebarLink
-                    href="/sales"
+                    href="/customers/sales"
                     title="Vendas"
                     icon={ShoppingCart}
                     onClick={handleLinkClick}
@@ -167,13 +167,13 @@ export const Sidebar = () => {
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
                   <SidebarLink
-                    href="/employees"
+                    href="/employees/employees"
                     title="Funcionários"
                     icon={PersonStanding}
                     onClick={handleLinkClick}
                   />
                   <SidebarLink
-                    href="/suppliers"
+                    href="/employees/suppliers"
                     title="Fornecedores"
                     icon={Container}
                     onClick={handleLinkClick}
@@ -186,7 +186,7 @@ export const Sidebar = () => {
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
                   <SidebarLink
-                    href="/summaries"
+                    href="/financial/summaries"
                     title="Relatórios financeiros"
                     icon={ClipboardList}
                     onClick={handleLinkClick}
@@ -199,13 +199,13 @@ export const Sidebar = () => {
               <AccordionContent>
                 <div className="flex w-full flex-col gap-2">
                   <SidebarLink
-                    href="/promotion-categories"
+                    href="/promotions/promotion-categories"
                     title="Categorias"
                     icon={WalletCards}
                     onClick={handleLinkClick}
                   />
                   <SidebarLink
-                    href="/promotions"
+                    href="/promotions/promotions"
                     title="Promoções"
                     icon={Percent}
                     onClick={handleLinkClick}
@@ -215,7 +215,7 @@ export const Sidebar = () => {
             </AccordionItem>
           </Accordion>
         </div>
-        <Link href="api/auth/signout" passHref prefetch={false} shallow={true}>
+        <Link href="/api/auth/signout" passHref prefetch={false} shallow={true}>
           <Button
             variant="destructive"
             className="w-full bg-opacity-80 text-md dark:bg-opacity-40"
