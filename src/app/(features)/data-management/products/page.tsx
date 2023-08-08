@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import { cache } from 'react'
 
 import { api } from '@axios'
 
@@ -20,7 +21,7 @@ const iterateResponse = (products?: Products) => {
   }))
 }
 
-const getProducts = async () => {
+const getProducts = cache(async () => {
   try {
     const cookiesStore = cookies()
     const token = cookiesStore.get('token')?.value
@@ -33,7 +34,7 @@ const getProducts = async () => {
   } catch (error: Error | any) {
     console.log(error?.response?.data?.message)
   }
-}
+})
 
 const Products = async () => {
   const categories = await getProducts()
