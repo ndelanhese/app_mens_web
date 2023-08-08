@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers'
 import { cache } from 'react'
+import { Metadata } from 'next'
 
 import { api } from '@axios'
 
@@ -35,6 +36,10 @@ const getProducts = cache(async () => {
     console.log(error?.response?.data?.message)
   }
 })
+
+export const metadata: Metadata = {
+  title: 'Produtos',
+}
 
 const Products = async () => {
   const categories = await getProducts()

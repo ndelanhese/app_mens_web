@@ -33,6 +33,10 @@ const getUsers = cache(async () => {
   }
 })
 
+export const metadata: Metadata = {
+  title: 'Usuários',
+}
+
 const Users = async () => {
   const users = await getUsers()
   const rows = iterateResponse(users)
