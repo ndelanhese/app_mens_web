@@ -17,6 +17,8 @@ export const metadata: Metadata = {
     template: '%s | Mens Moda Masculina',
     default: 'Mens Moda Masculina',
   },
+  description:
+    'Mens Moda Mascula, loja de vestuária masculina na cidade de Alto Piquiri',
   applicationName: 'Mens Moda Masculina',
   keywords: [
     'Mens',
