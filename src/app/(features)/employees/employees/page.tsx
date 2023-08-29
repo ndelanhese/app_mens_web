@@ -5,7 +5,7 @@ import { cache } from 'react'
 import { api } from '@axios'
 
 import { Employees } from './page.types'
-import { EmployeesTable } from './shards/table'
+import { EmployeesTable } from '@features-components/employees/employees/client/table/table'
 
 const iterateResponse = (employees?: Employees) => {
   if (!employees) return []

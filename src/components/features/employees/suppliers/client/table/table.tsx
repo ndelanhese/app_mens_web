@@ -1,50 +1,43 @@
 'use client'
 
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 
 import { Table } from '@/components/shared/table/table'
 import { TableColumn } from '@/components/shared/table/table.types'
 
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader'
 
-import { User, UserTableProps } from './table.types'
+import { Supplier, SuppliersTableProps } from './table.types'
 
-export const UserTable = ({ rows }: UserTableProps) => {
-  const tableColumns: Array<TableColumn<User>> = useMemo(
+export const SuppliersTableComponent = ({ rows }: SuppliersTableProps) => {
+  const tableColumns: Array<TableColumn<Supplier>> = useMemo(
     () => [
       {
         header: ({ column }) => (
           <TableColumnHeader column={column} title="Nome" />
         ),
-        accessorKey: 'name',
+        accessorKey: 'contactName',
         id: 'Nome',
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="CPF" />
+          <TableColumnHeader column={column} title="Empresa" />
         ),
-        accessorKey: 'cpf',
-        id: 'CPF',
+        accessorKey: 'corporateName',
+        id: 'Empresa',
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="E-mail" />
+          <TableColumnHeader column={column} title="CNPJ" />
         ),
-        accessorKey: 'email',
-        id: 'E-mail',
-      },
-      {
-        header: ({ column }) => (
-          <TableColumnHeader column={column} title="Celular" />
-        ),
-        accessorKey: 'phone',
-        id: 'Celular',
+        accessorKey: 'cnpj',
+        id: 'CNPJ',
       },
     ],
     [],
   )
 
-  const handleRowClick = (row: User) => {
+  const handleRowClick = (row: Supplier) => {
     console.log(row)
   }
 
@@ -58,3 +51,5 @@ export const UserTable = ({ rows }: UserTableProps) => {
     />
   )
 }
+
+export const SuppliersTable = memo(SuppliersTableComponent)

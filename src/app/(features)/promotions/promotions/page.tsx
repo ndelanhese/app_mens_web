@@ -5,7 +5,7 @@ import { Metadata } from 'next'
 import { api } from '@axios'
 
 import { Promotions } from './page.types'
-import { PromotionsTable } from './shards/table'
+import { PromotionsTable } from '@features-components/promotions/promotions/client/table/table'
 
 const iterateResponse = (promotions?: Promotions) => {
   if (!promotions) return []

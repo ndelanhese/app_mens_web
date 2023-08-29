@@ -5,7 +5,7 @@ import { cache } from 'react'
 import { api } from '@axios'
 
 import { Suppliers } from './page.types'
-import { SuppliersTable } from './shards/table'
+import { SuppliersTable } from '@features-components/employees/suppliers/client/table/table'
 
 const iterateResponse = (suppliers?: Suppliers) => {
   if (!suppliers) return []

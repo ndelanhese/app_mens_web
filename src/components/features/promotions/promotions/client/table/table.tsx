@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 
 import { Table } from '@/components/shared/table/table'
 import { TableColumn } from '@/components/shared/table/table.types'
@@ -9,7 +9,7 @@ import { TableColumnHeader } from '@components/shared/table/tableColumnHeader'
 
 import { Promotion, PromotionsTableProps } from './table.types'
 
-export const PromotionsTable = ({ rows }: PromotionsTableProps) => {
+export const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
   const tableColumns: Array<TableColumn<Promotion>> = useMemo(
     () => [
       {
@@ -86,3 +86,5 @@ export const PromotionsTable = ({ rows }: PromotionsTableProps) => {
     />
   )
 }
+
+export const PromotionsTable = memo(PromotionsTableComponent)

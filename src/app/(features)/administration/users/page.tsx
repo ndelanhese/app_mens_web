@@ -1,11 +1,10 @@
 import { cookies } from 'next/headers'
-import { cache } from 'react'
 import { Metadata } from 'next'
 
 import { api } from '@axios'
 
 import { Users } from './page.types'
-import { UserTable } from './shards/table'
+import { UserTable } from '@features-components/administration/users/client/table/table'
 
 const iterateResponse = (users?: Users) => {
   if (!users) return []
@@ -19,7 +18,7 @@ const iterateResponse = (users?: Users) => {
 
 export const revalidate = 3600
 
-const getUsers = cache(async () => {
+const getUsers = async () => {
   try {
     const cookiesStore = cookies()
     const token = cookiesStore.get('token')?.value
@@ -32,7 +31,7 @@ const getUsers = cache(async () => {
   } catch (error: Error | any) {
     console.log(error?.response?.data?.message)
   }
-})
+}
 
 export const metadata: Metadata = {
   title: 'Usuários',

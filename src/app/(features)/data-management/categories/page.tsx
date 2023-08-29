@@ -5,7 +5,7 @@ import { Metadata } from 'next'
 import { api } from '@axios'
 
 import { Categories } from './page.types'
-import { CategoriesTable } from './shards/table'
+import { CategoriesTable } from '@features-components/dataManagement/categories/client/table/table'
 
 const iterateResponse = (categories?: Categories) => {
   if (!categories) return []

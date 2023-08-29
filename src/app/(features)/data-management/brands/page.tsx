@@ -5,7 +5,7 @@ import { Metadata } from 'next'
 import { api } from '@axios'
 
 import { Brands } from './page.types'
-import { BrandsTable } from './shards/table'
+import { BrandsTable } from '@features-components/dataManagement/brands/client/table/table'
 
 const iterateResponse = (brands?: Brands) => {
   if (!brands) return []
