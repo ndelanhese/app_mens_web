@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/shadcn/button'
@@ -39,7 +39,7 @@ import { twMerge } from 'tailwind-merge'
 import { SidebarLink } from './sidebarLink'
 import { parseCookies } from 'nookies'
 
-export const Sidebar = () => {
+const SidebarComponent = () => {
   const [isMobile, setIsMobile] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(!isMobile)
   const [userName, setUserName] = useState('')
@@ -236,3 +236,5 @@ export const Sidebar = () => {
     </Button>
   )
 }
+
+export const Sidebar = memo(SidebarComponent)
