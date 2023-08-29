@@ -9,7 +9,7 @@ import { TableColumnHeader } from '@components/shared/table/tableColumnHeader'
 
 import { Employee, EmployeesTableProps } from './table.types'
 
-export const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
+const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
   const tableColumns: Array<TableColumn<Employee>> = useMemo(
     () => [
       {
