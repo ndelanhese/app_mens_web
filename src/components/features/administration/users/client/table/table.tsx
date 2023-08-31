@@ -4,7 +4,6 @@ import { memo, useMemo } from 'react'
 
 import { Table } from '@components/shared/table/table'
 import { TableColumn } from '@components/shared/table/table.types'
-
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader'
 
 import { User, UserTableProps } from './table.types'

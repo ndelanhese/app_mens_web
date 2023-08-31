@@ -1,10 +1,13 @@
 import { cookies } from 'next/headers'
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 
 import { api } from '@axios'
+import { UserTable } from '@features-components/administration/users/client/table/table'
+
+import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton'
 
 import { Users } from './page.types'
-import { UserTable } from '@features-components/administration/users/client/table/table'
 
 const iterateResponse = (users?: Users) => {
   if (!users) return []
@@ -40,7 +43,11 @@ export const metadata: Metadata = {
 const Users = async () => {
   const users = await getUsers()
   const rows = iterateResponse(users)
-  return <UserTable rows={rows} />
+  return (
+    <Suspense fallback={<TableSkeleton />}>
+      <UserTable rows={rows} />
+    </Suspense>
+  )
 }
 
 export default Users
