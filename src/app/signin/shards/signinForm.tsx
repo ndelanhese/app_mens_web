@@ -39,11 +39,14 @@ export const SigninForm = () => {
       await signin(email.toLowerCase().trim(), password)
       redirect()
     } catch (error: Error | any) {
-      toast({
-        title: 'Erro ao acessar',
-        description: error?.response?.data?.message,
-        variant: 'destructive',
-      })
+      const message = error?.response?.data?.message
+      if (message) {
+        toast({
+          title: 'Erro ao acessar',
+          description: message,
+          variant: 'destructive',
+        })
+      }
     }
   }
 
