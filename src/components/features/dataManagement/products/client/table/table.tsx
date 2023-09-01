@@ -1,6 +1,6 @@
 'use client'
 
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 
 import { Table } from '@/components/shared/table/table'
 import { TableColumn } from '@/components/shared/table/table.types'
@@ -79,9 +79,9 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
     [],
   )
 
-  const handleRowClick = (row: Product) => {
+  const handleRowClick = useCallback((row: Product) => {
     console.log(row)
-  }
+  }, [])
 
   return (
     <Table
