@@ -1,6 +1,6 @@
 'use client'
 
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/shadcn/button'
@@ -53,11 +53,11 @@ const SidebarComponent = () => {
     setIsSidebarOpen(!hasMobileWidth)
   }, [])
 
-  const handleLinkClick = () => {
+  const handleLinkClick = useCallback(() => {
     if (isMobile) {
       setIsSidebarOpen(!isSidebarOpen)
     }
-  }
+  }, [isMobile, isSidebarOpen])
 
   return isSidebarOpen ? (
     <aside
