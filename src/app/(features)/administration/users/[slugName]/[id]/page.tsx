@@ -36,7 +36,7 @@ export const generateMetadata = async ({ params }: UserPageSearchParams) => {
 const UserPage = async ({ params }: UserPageSearchParams) => {
   const userData = await getUserData(params.id);
   return (
-    <div>
+    <div className="flex w-full items-center justify-center">
       <FormData user={userData} />
     </div>
   );
