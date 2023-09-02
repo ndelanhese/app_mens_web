@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { Column, ColumnDef } from '@tanstack/react-table'
+import { Column } from '@tanstack/react-table'
 
 export type TableColumnHeaderProps = {
   column: Column<any>

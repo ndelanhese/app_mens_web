@@ -47,6 +47,8 @@ const UserTableComponent = ({ rows }: UserTableProps) => {
     console.log(row)
   }, [])
 
+  // const ACTION_BUTTON = ()
+
   return (
     <Table
       tableColumns={tableColumns}
