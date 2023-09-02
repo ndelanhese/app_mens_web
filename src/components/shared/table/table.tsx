@@ -1,16 +1,17 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { TablePagination } from '@components/shared/table/tablePagination'
-import { Button } from '@components/ui/shadcn/button'
+import { Button } from '@/components/ui/shadcn/button';
+
+import { TablePagination } from '@components/shared/table/tablePagination';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@components/ui/shadcn/dropdownMenu'
-import { Input } from '@components/ui/shadcn/input'
+} from '@components/ui/shadcn/dropdownMenu';
+import { Input } from '@components/ui/shadcn/input';
 import {
   TableBody,
   TableCell,
@@ -18,7 +19,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@components/ui/shadcn/table'
+} from '@components/ui/shadcn/table';
 
 /* eslint-disable import/named */
 import {
@@ -31,8 +32,9 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import { UserTableProps } from './table.types'
+} from '@tanstack/react-table';
+import { UserTableProps } from './table.types';
+import { Eye, Pencil, Trash } from 'lucide-react';
 
 export function Table<T>({
   rows,
@@ -41,9 +43,9 @@ export function Table<T>({
   actionCallback,
   actionLabel,
 }: UserTableProps<T>) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable({
     data: rows,
@@ -60,7 +62,7 @@ export function Table<T>({
       columnFilters,
       columnVisibility,
     },
-  })
+  });
 
   return (
     <div className="flex w-full flex-col items-start justify-start pb-3">
@@ -70,7 +72,7 @@ export function Table<T>({
           className="max-w-xs"
           placeholder="Pesquisar..."
           value={(table.getColumn(filter)?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
+          onChange={event =>
             table.getColumn(filter)?.setFilterValue(event.target.value)
           }
         />
@@ -81,30 +83,28 @@ export function Table<T>({
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
+              .filter(column => column.getCanHide())
+              .map(column => {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
+                    onCheckedChange={value => column.toggleVisibility(!!value)}
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
       <TableComponent>
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
+          {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
               <TableHead className="text-left "></TableHead>
-              {headerGroup.headers.map((header) => {
+              {headerGroup.headers.map(header => {
                 return (
                   <TableHead key={header.id}>
                     {header.isPlaceholder
@@ -114,7 +114,7 @@ export function Table<T>({
                           header.getContext(),
                         )}
                   </TableHead>
-                )
+                );
               })}
               <TableHead className="text-right"></TableHead>
             </TableRow>
@@ -122,13 +122,13 @@ export function Table<T>({
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+            table.getRowModel().rows.map(row => (
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
                 <TableCell>{Number(row.id) + 1}</TableCell>
-                {row.getVisibleCells().map((cell) => (
+                {row.getVisibleCells().map(cell => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
@@ -136,10 +136,30 @@ export function Table<T>({
                 <TableCell className="ml-8 flex items-end justify-end sm:ml-0">
                   <Button
                     onClick={() => {
-                      actionCallback(row.original)
+                      actionCallback(row.original, 'view');
                     }}
+                    variant="outline"
+                    size="icon"
                   >
-                    {actionLabel}
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      actionCallback(row.original, 'edit');
+                    }}
+                    variant="outline"
+                    size="icon"
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      actionCallback(row.original, 'delete');
+                    }}
+                    variant="outline"
+                    size="icon"
+                  >
+                    <Trash className="h-4 w-4" />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -168,5 +188,5 @@ export function Table<T>({
         }}
       />
     </div>
-  )
+  );
 }

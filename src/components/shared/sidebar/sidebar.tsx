@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { memo, useCallback, useEffect, useState } from 'react'
-import Link from 'next/link'
+import { memo, useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
 
-import { Button } from '@/components/ui/shadcn/button'
-import { getFirstName } from '@/utils/stringManipulation'
+import { Button } from '@/components/ui/shadcn/button';
+import { getFirstName } from '@/utils/helpers/stringManipulation';
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@components/ui/shadcn/accordion'
+} from '@components/ui/shadcn/accordion';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@components/ui/shadcn/avatar'
+} from '@components/ui/shadcn/avatar';
 
 import {
   LogOut,
@@ -34,30 +34,30 @@ import {
   Tags,
   Users,
   WalletCards,
-} from 'lucide-react'
-import { twMerge } from 'tailwind-merge'
-import { SidebarLink } from './sidebarLink'
-import { parseCookies } from 'nookies'
+} from 'lucide-react';
+import { twMerge } from 'tailwind-merge';
+import { SidebarLink } from './sidebarLink';
+import { parseCookies } from 'nookies';
 
 const SidebarComponent = () => {
-  const [isMobile, setIsMobile] = useState(false)
-  const [isSidebarOpen, setIsSidebarOpen] = useState(!isMobile)
-  const [userName, setUserName] = useState('')
+  const [isMobile, setIsMobile] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(!isMobile);
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
-    const { user } = parseCookies()
-    const name = getFirstName(JSON?.parse(user)?.name)
-    setUserName(name)
-    const hasMobileWidth = window.innerWidth < 768
-    setIsMobile(hasMobileWidth)
-    setIsSidebarOpen(!hasMobileWidth)
-  }, [])
+    const { user } = parseCookies();
+    const name = getFirstName(JSON?.parse(user)?.name);
+    setUserName(name);
+    const hasMobileWidth = window.innerWidth < 768;
+    setIsMobile(hasMobileWidth);
+    setIsSidebarOpen(!hasMobileWidth);
+  }, []);
 
   const handleLinkClick = useCallback(() => {
     if (isMobile) {
-      setIsSidebarOpen(!isSidebarOpen)
+      setIsSidebarOpen(!isSidebarOpen);
     }
-  }, [isMobile, isSidebarOpen])
+  }, [isMobile, isSidebarOpen]);
 
   return isSidebarOpen ? (
     <aside
@@ -234,7 +234,7 @@ const SidebarComponent = () => {
     >
       <SidebarOpen className="h-5 w-5" />
     </Button>
-  )
-}
+  );
+};
 
-export const Sidebar = memo(SidebarComponent)
+export const Sidebar = memo(SidebarComponent);
