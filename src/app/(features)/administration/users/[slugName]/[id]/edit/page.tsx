@@ -1,9 +1,8 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import { EditUserForm } from '@/components/features/administration/users/client/editUser/editUserForm';
 import { api } from '@axios';
-
-import { FormData } from '@components/features/administration/users/server/formData/formData';
 
 import { getFirstAndLastName } from '@utils/helpers/stringManipulation';
 
@@ -37,7 +36,7 @@ const UserPage = async ({ params }: UserPageSearchParams) => {
   const userData = await getUserData(params.id);
   return (
     <div className="flex w-full items-center justify-center">
-      <FormData user={userData} />
+      <EditUserForm user={userData} />
     </div>
   );
 };
