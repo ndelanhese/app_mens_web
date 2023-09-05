@@ -12,7 +12,7 @@ export interface InputVariants
     VariantProps<typeof controlledInput> {
   id: string;
   label: string;
-  register: any;
+  register?: any;
   errorMessage?: string;
 }
 
