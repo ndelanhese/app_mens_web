@@ -71,7 +71,7 @@ const UserTableComponent = ({ rows }: UserTableProps) => {
           break;
       }
     },
-    [],
+    [router],
   );
 
   // const ACTION_BUTTON = ()

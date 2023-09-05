@@ -1,15 +1,23 @@
-'use client'
+'use client';
 
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 
-import { Table } from '@/components/shared/table/table'
-import { TableColumn } from '@/components/shared/table/table.types'
+import { Table } from '@/components/shared/table/table';
+import {
+  TableActionCallbackOptions,
+  TableColumn,
+} from '@/components/shared/table/table.types';
 
-import { TableColumnHeader } from '@components/shared/table/tableColumnHeader'
+import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 
-import { Brands, BrandsTableProps } from './table.types'
+import { convertStringToSlug } from '@utils/helpers/stringManipulation';
+
+import { Brands, BrandsTableProps } from './table.types';
 
 const BrandsTableComponent = ({ rows }: BrandsTableProps) => {
+  const router = useRouter();
+
   const tableColumns: Array<TableColumn<Brands>> = useMemo(
     () => [
       {
@@ -21,11 +29,30 @@ const BrandsTableComponent = ({ rows }: BrandsTableProps) => {
       },
     ],
     [],
-  )
+  );
 
-  const handleRowClick = useCallback((row: Brands) => {
-    console.log(row)
-  }, [])
+  const handleRowClick = useCallback(
+    (row: Brands, action: TableActionCallbackOptions) => {
+      const { name, id } = row;
+      const slugName = convertStringToSlug(name);
+
+      switch (action) {
+        case 'view':
+          router.push(`/data-management/brands/${slugName}/${id}`);
+          break;
+        case 'edit':
+          router.push(`/data-management/brands/${slugName}/${id}/edit`);
+          break;
+        case 'delete':
+          console.log('delete');
+          break;
+        default:
+          router.push(`/data-management/brands/${slugName}/${id}`);
+          break;
+      }
+    },
+    [router],
+  );
 
   return (
     <Table
@@ -35,7 +62,7 @@ const BrandsTableComponent = ({ rows }: BrandsTableProps) => {
       actionLabel="Ação"
       actionCallback={handleRowClick}
     />
-  )
-}
+  );
+};
 
-export const BrandsTable = memo(BrandsTableComponent)
+export const BrandsTable = memo(BrandsTableComponent);
