@@ -41,7 +41,6 @@ export function Table<T>({
   tableColumns,
   filter,
   actionCallback,
-  actionLabel,
 }: UserTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
