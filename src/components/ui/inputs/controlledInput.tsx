@@ -12,12 +12,16 @@ export interface InputVariants
     VariantProps<typeof controlledInput> {
   id: string;
   label: string;
+  register: any;
+  errorMessage?: string;
 }
 
 export const ControlledInput: FC<InputVariants> = ({
   id,
   label,
   className,
+  register,
+  errorMessage,
   ...props
 }) => {
   return (
@@ -25,7 +29,12 @@ export const ControlledInput: FC<InputVariants> = ({
       <label className="mb-2 text-lg text-black-40 dark:text-white-80">
         {label}
       </label>
-      <Input id={id} hasLabel {...props} />
+      <Input
+        id={id}
+        {...props}
+        register={register}
+        errorMessage={errorMessage}
+      />
     </div>
   );
 };

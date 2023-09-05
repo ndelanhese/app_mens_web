@@ -61,7 +61,7 @@ const UserTableComponent = ({ rows }: UserTableProps) => {
           router.push(`/administration/users/${slugName}/${id}`);
           break;
         case 'edit':
-          router.push(`/administration/users/edit/${slugName}/${id}`);
+          router.push(`/administration/users/${slugName}/${id}/edit`);
           break;
         case 'delete':
           console.log('delete');
