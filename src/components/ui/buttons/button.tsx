@@ -1,6 +1,6 @@
-import { ButtonHTMLAttributes, FC, ReactNode } from 'react'
+import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
 
-import { tv, type VariantProps } from 'tailwind-variants'
+import { tv, type VariantProps } from 'tailwind-variants';
 
 const button = tv({
   base: 'rounded-lg font-re inline-flex items-center justify-center transition-colors',
@@ -16,7 +16,7 @@ const button = tv({
     size: {
       sm: 'text-md px-2 py-1 gap-1',
       md: 'text-lg px-4 py-2 gap-2',
-      lg: 'text-lg px-6 py-4 gap-2 rounded-2xl font-sb',
+      lg: 'px-6 py-3 gap-2 rounded-lg font-sb',
     },
     disabled: {
       true: 'bg-opacity-5 text-opacity-10 cursor-not-allowed text-black-100',
@@ -49,13 +49,13 @@ const button = tv({
     size: 'md',
     disabled: false,
   },
-})
+});
 
 export interface ButtonVariants
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof button> {
-  children: ReactNode
-  color?: 'primary' | 'outline' | 'opaque' | 'white'
+  children: ReactNode;
+  color?: 'primary' | 'outline' | 'opaque' | 'white';
 }
 
 export const Button: FC<ButtonVariants> = ({
@@ -70,5 +70,5 @@ export const Button: FC<ButtonVariants> = ({
     <button className={button({ className, color, size, disabled })} {...props}>
       {children}
     </button>
-  )
-}
+  );
+};
