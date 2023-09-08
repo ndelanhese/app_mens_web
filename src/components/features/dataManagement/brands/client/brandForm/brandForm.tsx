@@ -1,6 +1,7 @@
 'use client';
 
 import { memo } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { api } from '@axios';
 
@@ -14,6 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { BrandFormSchema, brandFormSchema } from './brandForm.schema';
 
 export const BrandFormComponent = ({ brand }: BrandFormProps) => {
+  const route = useRouter();
   const { toast } = useToast();
 
   const {
@@ -27,6 +29,12 @@ export const BrandFormComponent = ({ brand }: BrandFormProps) => {
   const onSubmit: SubmitHandler<BrandFormSchema> = async data => {
     try {
       await api.put(`/brands/${brand.id}`, data);
+      toast({
+        title: 'Marca atualizada com sucesso',
+        variant: 'default',
+      });
+      route.refresh();
+      route.push('/data-management/brands');
     } catch (error: Error | any) {
       const errorMessage = error.response.data.message ?? 'Erro desconhecido';
       toast({
