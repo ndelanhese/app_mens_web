@@ -1,9 +1,9 @@
-import { Metadata } from 'next'
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Pedidos',
-}
+};
 
-const Orders = () => <h1>Orders</h1>
+const Orders = () => <h1>Orders</h1>;
 
-export default Orders
+export default Orders;

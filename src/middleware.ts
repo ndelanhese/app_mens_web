@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 
 // This is a function to verify if the route is a protected route
 // const isAProtectedRoute = (pathname: string) => {
@@ -21,15 +21,15 @@ import { NextRequest, NextResponse } from 'next/server'
 // }
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('token')?.value
-  const ONE_MINUTE_IN_SECONDS = 60
-  const { pathname } = request.nextUrl
+  const token = request.cookies.get('token')?.value;
+  const ONE_MINUTE_IN_SECONDS = 60;
+  const { pathname } = request.nextUrl;
   if (!token && pathname !== '/signin') {
     return NextResponse.redirect(new URL('/signin', request.url), {
       headers: {
         'Set-Cookie': `redirectTo=${request.url}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
       },
-    })
+    });
   }
 
   if (pathname === '/signin' && token) {
@@ -37,7 +37,7 @@ export function middleware(request: NextRequest) {
       headers: {
         'Set-Cookie': `redirectTo=${request.nextUrl.basePath}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
       },
-    })
+    });
   }
 
   // caller function to verify if the route is a protected route
@@ -51,7 +51,7 @@ export function middleware(request: NextRequest) {
   //   })
   // }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
@@ -71,4 +71,4 @@ export const config = {
     '/promotions/promotion-categories/:path*',
     '/promotions/promotions/:path*',
   ],
-}
+};

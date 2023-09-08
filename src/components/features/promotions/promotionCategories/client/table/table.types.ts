@@ -1,7 +1,7 @@
 export type Category = {
-  name: string
-}
+  name: string;
+};
 
 export type CategoriesTableProps = {
-  rows: Array<Category>
-}
+  rows: Array<Category>;
+};

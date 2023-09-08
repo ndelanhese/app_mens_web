@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react';
 
-import { Table } from '@/components/shared/table/table'
-import { TableColumn } from '@/components/shared/table/table.types'
+import { Table } from '@/components/shared/table/table';
+import { TableColumn } from '@/components/shared/table/table.types';
 
-import { TableColumnHeader } from '@components/shared/table/tableColumnHeader'
+import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 
-import { Supplier, SuppliersTableProps } from './table.types'
+import { Supplier, SuppliersTableProps } from './table.types';
 
 const SuppliersTableComponent = ({ rows }: SuppliersTableProps) => {
   const tableColumns: Array<TableColumn<Supplier>> = useMemo(
@@ -35,11 +35,11 @@ const SuppliersTableComponent = ({ rows }: SuppliersTableProps) => {
       },
     ],
     [],
-  )
+  );
 
   const handleRowClick = useCallback((row: Supplier) => {
-    console.log(row)
-  }, [])
+    console.log(row);
+  }, []);
   return (
     <Table
       tableColumns={tableColumns}
@@ -48,7 +48,7 @@ const SuppliersTableComponent = ({ rows }: SuppliersTableProps) => {
       actionLabel="Ação"
       actionCallback={handleRowClick}
     />
-  )
-}
+  );
+};
 
-export const SuppliersTable = memo(SuppliersTableComponent)
+export const SuppliersTable = memo(SuppliersTableComponent);

@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react';
 
-import { Table } from '@/components/shared/table/table'
-import { TableColumn } from '@/components/shared/table/table.types'
+import { Table } from '@/components/shared/table/table';
+import { TableColumn } from '@/components/shared/table/table.types';
 
-import { TableColumnHeader } from '@components/shared/table/tableColumnHeader'
+import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 
-import { Product, ProductsTableProps } from './table.types'
+import { Product, ProductsTableProps } from './table.types';
 
 const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
   const tableColumns: Array<TableColumn<Product>> = useMemo(
@@ -77,11 +77,11 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
       },
     ],
     [],
-  )
+  );
 
   const handleRowClick = useCallback((row: Product) => {
-    console.log(row)
-  }, [])
+    console.log(row);
+  }, []);
 
   return (
     <Table
@@ -91,7 +91,7 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
       actionLabel="Ação"
       actionCallback={handleRowClick}
     />
-  )
-}
+  );
+};
 
-export const ProductsTable = memo(ProductsTableComponent)
+export const ProductsTable = memo(ProductsTableComponent);

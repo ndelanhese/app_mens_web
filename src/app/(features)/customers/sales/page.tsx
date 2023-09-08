@@ -1,9 +1,9 @@
-import { Metadata } from 'next'
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Vendas',
-}
+};
 
-const Sales = () => <h1>Sales</h1>
+const Sales = () => <h1>Sales</h1>;
 
-export default Sales
+export default Sales;

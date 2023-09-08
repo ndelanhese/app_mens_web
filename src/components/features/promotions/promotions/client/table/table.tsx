@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react';
 
-import { Table } from '@/components/shared/table/table'
-import { TableColumn } from '@/components/shared/table/table.types'
+import { Table } from '@/components/shared/table/table';
+import { TableColumn } from '@/components/shared/table/table.types';
 
-import { TableColumnHeader } from '@components/shared/table/tableColumnHeader'
+import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 
-import { Promotion, PromotionsTableProps } from './table.types'
+import { Promotion, PromotionsTableProps } from './table.types';
 
 const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
   const tableColumns: Array<TableColumn<Promotion>> = useMemo(
@@ -70,11 +70,11 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
       },
     ],
     [],
-  )
+  );
 
   const handleRowClick = useCallback((row: Promotion) => {
-    console.log(row)
-  }, [])
+    console.log(row);
+  }, []);
 
   return (
     <Table
@@ -84,7 +84,7 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
       actionLabel="Ação"
       actionCallback={handleRowClick}
     />
-  )
-}
+  );
+};
 
-export const PromotionsTable = memo(PromotionsTableComponent)
+export const PromotionsTable = memo(PromotionsTableComponent);

@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
 import {
   CommandDialog,
@@ -11,24 +11,24 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from '@/components/ui/shadcn/command/command'
+} from '@/components/ui/shadcn/command/command';
 
-import { CreditCard, Settings, User } from 'lucide-react'
-import { CommandKeyProps } from './commandKey.types'
-import { CommandKeyItems } from './commandKeyItems'
+import { CreditCard, Settings, User } from 'lucide-react';
+import { CommandKeyProps } from './commandKey.types';
+import { CommandKeyItems } from './commandKeyItems';
 
 export function CommandKey({ open, setOpen }: CommandKeyProps) {
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && e.ctrlKey) {
-        setOpen(!open)
-        e.preventDefault()
+        setOpen(!open);
+        e.preventDefault();
       }
-    }
+    };
 
-    document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
-  }, [])
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
 
   return (
     <>
@@ -63,5 +63,5 @@ export function CommandKey({ open, setOpen }: CommandKeyProps) {
         </CommandList>
       </CommandDialog>
     </>
-  )
+  );
 }

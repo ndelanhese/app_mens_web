@@ -1,7 +1,7 @@
-import { Button } from '@components/ui/shadcn/button'
+import { Button } from '@components/ui/shadcn/button';
 
-import { ArrowUpDown } from 'lucide-react'
-import { TableColumnHeaderProps } from './table.types'
+import { ArrowUpDown } from 'lucide-react';
+import { TableColumnHeaderProps } from './table.types';
 
 export const TableColumnHeader = ({
   column,
@@ -15,4 +15,4 @@ export const TableColumnHeader = ({
     {title}
     <ArrowUpDown className="ml-2 h-4 w-4" />
   </Button>
-)
+);

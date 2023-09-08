@@ -1,3 +1,3 @@
 export type BreadcrumbMapping = {
-  [key: string]: string
-}
+  [key: string]: string;
+};

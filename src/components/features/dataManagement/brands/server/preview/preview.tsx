@@ -1,5 +1,3 @@
-import { Input } from '@/components/ui/shadcn/input';
-
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 
 import { BrandPreviewProps } from './preview.types';

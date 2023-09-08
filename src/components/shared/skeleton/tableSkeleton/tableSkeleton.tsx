@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@components/ui/shadcn/table'
+} from '@components/ui/shadcn/table';
 
 export const TableSkeleton = () => {
   const iterateRows = () => {
@@ -38,13 +38,13 @@ export const TableSkeleton = () => {
           </div>
         </TableCell>
       </TableRow>,
-    ]
+    ];
 
     for (let index = 0; index < 5; index++) {
-      rows.push(rows[0])
+      rows.push(rows[0]);
     }
-    return rows
-  }
+    return rows;
+  };
 
   return (
     <Table>
@@ -82,7 +82,7 @@ export const TableSkeleton = () => {
           </TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>{iterateRows().map((row) => row)}</TableBody>
+      <TableBody>{iterateRows().map(row => row)}</TableBody>
     </Table>
-  )
-}
+  );
+};
