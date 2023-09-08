@@ -102,7 +102,6 @@ export function Table<T>({
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
-              <TableHead className="text-left "></TableHead>
               {headerGroup.headers.map(header => {
                 return (
                   <TableHead key={header.id}>
@@ -126,7 +125,6 @@ export function Table<T>({
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
-                <TableCell>{Number(row.id) + 1}</TableCell>
                 {row.getVisibleCells().map(cell => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
