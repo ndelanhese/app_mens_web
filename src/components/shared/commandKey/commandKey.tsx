@@ -28,7 +28,7 @@ export function CommandKey({ open, setOpen }: CommandKeyProps) {
 
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
-  }, []);
+  }, [open, setOpen]);
 
   return (
     <>
