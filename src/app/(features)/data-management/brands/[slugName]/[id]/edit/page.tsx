@@ -3,9 +3,11 @@ import { redirect } from 'next/navigation';
 
 import { api } from '@axios';
 
+import { BrandForm } from '@components/features/dataManagement/brands/client/brandForm/brandForm';
+
 import { Brand, BrandsPageSearchParams } from './page.types';
 
-const getBrandsData = async (id: string | undefined) => {
+const getBrandData = async (id: string | undefined) => {
   if (!id) return redirect('/not-found');
 
   try {
@@ -23,17 +25,17 @@ const getBrandsData = async (id: string | undefined) => {
 };
 
 export const generateMetadata = async ({ params }: BrandsPageSearchParams) => {
-  const brandsData = await getBrandsData(params.id);
+  const brandData = await getBrandData(params.id);
   return {
-    title: brandsData.name,
+    title: brandData.name,
   };
 };
 
 const BrandPage = async ({ params }: BrandsPageSearchParams) => {
-  const brandsData = await getBrandsData(params.id);
+  const brandData = await getBrandData(params.id);
   return (
-    <div className="flex w-full items-center justify-center">
-      <h1>{JSON.stringify(brandsData)}</h1>
+    <div className="flex w-full">
+      <BrandForm brand={brandData} />
     </div>
   );
 };
