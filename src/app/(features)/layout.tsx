@@ -1,9 +1,9 @@
-import { ReactNode, Suspense } from 'react'
+import { ReactNode, Suspense } from 'react';
 
-import { Breadcrumb } from '@components/shared/breadcrumb/breadcrumb'
-import { CommandKeySearchBar } from '@components/shared/commandKey/commandKeySearchBar'
-import { Sidebar } from '@components/shared/sidebar/sidebar'
-import { ToggleTheme } from '@components/shared/toggleTheme/toggleTheme'
+import { Breadcrumb } from '@components/shared/breadcrumb/breadcrumb';
+import { CommandKeySearchBar } from '@components/shared/commandKey/commandKeySearchBar';
+import { Sidebar } from '@components/shared/sidebar/sidebar';
+import { ToggleTheme } from '@components/shared/toggleTheme/toggleTheme';
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
@@ -26,6 +26,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         </main>
       </div>
     </div>
-  )
-}
-export default RootLayout
+  );
+};
+export default RootLayout;

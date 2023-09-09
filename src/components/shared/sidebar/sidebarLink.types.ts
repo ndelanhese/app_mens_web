@@ -1,8 +1,8 @@
-import { ElementType } from 'react'
+import { ElementType } from 'react';
 
 export type SidebarLinkProps = {
-  title: string
-  href: string
-  icon?: ElementType
-  onClick?: () => void
-}
+  title: string;
+  href: string;
+  icon?: ElementType;
+  onClick?: () => void;
+};

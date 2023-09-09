@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react';
 
-import { Table } from '@/components/shared/table/table'
-import { TableColumn } from '@/components/shared/table/table.types'
+import { Table } from '@/components/shared/table/table';
+import { TableColumn } from '@/components/shared/table/table.types';
 
-import { TableColumnHeader } from '@components/shared/table/tableColumnHeader'
+import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 
-import { Employee, EmployeesTableProps } from './table.types'
+import { Employee, EmployeesTableProps } from './table.types';
 
 const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
   const tableColumns: Array<TableColumn<Employee>> = useMemo(
@@ -42,11 +42,11 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
       },
     ],
     [],
-  )
+  );
 
   const handleRowClick = useCallback((row: Employee) => {
-    console.log(row)
-  }, [])
+    console.log(row);
+  }, []);
 
   return (
     <Table
@@ -56,7 +56,7 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
       actionLabel="Ação"
       actionCallback={handleRowClick}
     />
-  )
-}
+  );
+};
 
-export const EmployeesTable = memo(EmployeesTableComponent)
+export const EmployeesTable = memo(EmployeesTableComponent);

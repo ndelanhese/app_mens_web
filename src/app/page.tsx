@@ -1,7 +1,7 @@
-import { Breadcrumb } from '@components/shared/breadcrumb/breadcrumb'
-import { CommandKeySearchBar } from '@components/shared/commandKey/commandKeySearchBar'
-import { Sidebar } from '@components/shared/sidebar/sidebar'
-import { ToggleTheme } from '@components/shared/toggleTheme/toggleTheme'
+import { Breadcrumb } from '@components/shared/breadcrumb/breadcrumb';
+import { CommandKeySearchBar } from '@components/shared/commandKey/commandKeySearchBar';
+import { Sidebar } from '@components/shared/sidebar/sidebar';
+import { ToggleTheme } from '@components/shared/toggleTheme/toggleTheme';
 
 const Home = () => (
   <div className="flex h-screen w-screen flex-col">
@@ -21,6 +21,6 @@ const Home = () => (
       </main>
     </div>
   </div>
-)
+);
 
-export default Home
+export default Home;

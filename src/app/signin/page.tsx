@@ -1,11 +1,11 @@
-import { Metadata } from 'next'
+import { Metadata } from 'next';
 
-import { User } from 'lucide-react'
-import { SigninForm } from './shards/signinForm'
+import { User } from 'lucide-react';
+import { SigninForm } from './shards/signinForm';
 
 export const metadata: Metadata = {
   title: 'Entrar',
-}
+};
 
 const SignIn = () => {
   return (
@@ -19,6 +19,6 @@ const SignIn = () => {
       </div>
       <SigninForm />
     </section>
-  )
-}
-export default SignIn
+  );
+};
+export default SignIn;

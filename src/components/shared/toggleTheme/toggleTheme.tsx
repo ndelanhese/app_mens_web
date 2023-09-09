@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import * as React from 'react'
+import * as React from 'react';
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@components/ui/shadcn/dropdownMenu'
-import { Button } from '@components/ui/shadcn/button'
+} from '@components/ui/shadcn/dropdownMenu';
+import { Button } from '@components/ui/shadcn/button';
 
-import { Moon, Sun } from 'lucide-react'
-import { useTheme } from 'next-themes'
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 export function ToggleTheme() {
-  const { setTheme } = useTheme()
+  const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -41,5 +41,5 @@ export function ToggleTheme() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

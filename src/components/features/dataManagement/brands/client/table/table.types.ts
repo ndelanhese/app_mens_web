@@ -1,8 +1,8 @@
-export type Brands = {
+export type Brand = {
   id: number;
   name: string;
 };
 
 export type BrandsTableProps = {
-  rows: Array<Brands>;
+  rows: Array<Brand>;
 };
