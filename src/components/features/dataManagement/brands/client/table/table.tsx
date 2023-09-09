@@ -1,12 +1,13 @@
 'use client';
 
-import { memo, useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { api } from '@axios';
 
 import { Table } from '@components/shared/table/table';
 import {
+  RefModalProps,
   TableActionCallbackOptions,
   TableColumn,
 } from '@components/shared/table/table.types';
@@ -18,11 +19,14 @@ import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 
 import { Brands, BrandsTableProps } from './table.types';
 import { Plus } from 'lucide-react';
+import { CreateBrandForm } from '../createBrandForm/createBrandForm';
 
 export const BrandsTable = ({ rows }: BrandsTableProps) => {
   const router = useRouter();
 
   const { toast } = useToast();
+
+  const createBranModalRef = useRef<RefModalProps | null>(null);
 
   const tableColumns: Array<TableColumn<Brands>> = useMemo(
     () => [
@@ -88,7 +92,6 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
     [handleDeleteItem, router],
   );
 
-  // Adicionar form de nova marca
   const NEW_BRAND_TRIGGER = (
     <StyledDiv>
       Criar nova marca
@@ -96,16 +99,25 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
     </StyledDiv>
   );
 
+  const handleCloseNewBrandModal = useCallback(() => {
+    createBranModalRef.current?.close();
+  }, []);
+
   return (
     <Table
       tableColumns={tableColumns}
       filter="Nome"
       rows={rows}
       actionCallback={handleRowClick}
-      newItemDialogContent={<h1>Dialog form content</h1>}
+      newItemDialogContent={
+        <CreateBrandForm handleCloseModal={handleCloseNewBrandModal} />
+      }
       newItemDialogDescription="Criar uma nova marca no sistema."
       newItemDialogTitle="Criar nova marca"
       newItemTrigger={NEW_BRAND_TRIGGER}
+      newItemDialogRef={ref => {
+        createBranModalRef.current = ref;
+      }}
     />
   );
 };

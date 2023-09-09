@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, RefObject } from 'react';
 
 // eslint-disable-next-line import/named
 import { Column } from '@tanstack/react-table';
@@ -27,6 +27,11 @@ export type TableColumn<T> = {
 
 export type TableActionCallbackOptions = 'view' | 'edit' | 'delete';
 
+export interface RefModalProps {
+  open: () => void;
+  close: () => void;
+}
+
 export type UserTableProps<T> = {
   rows: Array<T>;
   tableColumns: Array<TableColumn<T>>;
@@ -37,4 +42,5 @@ export type UserTableProps<T> = {
   newItemDialogTitle?: string;
   newItemDialogDescription?: string;
   newItemDialogContent?: ReactNode;
+  newItemDialogRef?: (ref: RefModalProps) => void | undefined;
 };

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { table } from 'console';
 
 import { Button } from '@/components/ui/shadcn/button';
 import { StyledDiv } from '@/components/ui/styledDiv/styledDiv';
@@ -43,7 +44,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { UserTableProps } from './table.types';
+import { RefModalProps, UserTableProps } from './table.types';
 import { Eye, Pencil, Trash } from 'lucide-react';
 
 export function Table<T>({
@@ -55,10 +56,13 @@ export function Table<T>({
   newItemDialogTitle,
   newItemDialogDescription,
   newItemTrigger,
+  newItemDialogRef,
 }: UserTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+
+  const [open, setOpen] = useState(false);
 
   const table = useReactTable({
     data: rows,
@@ -83,22 +87,37 @@ export function Table<T>({
     </StyledDiv>
   );
 
+  useEffect(() => {
+    if (newItemDialogRef) {
+      const ref: RefModalProps = {
+        open: () => setOpen(true),
+        close: () => setOpen(false),
+      };
+      newItemDialogRef(ref);
+    }
+  }, [newItemDialogRef]);
+
   return (
     <div className="flex w-full flex-col items-start justify-start pb-3">
-      <div className="flex w-full flex-row items-end justify-between">
+      <div className="flex w-full flex-col justify-between sm:flex-row sm:items-end">
         <Input
           id="search"
-          className="max-w-xs"
+          className="sm:max-w-xs"
           placeholder="Pesquisar..."
           value={(table.getColumn(filter)?.getFilterValue() as string) ?? ''}
           onChange={event =>
             table.getColumn(filter)?.setFilterValue(event.target.value)
           }
         />
-        <div className="flex flex-row items-center gap-2">
-          <Dialog>
+        <div className="mt-2 flex flex-row items-center justify-between gap-2 sm:mt-0">
+          <Dialog
+            open={open}
+            onOpenChange={isOpen => {
+              setOpen(isOpen);
+            }}
+          >
             <DialogTrigger>{newItemTrigger ?? 'Criar novo'}</DialogTrigger>
-            <DialogContent>
+            <DialogContent className="flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto">
               <DialogHeader>
                 <DialogTitle>
                   {newItemDialogTitle ?? 'Criar novo item'}

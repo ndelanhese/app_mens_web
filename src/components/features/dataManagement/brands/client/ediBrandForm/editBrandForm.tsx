@@ -9,12 +9,12 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
-import { BrandFormProps } from './brandForm.types';
+import { BrandFormProps } from './editBrandForm.types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { BrandFormSchema, brandFormSchema } from './brandForm.schema';
+import { BrandFormSchema, brandFormSchema } from './editBrandForm.schema';
 
-export const BrandFormComponent = ({ brand }: BrandFormProps) => {
+export const EditBrandFormComponent = ({ brand }: BrandFormProps) => {
   const route = useRouter();
   const { toast } = useToast();
 
@@ -67,4 +67,4 @@ export const BrandFormComponent = ({ brand }: BrandFormProps) => {
   );
 };
 
-export const BrandForm = memo(BrandFormComponent);
+export const EditBrandForm = memo(EditBrandFormComponent);

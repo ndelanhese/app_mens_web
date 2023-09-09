@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { api } from '@axios';
 
-import { BrandForm } from '@components/features/dataManagement/brands/client/brandForm/brandForm';
+import { EditBrandForm } from '@components/features/dataManagement/brands/client/ediBrandForm/editBrandForm';
 
 import { Brand, BrandsPageSearchParams } from './page.types';
 
@@ -35,7 +35,7 @@ const BrandPage = async ({ params }: BrandsPageSearchParams) => {
   const brandData = await getBrandData(params.id);
   return (
     <div className="flex w-full">
-      <BrandForm brand={brandData} />
+      <EditBrandForm brand={brandData} />
     </div>
   );
 };
