@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
 
@@ -11,15 +11,15 @@ import {
   TableActionCallbackOptions,
   TableColumn,
 } from '@components/shared/table/table.types';
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 
-import { convertStringToSlug } from '@utils/helpers/stringManipulation';
-
-import { Brands, BrandsTableProps } from './table.types';
 import { Plus } from 'lucide-react';
+import { ViewBrandForm } from '../../server/viewBrandForm/viewBrandForm';
 import { CreateBrandForm } from '../createBrandForm/createBrandForm';
+import { EditBrandForm } from '../ediBrandForm/editBrandForm';
+import { Brand, BrandsTableProps } from './table.types';
 
 export const BrandsTable = ({ rows }: BrandsTableProps) => {
   const router = useRouter();
@@ -27,8 +27,14 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
   const { toast } = useToast();
 
   const createBranModalRef = useRef<RefModalProps | null>(null);
+  const editBranModalRef = useRef<RefModalProps | null>(null);
+  const viewBranModalRef = useRef<RefModalProps | null>(null);
 
-  const tableColumns: Array<TableColumn<Brands>> = useMemo(
+  const [selectedBrand, setSelectBrand] = useState<Brand | undefined>(
+    undefined,
+  );
+
+  const tableColumns: Array<TableColumn<Brand>> = useMemo(
     () => [
       {
         header: ({ column }) => (
@@ -70,26 +76,25 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
   );
 
   const handleRowClick = useCallback(
-    async (row: Brands, action: TableActionCallbackOptions) => {
-      const { name, id } = row;
-      const slugName = convertStringToSlug(name);
+    async (row: Brand, action: TableActionCallbackOptions) => {
+      const { id } = row;
 
       switch (action) {
         case 'view':
-          router.push(`/data-management/brands/${slugName}/${id}`);
+          setSelectBrand(row);
           break;
         case 'edit':
-          router.push(`/data-management/brands/${slugName}/${id}/edit`);
+          setSelectBrand(row);
           break;
         case 'delete':
           await handleDeleteItem(id);
           break;
         default:
-          router.push(`/data-management/brands/${slugName}/${id}`);
+          setSelectBrand(row);
           break;
       }
     },
-    [handleDeleteItem, router],
+    [handleDeleteItem],
   );
 
   const NEW_BRAND_TRIGGER = (
@@ -101,6 +106,14 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
 
   const handleCloseNewBrandModal = useCallback(() => {
     createBranModalRef.current?.close();
+  }, []);
+
+  const handleCloseEditBrandModal = useCallback(() => {
+    editBranModalRef.current?.close();
+  }, []);
+
+  const handleCloseViewBrandModal = useCallback(() => {
+    viewBranModalRef.current?.close();
   }, []);
 
   return (
@@ -117,6 +130,18 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
       newItemTrigger={NEW_BRAND_TRIGGER}
       newItemDialogRef={ref => {
         createBranModalRef.current = ref;
+      }}
+      editItemDialogTitle="Editar marca"
+      editItemDialogDescription="Editar uma marca no sistema..."
+      editItemDialogContent={<EditBrandForm brand={selectedBrand} />}
+      editItemDialogRef={ref => {
+        editBranModalRef.current = ref;
+      }}
+      viewItemDialogTitle="Visualizar marca"
+      viewItemDialogDescription="Visualizar uma marca no sistema..."
+      viewItemDialogContent={<ViewBrandForm brand={selectedBrand} />}
+      viewItemDialogRef={ref => {
+        viewBranModalRef.current = ref;
       }}
     />
   );

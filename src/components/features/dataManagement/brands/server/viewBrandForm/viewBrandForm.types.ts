@@ -3,6 +3,6 @@ export type Brand = {
   name: string;
 };
 
-export type BrandFormProps = {
+export type BrandPreviewProps = {
   brand: Brand | undefined;
 };

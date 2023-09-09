@@ -43,4 +43,12 @@ export type UserTableProps<T> = {
   newItemDialogDescription?: string;
   newItemDialogContent?: ReactNode;
   newItemDialogRef?: (ref: RefModalProps) => void | undefined;
+  editItemDialogTitle?: string;
+  editItemDialogDescription?: string;
+  editItemDialogContent?: ReactNode;
+  editItemDialogRef?: (ref: RefModalProps) => void | undefined;
+  viewItemDialogTitle?: string;
+  viewItemDialogDescription?: string;
+  viewItemDialogContent?: ReactNode;
+  viewItemDialogRef?: (ref: RefModalProps) => void | undefined;
 };

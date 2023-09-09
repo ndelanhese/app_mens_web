@@ -59,7 +59,7 @@ export const CreateBrandFormComponent = ({
         errorMessage={errors.name?.message}
       />
 
-      <Button disabled={isSubmitting} type="submit">
+      <Button disabled={isSubmitting} type="submit" className="sm:self-end">
         Criar
       </Button>
     </form>

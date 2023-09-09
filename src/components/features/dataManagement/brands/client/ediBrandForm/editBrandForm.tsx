@@ -1,6 +1,6 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { api } from '@axios';
@@ -21,6 +21,7 @@ export const EditBrandFormComponent = ({ brand }: BrandFormProps) => {
   const {
     register,
     handleSubmit,
+    setFocus,
     formState: { errors, isSubmitting },
   } = useForm<BrandFormSchema>({
     resolver: zodResolver(brandFormSchema),
@@ -28,7 +29,7 @@ export const EditBrandFormComponent = ({ brand }: BrandFormProps) => {
 
   const onSubmit: SubmitHandler<BrandFormSchema> = async data => {
     try {
-      await api.put(`/brands/${brand.id}`, data);
+      await api.put(`/brands/${brand?.id}`, data);
       toast({
         title: 'Marca atualizada com sucesso',
         variant: 'default',
@@ -45,15 +46,19 @@ export const EditBrandFormComponent = ({ brand }: BrandFormProps) => {
     }
   };
 
+  useEffect(() => {
+    setFocus('name');
+  }, [setFocus]);
+
   return (
     <form
-      className="flex w-full flex-col gap-6 sm:w-fit"
+      className="flex w-full flex-col gap-6"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex flex-col gap-4 sm:flex-row">
-        <ControlledInput value={brand.id} id="id" label="Código" readOnly />
+      <div className="flex w-full flex-col gap-4">
+        <ControlledInput value={brand?.id} id="id" label="Código" readOnly />
         <ControlledInput
-          defaultValue={brand.name}
+          defaultValue={brand?.name}
           id="name"
           label="Marca"
           register={register}
