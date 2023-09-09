@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 // eslint-disable-next-line import/named
 import { Column } from '@tanstack/react-table';
 
@@ -31,4 +33,8 @@ export type UserTableProps<T> = {
   filter: string;
   actionLabel?: string;
   actionCallback: (row: T, action: TableActionCallbackOptions) => void;
+  newItemTrigger?: ReactNode;
+  newItemDialogTitle?: string;
+  newItemDialogDescription?: string;
+  newItemDialogContent?: ReactNode;
 };

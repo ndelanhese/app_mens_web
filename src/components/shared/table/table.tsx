@@ -21,6 +21,14 @@ import {
   TableRow,
 } from '@components/ui/shadcn/table';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@components/ui/shadcn/dialog';
 
 /* eslint-disable import/named */
 import {
@@ -42,6 +50,10 @@ export function Table<T>({
   tableColumns,
   filter,
   actionCallback,
+  newItemDialogContent,
+  newItemDialogTitle,
+  newItemDialogDescription,
+  newItemTrigger,
 }: UserTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -82,28 +94,46 @@ export function Table<T>({
             table.getColumn(filter)?.setFilterValue(event.target.value)
           }
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">Colunas</Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter(column => column.getCanHide())
-              .map(column => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={value => column.toggleVisibility(!!value)}
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex flex-row items-center gap-2">
+          <Dialog>
+            <DialogTrigger>{newItemTrigger ?? 'Criar novo'}</DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  {newItemDialogTitle ?? 'Criar novo item'}
+                </DialogTitle>
+                <DialogDescription>
+                  {newItemDialogDescription ?? 'Criar novo registro'}
+                </DialogDescription>
+              </DialogHeader>
+              {newItemDialogContent}
+            </DialogContent>
+          </Dialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">Colunas</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter(column => column.getCanHide())
+                .map(column => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={value =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <TableComponent>
         <TableHeader>
