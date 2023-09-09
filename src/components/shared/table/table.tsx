@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/shadcn/button';
+import { StyledDiv } from '@/components/ui/styledDiv/styledDiv';
 
 import { TablePagination } from '@components/shared/table/tablePagination';
 import {
@@ -77,9 +78,9 @@ export function Table<T>({
   });
 
   const DELETE_ITEM_TRIGGER = (
-    <div className="ring-offset-white bg-white inline-flex h-10 w-10 items-center justify-center rounded-md border border-zinc-200 text-sm font-medium transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:focus-visible:ring-zinc-800">
+    <StyledDiv>
       <Trash className="h-4 w-4" />
-    </div>
+    </StyledDiv>
   );
 
   return (

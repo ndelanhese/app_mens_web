@@ -12,6 +12,7 @@ import {
 } from '@components/shared/table/table.types';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
+import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 
@@ -87,11 +88,12 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
     [handleDeleteItem, router],
   );
 
+  // Adicionar form de nova marca
   const NEW_BRAND_TRIGGER = (
-    <div className=" ring-offset-white bg-white inline-flex h-10 items-center justify-center gap-2 rounded-md border border-zinc-200 px-4 text-sm font-medium transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-offset-2 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50">
+    <StyledDiv>
       Criar nova marca
       <Plus className="h-4 w-4" />
-    </div>
+    </StyledDiv>
   );
 
   return (
