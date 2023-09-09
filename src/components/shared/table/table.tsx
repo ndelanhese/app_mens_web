@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from '@components/ui/shadcn/table';
+import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
 
 /* eslint-disable import/named */
 import {
@@ -62,6 +63,12 @@ export function Table<T>({
       columnVisibility,
     },
   });
+
+  const DELETE_ITEM_TRIGGER = (
+    <div className="ring-offset-white bg-white inline-flex h-10 w-10 items-center justify-center rounded-md border border-zinc-200 text-sm font-medium transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:focus-visible:ring-zinc-800">
+      <Trash className="h-4 w-4" />
+    </div>
+  );
 
   return (
     <div className="flex w-full flex-col items-start justify-start pb-3">
@@ -130,7 +137,7 @@ export function Table<T>({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
-                <TableCell className="ml-8 flex items-end justify-end sm:ml-0">
+                <TableCell className="ml-8 flex items-end justify-end gap-1 sm:ml-0">
                   <Button
                     onClick={() => {
                       actionCallback(row.original, 'view');
@@ -149,15 +156,14 @@ export function Table<T>({
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>
-                  <Button
-                    onClick={() => {
-                      actionCallback(row.original, 'delete');
-                    }}
-                    variant="outline"
-                    size="icon"
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
+                  <AlertDialog
+                    actionLabel="Confirmar"
+                    cancelLabel="Cancelar"
+                    description="Você tem certeza que deseja excluir este item?"
+                    onAction={() => actionCallback(row.original, 'delete')}
+                    title="Excluir"
+                    trigger={DELETE_ITEM_TRIGGER}
+                  />
                 </TableCell>
               </TableRow>
             ))

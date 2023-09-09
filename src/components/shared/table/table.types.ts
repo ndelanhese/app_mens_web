@@ -29,6 +29,6 @@ export type UserTableProps<T> = {
   rows: Array<T>;
   tableColumns: Array<TableColumn<T>>;
   filter: string;
-  actionLabel: string;
+  actionLabel?: string;
   actionCallback: (row: T, action: TableActionCallbackOptions) => void;
 };
