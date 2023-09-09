@@ -28,7 +28,6 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
 
   const createBranModalRef = useRef<RefModalProps | null>(null);
   const editBranModalRef = useRef<RefModalProps | null>(null);
-  const viewBranModalRef = useRef<RefModalProps | null>(null);
 
   const [selectedBrand, setSelectBrand] = useState<Brand | undefined>(
     undefined,
@@ -112,10 +111,6 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
     editBranModalRef.current?.close();
   }, []);
 
-  const handleCloseViewBrandModal = useCallback(() => {
-    viewBranModalRef.current?.close();
-  }, []);
-
   return (
     <Table
       tableColumns={tableColumns}
@@ -133,16 +128,18 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
       }}
       editItemDialogTitle="Editar marca"
       editItemDialogDescription="Editar uma marca no sistema..."
-      editItemDialogContent={<EditBrandForm brand={selectedBrand} />}
+      editItemDialogContent={
+        <EditBrandForm
+          brand={selectedBrand}
+          handleCloseModal={handleCloseEditBrandModal}
+        />
+      }
       editItemDialogRef={ref => {
         editBranModalRef.current = ref;
       }}
       viewItemDialogTitle="Visualizar marca"
       viewItemDialogDescription="Visualizar uma marca no sistema..."
       viewItemDialogContent={<ViewBrandForm brand={selectedBrand} />}
-      viewItemDialogRef={ref => {
-        viewBranModalRef.current = ref;
-      }}
     />
   );
 };

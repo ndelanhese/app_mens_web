@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { api } from '@axios';
@@ -14,7 +14,10 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BrandFormSchema, brandFormSchema } from './editBrandForm.schema';
 
-export const EditBrandFormComponent = ({ brand }: BrandFormProps) => {
+export const EditBrandFormComponent = ({
+  brand,
+  handleCloseModal,
+}: BrandFormProps) => {
   const route = useRouter();
   const { toast } = useToast();
 
@@ -35,7 +38,7 @@ export const EditBrandFormComponent = ({ brand }: BrandFormProps) => {
         variant: 'default',
       });
       route.refresh();
-      route.push('/data-management/brands');
+      handleCloseModal();
     } catch (error: Error | any) {
       const errorMessage = error.response.data.message ?? 'Erro desconhecido';
       toast({

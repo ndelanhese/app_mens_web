@@ -5,4 +5,5 @@ export type Brand = {
 
 export type BrandFormProps = {
   brand: Brand | undefined;
+  handleCloseModal: () => void;
 };
