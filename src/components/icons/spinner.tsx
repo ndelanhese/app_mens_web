@@ -1,4 +1,4 @@
-import { IconProps } from './icons.types'
+import { IconProps } from './icons.types';
 
 export const Spinner = ({ className }: IconProps) => {
   return (
@@ -15,5 +15,5 @@ export const Spinner = ({ className }: IconProps) => {
         fill="#fff"
       />
     </svg>
-  )
-}
+  );
+};

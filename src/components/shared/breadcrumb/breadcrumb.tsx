@@ -1,8 +1,9 @@
-'use client'
+'use client';
 
-import { usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation';
+import { memo } from 'react';
 
-import { BreadcrumbMapping } from './breadcrumb.types'
+import { BreadcrumbMapping } from './breadcrumb.types';
 
 const breadcrumbMapping: BreadcrumbMapping = {
   '/': 'Tela Inicial',
@@ -18,18 +19,21 @@ const breadcrumbMapping: BreadcrumbMapping = {
   '/financial/summaries': 'Financeiro / Resumos',
   '/promotions/promotion-categories': 'Promoções / Categorias de Promoção',
   '/promotions/promotions': 'Promoções / Promoções',
-}
+};
 
-const getDefaultBreadcrumb = (): string => 'Página Desconhecida'
+const getDefaultBreadcrumb = (): string => 'Página Desconhecida';
 
 const getBreadcrumbText = (pathname: string): string =>
-  breadcrumbMapping[pathname] || getDefaultBreadcrumb()
+  breadcrumbMapping[pathname] || getDefaultBreadcrumb();
 
-export const Breadcrumb = () => {
-  const pathname = usePathname()
-  const breadcrumbText = getBreadcrumbText(pathname)
+const BreadcrumbComponent = () => {
+  const pathname = usePathname();
+  // TODO -> adicionar validação de pathname para sub rotas
+  const breadcrumbText = getBreadcrumbText(pathname);
 
   return (
     <div className="invisible w-12 sm:visible sm:w-auto">{breadcrumbText}</div>
-  )
-}
+  );
+};
+
+export const Breadcrumb = memo(BreadcrumbComponent);

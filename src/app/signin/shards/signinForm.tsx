@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
-import { Spinner } from '@components/icons/spinner'
-import { Button } from '@components/ui/buttons/button'
-import { Input } from '@components/ui/inputs/input'
-import { useToast } from '@components/ui/shadcn/toast/use-toast'
+import { Spinner } from '@components/icons/spinner';
+import { Button } from '@components/ui/buttons/button';
+import { Input } from '@components/ui/inputs/input';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { signin } from './api'
-import { SigninSchema, signinSchema } from './signinForm.schema'
-import { parseCookies } from 'nookies'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { signin } from './api';
+import { SigninSchema, signinSchema } from './signinForm.schema';
+import { parseCookies } from 'nookies';
 
 export const SigninForm = () => {
-  const router = useRouter()
-  const { toast } = useToast()
+  const router = useRouter();
+  const { toast } = useToast();
 
   const {
     register,
@@ -23,29 +23,32 @@ export const SigninForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<SigninSchema>({
     resolver: zodResolver(signinSchema),
-  })
+  });
 
   const redirect = () => {
-    const { redirectTo } = parseCookies()
+    const { redirectTo } = parseCookies();
     if (!redirectTo) {
-      router.push('/')
+      router.push('/');
     }
-    router.push(redirectTo)
-  }
+    router.push(redirectTo);
+  };
 
-  const onSubmit: SubmitHandler<SigninSchema> = async (data) => {
-    const { email, password } = data
+  const onSubmit: SubmitHandler<SigninSchema> = async data => {
+    const { email, password } = data;
     try {
-      await signin(email.toLowerCase().trim(), password)
-      redirect()
+      await signin(email.toLowerCase().trim(), password);
+      redirect();
     } catch (error: Error | any) {
-      toast({
-        title: 'Erro ao acessar',
-        description: error?.response?.data?.message,
-        variant: 'destructive',
-      })
+      const message = error?.response?.data?.message;
+      if (message) {
+        toast({
+          title: 'Erro ao acessar',
+          description: message,
+          variant: 'destructive',
+        });
+      }
     }
-  }
+  };
 
   return (
     <form
@@ -72,5 +75,5 @@ export const SigninForm = () => {
         {isSubmitting ? <Spinner className="dark:text-white" /> : 'Acessar'}
       </Button>
     </form>
-  )
-}
+  );
+};

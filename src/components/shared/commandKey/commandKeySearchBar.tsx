@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { Input } from '@components/ui/shadcn/input'
+import { Input } from '@components/ui/shadcn/input';
 
-import { CommandKey } from './commandKey'
-import { Search } from 'lucide-react'
+import { CommandKey } from './commandKey';
+import { Search } from 'lucide-react';
 
 export const CommandKeySearchBar = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="relative hidden items-center sm:flex">
@@ -24,5 +24,5 @@ export const CommandKeySearchBar = () => {
         <CommandKey open={open} setOpen={setOpen} />
       </div>
     </div>
-  )
-}
+  );
+};

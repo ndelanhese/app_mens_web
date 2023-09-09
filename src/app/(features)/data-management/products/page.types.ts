@@ -1,23 +1,23 @@
 export type Product = {
-  id: number
-  name: string
-  part_number: string
-  description: string
-  price: number
-  size: string
-  color: string
-  quantity: number
+  id: number;
+  name: string;
+  part_number: string;
+  description: string;
+  price: number;
+  size: string;
+  color: string;
+  quantity: number;
   category: {
-    name: string
-  }
+    name: string;
+  };
   brand: {
-    name: string
-  }
+    name: string;
+  };
   supplier: {
-    name: string
-  }
-}
+    name: string;
+  };
+};
 
 export type Products = {
-  data: Product[]
-}
+  data: Product[];
+};

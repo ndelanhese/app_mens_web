@@ -1,12 +1,13 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
+import Link from 'next/link';
+import { memo } from 'react';
 
-import { Button } from '@components/ui/shadcn/button'
+import { Button } from '@components/ui/shadcn/button';
 
-import { SidebarLinkProps } from './sidebarLink.types'
+import { SidebarLinkProps } from './sidebarLink.types';
 
-export const SidebarLink = ({
+const SidebarLinkComponent = ({
   title,
   href,
   icon: Icon,
@@ -18,4 +19,6 @@ export const SidebarLink = ({
       {title}
     </Button>
   </Link>
-)
+);
+
+export const SidebarLink = memo(SidebarLinkComponent);

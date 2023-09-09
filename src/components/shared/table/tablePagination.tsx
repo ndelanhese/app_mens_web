@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { Button } from '@components/ui/shadcn/button'
+import { Button } from '@components/ui/shadcn/button';
 
-import { TablePaginationProps } from './table.types'
+import { TablePaginationProps } from './table.types';
 
 export const TablePagination = ({ previous, next }: TablePaginationProps) => (
   <div className="flex w-full items-center justify-end space-x-2 py-4">
@@ -23,4 +23,4 @@ export const TablePagination = ({ previous, next }: TablePaginationProps) => (
       Próxima
     </Button>
   </div>
-)
+);

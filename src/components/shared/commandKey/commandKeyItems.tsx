@@ -1,4 +1,4 @@
-import { CommandGroup } from '@/components/ui/shadcn/command/command'
+import { CommandGroup } from '@/components/ui/shadcn/command/command';
 
 import {
   ClipboardList,
@@ -13,8 +13,8 @@ import {
   Tags,
   Users,
   WalletCards,
-} from 'lucide-react'
-import { CommandKeyItem } from './commandKeyItem'
+} from 'lucide-react';
+import { CommandKeyItem } from './commandKeyItem';
 
 export const CommandKeyItems = () => (
   <CommandGroup heading="Funções">
@@ -48,4 +48,4 @@ export const CommandKeyItems = () => (
     />
     <CommandKeyItem icon={Percent} title="Promoções" route="/promotions" />
   </CommandGroup>
-)
+);

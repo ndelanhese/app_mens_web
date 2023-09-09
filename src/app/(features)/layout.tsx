@@ -1,9 +1,9 @@
-import { ReactNode, Suspense } from 'react'
+import { ReactNode, Suspense } from 'react';
 
-import { Breadcrumb } from '@components/shared/breadcrumb/breadcrumb'
-import { CommandKeySearchBar } from '@components/shared/commandKey/commandKeySearchBar'
-import { Sidebar } from '@components/shared/sidebar/sidebar'
-import { ToggleTheme } from '@components/shared/toggleTheme/toggleTheme'
+import { Breadcrumb } from '@components/shared/breadcrumb/breadcrumb';
+import { CommandKeySearchBar } from '@components/shared/commandKey/commandKeySearchBar';
+import { Sidebar } from '@components/shared/sidebar/sidebar';
+import { ToggleTheme } from '@components/shared/toggleTheme/toggleTheme';
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
@@ -20,12 +20,12 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
           </nav>
           <section className="flex h-full w-full overflow-y-auto px-5">
             <div className="h-[calc(100vh-5.5rem)] w-screen overflow-x-auto pr-12 sm:w-[calc(100vw-16.5rem)] sm:overflow-y-hidden sm:pr-0">
-              <Suspense fallback={<h1>Loading...</h1>}>{children}</Suspense>
+              {children}
             </div>
           </section>
         </main>
       </div>
     </div>
-  )
-}
-export default RootLayout
+  );
+};
+export default RootLayout;

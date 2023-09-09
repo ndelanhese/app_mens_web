@@ -1,12 +1,12 @@
-import { ElementType } from 'react'
+import { ElementType } from 'react';
 
 export type CommandKeyItemProps = {
-  icon: ElementType
-  route: string
-  title: string
-}
+  icon: ElementType;
+  route: string;
+  title: string;
+};
 
 export type CommandKeyProps = {
-  open: boolean
-  setOpen: (open: boolean) => void
-}
+  open: boolean;
+  setOpen: (open: boolean) => void;
+};

@@ -1,16 +1,16 @@
-import { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { ReactNode } from 'react'
-import './globals.css'
+import { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { ReactNode } from 'react';
+import './globals.css';
 
-import { Toaster } from '@components/ui/shadcn/toast/toaster'
+import { Toaster } from '@components/ui/shadcn/toast/toaster';
 
-import { ThemeProvider } from '@contexts/theme'
+import { ThemeProvider } from '@contexts/theme';
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
-})
+});
 
 export const metadata: Metadata = {
   title: {
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     ],
     type: 'website',
   },
-}
+};
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="pt-BR">
@@ -62,6 +62,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         </ThemeProvider>
       </body>
     </html>
-  )
-}
-export default RootLayout
+  );
+};
+export default RootLayout;

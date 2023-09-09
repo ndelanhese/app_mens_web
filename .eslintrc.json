@@ -1,7 +1,7 @@
 {
   "extends": [
     "next/core-web-vitals",
-    "@rocketseat/eslint-config/react",
+    "@rocketseat/eslint-config/next",
     "plugin:import/typescript",
     "plugin:import/errors",
     "plugin:import/warnings",
@@ -11,6 +11,15 @@
     "*.d.ts"
   ],
   "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "trailingComma": "all",
+        "arrowParens": "avoid",
+        "endOfLine": "auto"
+      }
+    ],
     "import/no-unresolved": "off",
     "import/extensions": [
       "error",

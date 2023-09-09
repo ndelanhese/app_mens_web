@@ -29,6 +29,7 @@
       "@axios": ["./src/services/axios.ts"],
       "@components/*": ["./src/components/*"],
       "@utils/*": ["./src/utils/*"],
+      "@features-components/*": ["./src/components/features/*"],
     }
   },
   "include": [

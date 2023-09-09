@@ -1,15 +1,15 @@
-import { cookies } from 'next/headers'
-import { cache } from 'react'
-import { Metadata } from 'next'
+import { cookies } from 'next/headers';
+import { cache } from 'react';
+import { Metadata } from 'next';
 
-import { api } from '@axios'
+import { api } from '@axios';
+import { PromotionsTable } from '@features-components/promotions/promotions/client/table/table';
 
-import { Promotions } from './page.types'
-import { PromotionsTable } from './shards/table'
+import { Promotions } from './page.types';
 
 const iterateResponse = (promotions?: Promotions) => {
-  if (!promotions) return []
-  return promotions?.data?.map((promotion) => ({
+  if (!promotions) return [];
+  return promotions?.data?.map(promotion => ({
     name: promotion?.name,
     description: promotion?.description,
     discount: String(promotion?.discount_amount), // TODO -> add util to format currency
@@ -20,32 +20,32 @@ const iterateResponse = (promotions?: Promotions) => {
     products: promotion?.products
       ?.map(({ product }) => product?.name)
       .join(', '), // TODO -> add util to format array and prevent duplicate
-  }))
-}
+  }));
+};
 
 const getPromotions = cache(async () => {
   try {
-    const cookiesStore = cookies()
-    const token = cookiesStore.get('token')?.value
+    const cookiesStore = cookies();
+    const token = cookiesStore.get('token')?.value;
     const { data } = await api.get<Promotions>('/promotions', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    })
-    return data
+    });
+    return data;
   } catch (error: Error | any) {
-    console.log(error?.response?.data?.message)
+    console.log(error?.response?.data?.message);
   }
-})
+});
 
 export const metadata: Metadata = {
   title: 'Promoções',
-}
+};
 
 const Promotions = async () => {
-  const promotions = await getPromotions()
-  const rows = iterateResponse(promotions)
-  return <PromotionsTable rows={rows} />
-}
+  const promotions = await getPromotions();
+  const rows = iterateResponse(promotions);
+  return <PromotionsTable rows={rows} />;
+};
 
-export default Promotions
+export default Promotions;
