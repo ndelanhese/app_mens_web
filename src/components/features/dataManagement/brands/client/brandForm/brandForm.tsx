@@ -46,8 +46,11 @@ export const BrandFormComponent = ({ brand }: BrandFormProps) => {
   };
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-row gap-4">
+    <form
+      className="flex w-full flex-col gap-6 sm:w-fit"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div className="flex flex-col gap-4 sm:flex-row">
         <ControlledInput value={brand.id} id="id" label="Código" readOnly />
         <ControlledInput
           defaultValue={brand.name}
@@ -57,7 +60,7 @@ export const BrandFormComponent = ({ brand }: BrandFormProps) => {
           errorMessage={errors.name?.message}
         />
       </div>
-      <Button disabled={isSubmitting} type="submit" className="self-end">
+      <Button disabled={isSubmitting} type="submit" className="sm:self-end">
         Alterar
       </Button>
     </form>
