@@ -81,8 +81,6 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
 
       switch (action) {
         case 'view':
-          setSelectBrand(row);
-          break;
         case 'edit':
           setSelectBrand(row);
           break;
