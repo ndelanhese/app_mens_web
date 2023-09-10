@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     const expirationTimeInSeconds = Math.floor(
       (currentDate.getTime() - Date.now()) / 1000,
     );
-    const TOKEN_COOKIE = `token=${data.token}; Path=/; Max-Age=${expirationTimeInSeconds}; HttpOnly;`;
+    const TOKEN_COOKIE = `token=${data.token}; Path=/; Max-Age=${expirationTimeInSeconds};`;
     const USER_COOKIE = `user=${JSON.stringify(
       data.user_data,
     )}; Path=/; Max-Age=${expirationTimeInSeconds};`;
@@ -28,9 +28,13 @@ export async function POST(request: NextRequest) {
     const header = new Headers();
     header.append('Set-Cookie', TOKEN_COOKIE);
     header.append('Set-Cookie', USER_COOKIE);
-    return NextResponse.redirect(redirectUrl, {
-      headers: header,
-    });
+    return NextResponse.json(
+      { message: 'Login realizado com sucesso!' },
+      {
+        status: 200,
+        headers: header,
+      },
+    );
   } catch (error: Error | any) {
     return NextResponse.json(
       {

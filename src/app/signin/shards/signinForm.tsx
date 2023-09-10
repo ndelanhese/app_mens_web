@@ -29,6 +29,7 @@ export const SigninForm = () => {
     const { redirectTo } = parseCookies();
     if (!redirectTo) {
       router.push('/');
+      return;
     }
     router.push(redirectTo);
   };
