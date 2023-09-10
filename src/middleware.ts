@@ -33,11 +33,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (pathname === '/signin' && token) {
-    return NextResponse.redirect(new URL('/', request.url), {
-      headers: {
-        'Set-Cookie': `redirectTo=${request.nextUrl.basePath}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
-      },
-    });
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   // caller function to verify if the route is a protected route
