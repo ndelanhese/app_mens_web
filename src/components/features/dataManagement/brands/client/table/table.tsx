@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
+import { TableSkeleton } from '@/components/shared/skeleton/tableSkeleton/tableSkeleton';
 
 import { Table } from '@components/shared/table/table';
 import {
@@ -110,6 +111,10 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
   const handleCloseEditBrandModal = useCallback(() => {
     editBranModalRef.current?.close();
   }, []);
+
+  if (rows.length === 0) {
+    return <TableSkeleton />;
+  }
 
   return (
     <Table
