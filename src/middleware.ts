@@ -22,9 +22,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
-  const ONE_MINUTE_IN_SECONDS = 60;
   const { pathname } = request.nextUrl;
+
   if (!token && pathname !== '/signin') {
+    const ONE_MINUTE_IN_SECONDS = 60;
     return NextResponse.redirect(new URL('/signin', request.url), {
       headers: {
         'Set-Cookie': `redirectTo=${request.url}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
@@ -33,11 +34,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (pathname === '/signin' && token) {
-    return NextResponse.redirect(new URL('/', request.url), {
-      headers: {
-        'Set-Cookie': `redirectTo=${request.nextUrl.basePath}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
-      },
-    });
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   // caller function to verify if the route is a protected route
