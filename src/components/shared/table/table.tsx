@@ -1,20 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/shadcn/button';
 import { StyledDiv } from '@/components/ui/styledDiv/styledDiv';
 
 import { TablePagination } from '@components/shared/table/tablePagination';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@components/ui/shadcn/dialog';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -44,7 +36,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Eye, Pencil, Trash } from 'lucide-react';
-import { RefModalProps, UserTableProps } from './table.types';
+import { UserTableProps } from './table.types';
+import { TableDialog } from './tableDialog';
 
 export function Table<T>({
   rows,
@@ -68,10 +61,6 @@ export function Table<T>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-
-  const [openNewItem, setOpenNewItem] = useState(false);
-  const [openEditItem, setOpenEditItem] = useState(false);
-  const [openViewItem, setOpenViewItem] = useState(false);
 
   const table = useReactTable({
     data: rows,
@@ -108,36 +97,6 @@ export function Table<T>({
     </StyledDiv>
   );
 
-  useEffect(() => {
-    if (newItemDialogRef) {
-      const ref: RefModalProps = {
-        open: () => setOpenNewItem(true),
-        close: () => setOpenNewItem(false),
-      };
-      newItemDialogRef(ref);
-    }
-  }, [newItemDialogRef]);
-
-  useEffect(() => {
-    if (editItemDialogRef) {
-      const ref: RefModalProps = {
-        open: () => setOpenEditItem(true),
-        close: () => setOpenEditItem(false),
-      };
-      editItemDialogRef(ref);
-    }
-  }, [editItemDialogRef]);
-
-  useEffect(() => {
-    if (viewItemDialogRef) {
-      const ref: RefModalProps = {
-        open: () => setOpenEditItem(true),
-        close: () => setOpenEditItem(false),
-      };
-      viewItemDialogRef(ref);
-    }
-  }, [viewItemDialogRef]);
-
   return (
     <div className="flex w-full flex-col items-start justify-start pb-3">
       <div className="flex w-full flex-col justify-between sm:flex-row sm:items-end">
@@ -151,25 +110,13 @@ export function Table<T>({
           }
         />
         <div className="mt-2 flex flex-row items-center justify-between gap-2 sm:mt-0">
-          <Dialog
-            open={openNewItem}
-            onOpenChange={isOpen => {
-              setOpenNewItem(isOpen);
-            }}
-          >
-            <DialogTrigger>{newItemTrigger ?? 'Criar novo'}</DialogTrigger>
-            <DialogContent className="flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto">
-              <DialogHeader>
-                <DialogTitle>
-                  {newItemDialogTitle ?? 'Criar novo item'}
-                </DialogTitle>
-                <DialogDescription>
-                  {newItemDialogDescription ?? 'Criar novo registro'}
-                </DialogDescription>
-              </DialogHeader>
-              {newItemDialogContent}
-            </DialogContent>
-          </Dialog>
+          <TableDialog
+            dialogRef={newItemDialogRef}
+            trigger={newItemTrigger}
+            content={newItemDialogContent}
+            description={newItemDialogDescription}
+            title={newItemDialogTitle}
+          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">Colunas</Button>
@@ -229,50 +176,26 @@ export function Table<T>({
                   </TableCell>
                 ))}
                 <TableCell className="ml-8 flex items-end justify-end gap-1 sm:ml-0">
-                  <Dialog
-                    open={openViewItem}
-                    onOpenChange={isOpen => {
-                      setOpenViewItem(isOpen);
-                      if (isOpen) {
-                        actionCallback(row.original, 'view');
-                      }
-                    }}
-                  >
-                    <DialogTrigger>{VIEW_ITEM_TRIGGER}</DialogTrigger>
-                    <DialogContent className="flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto">
-                      <DialogHeader>
-                        <DialogTitle>
-                          {viewItemDialogTitle ?? 'Visualizar item'}
-                        </DialogTitle>
-                        <DialogDescription>
-                          {viewItemDialogDescription ?? 'Visualizar registro'}
-                        </DialogDescription>
-                      </DialogHeader>
-                      {viewItemDialogContent}
-                    </DialogContent>
-                  </Dialog>
-                  <Dialog
-                    open={openEditItem}
-                    onOpenChange={isOpen => {
-                      setOpenEditItem(isOpen);
-                      if (isOpen) {
-                        actionCallback(row.original, 'edit');
-                      }
-                    }}
-                  >
-                    <DialogTrigger>{EDIT_ITEM_TRIGGER}</DialogTrigger>
-                    <DialogContent className="flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto">
-                      <DialogHeader>
-                        <DialogTitle>
-                          {editItemDialogTitle ?? 'Editar item'}
-                        </DialogTitle>
-                        <DialogDescription>
-                          {editItemDialogDescription ?? 'Editar registro'}
-                        </DialogDescription>
-                      </DialogHeader>
-                      {editItemDialogContent}
-                    </DialogContent>
-                  </Dialog>
+                  <TableDialog
+                    dialogRef={viewItemDialogRef}
+                    trigger={VIEW_ITEM_TRIGGER}
+                    content={viewItemDialogContent}
+                    description={viewItemDialogDescription}
+                    title={viewItemDialogTitle}
+                    actionCallback={actionCallback}
+                    row={row.original}
+                    type="view"
+                  />
+                  <TableDialog
+                    dialogRef={editItemDialogRef}
+                    trigger={EDIT_ITEM_TRIGGER}
+                    content={editItemDialogContent}
+                    description={editItemDialogDescription}
+                    title={editItemDialogTitle}
+                    actionCallback={actionCallback}
+                    row={row.original}
+                    type="edit"
+                  />
                   <AlertDialog
                     actionLabel="Confirmar"
                     cancelLabel="Cancelar"

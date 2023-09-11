@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
 import { TableSkeleton } from '@/components/shared/skeleton/tableSkeleton/tableSkeleton';
@@ -79,19 +79,10 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
     async (row: Brand, action: TableActionCallbackOptions) => {
       const { id } = row;
 
-      switch (action) {
-        case 'view':
-          setSelectBrand(row);
-          break;
-        case 'edit':
-          setSelectBrand(row);
-          break;
-        case 'delete':
-          await handleDeleteItem(id);
-          break;
-        default:
-          setSelectBrand(row);
-          break;
+      setSelectBrand(row);
+
+      if (action === 'delete') {
+        await handleDeleteItem(id);
       }
     },
     [handleDeleteItem],
@@ -106,13 +97,21 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
 
   const handleCloseNewBrandModal = useCallback(() => {
     createBranModalRef.current?.close();
-  }, []);
+    setSelectBrand(undefined);
+    router.refresh();
+  }, [router]);
 
   const handleCloseEditBrandModal = useCallback(() => {
     editBranModalRef.current?.close();
-  }, []);
+    setSelectBrand(undefined);
+    router.refresh();
+  }, [router]);
 
-  if (rows.length === 0) {
+  const getBrandFunction = useCallback(() => {
+    return selectedBrand;
+  }, [selectedBrand]);
+
+  if (rows.length < 1) {
     return <TableSkeleton />;
   }
 
@@ -135,7 +134,7 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
       editItemDialogDescription="Editar uma marca no sistema..."
       editItemDialogContent={
         <EditBrandForm
-          brand={selectedBrand}
+          getBrandFunction={getBrandFunction}
           handleCloseModal={handleCloseEditBrandModal}
         />
       }

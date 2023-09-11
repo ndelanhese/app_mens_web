@@ -1,7 +1,6 @@
 'use client';
 
 import { memo } from 'react';
-import { useRouter } from 'next/navigation';
 
 import { api } from '@axios';
 
@@ -17,7 +16,6 @@ import { BrandFormProps } from './createBrandForm.types';
 export const CreateBrandFormComponent = ({
   handleCloseModal,
 }: BrandFormProps) => {
-  const route = useRouter();
   const { toast } = useToast();
 
   const {
@@ -31,12 +29,11 @@ export const CreateBrandFormComponent = ({
   const onSubmit: SubmitHandler<BrandFormSchema> = async data => {
     try {
       await api.post('/brands', { ...data });
+      handleCloseModal();
       toast({
         title: 'Marca criada com sucesso',
         variant: 'default',
       });
-      route.refresh();
-      handleCloseModal();
     } catch (error: Error | any) {
       const errorMessage = error.response.data.message ?? 'Erro desconhecido';
       toast({
