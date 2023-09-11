@@ -14,6 +14,13 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
     () => [
       {
         header: ({ column }) => (
+          <TableColumnHeader column={column} title="Código" />
+        ),
+        accessorKey: 'id',
+        id: 'Código',
+      },
+      {
+        header: ({ column }) => (
           <TableColumnHeader column={column} title="Nome" />
         ),
         accessorKey: 'name',
