@@ -16,7 +16,7 @@ import {
 } from './createCategoryForm.schema';
 import { CategoryFormProps } from './createCategoryForm.types';
 
-export const CreateCategoryFormComponent = ({
+const CreateCategoryFormComponent = ({
   handleCloseModal,
 }: CategoryFormProps) => {
   const { toast } = useToast();
