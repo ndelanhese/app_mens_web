@@ -1,17 +1,48 @@
 'use client';
 
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { Table } from '@/components/shared/table/table';
-import { TableColumn } from '@/components/shared/table/table.types';
+import { api } from '@axios';
 
+import {
+  RefModalProps,
+  TableActionCallbackOptions,
+  TableColumn,
+} from '@components/shared/table/table.types';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
+import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 
 import { Product, ProductsTableProps } from './table.types';
+import { Plus } from 'lucide-react';
+import { CreateProductForm } from '../createProductForm/createProductForm';
+import { EditProductForm } from '../ediProductForm/editProductForm';
+import { ViewProductForm } from '../../server/viewProductForm/viewProductForm';
 
 const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
+  const router = useRouter();
+
+  const { toast } = useToast();
+
+  const createProductModalRef = useRef<RefModalProps | null>(null);
+  const editProductModalRef = useRef<RefModalProps | null>(null);
+
+  const [selectedProduct, setSelectProduct] = useState<Product | undefined>(
+    undefined,
+  );
+
   const tableColumns: Array<TableColumn<Product>> = useMemo(
     () => [
+      {
+        header: ({ column }) => (
+          <TableColumnHeader column={column} title="Código" />
+        ),
+        accessorKey: 'id',
+        id: 'Código',
+      },
       {
         header: ({ column }) => (
           <TableColumnHeader column={column} title="Nome" />
@@ -21,10 +52,10 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="Código" />
+          <TableColumnHeader column={column} title="Part Number" />
         ),
         accessorKey: 'partNumber',
-        id: 'Código',
+        id: 'Part Number',
       },
       {
         header: ({ column }) => (
@@ -79,17 +110,96 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
     [],
   );
 
-  const handleRowClick = useCallback((row: Product) => {
-    console.log(row);
-  }, []);
+  const handleDeleteItem = useCallback(
+    async (id: number) => {
+      try {
+        await api.delete(`/products/${id}`);
+        router.refresh();
+        toast({
+          title: 'Produto deletado com sucesso',
+        });
+      } catch (error: Error | any) {
+        const message =
+          error?.response?.data?.message ?? 'Erro ao deletar o item';
+        toast({
+          title: 'Erro ao deletar',
+          description: message,
+          variant: 'destructive',
+        });
+      }
+    },
+    [router, toast],
+  );
+
+  const handleRowClick = useCallback(
+    async (row: Product, action: TableActionCallbackOptions) => {
+      const { id } = row;
+
+      setSelectProduct(row);
+
+      if (action === 'delete') {
+        await handleDeleteItem(id);
+      }
+    },
+    [handleDeleteItem],
+  );
+
+  const NEW_PRODUCT_TRIGGER = (
+    <StyledDiv>
+      Criar novo produto
+      <Plus className="h-4 w-4" />
+    </StyledDiv>
+  );
+
+  const handleCloseNewProductModal = useCallback(() => {
+    createProductModalRef.current?.close();
+    setSelectProduct(undefined);
+    router.refresh();
+  }, [router]);
+
+  const handleCloseEditProductModal = useCallback(() => {
+    editProductModalRef.current?.close();
+    setSelectProduct(undefined);
+    router.refresh();
+  }, [router]);
+
+  const getProductFunction = useCallback(() => {
+    return selectedProduct;
+  }, [selectedProduct]);
+
+  if (rows.length < 1) {
+    return <TableSkeleton />;
+  }
 
   return (
     <Table
       tableColumns={tableColumns}
       filter="Nome"
       rows={rows}
-      actionLabel="Ação"
       actionCallback={handleRowClick}
+      newItemDialogContent={
+        <CreateProductForm handleCloseModal={handleCloseNewProductModal} />
+      }
+      newItemDialogDescription="Criar um novo produto no sistema."
+      newItemDialogTitle="Criar novo produto"
+      newItemTrigger={NEW_PRODUCT_TRIGGER}
+      newItemDialogRef={ref => {
+        createProductModalRef.current = ref;
+      }}
+      editItemDialogTitle="Editar produto"
+      editItemDialogDescription="Editar um produto no sistema..."
+      editItemDialogContent={
+        <EditProductForm
+          getProductFunction={getProductFunction}
+          handleCloseModal={handleCloseEditProductModal}
+        />
+      }
+      editItemDialogRef={ref => {
+        editProductModalRef.current = ref;
+      }}
+      viewItemDialogTitle="Visualizar produto"
+      viewItemDialogDescription="Visualizar um produto no sistema..."
+      viewItemDialogContent={<ViewProductForm product={selectedProduct} />}
     />
   );
 };

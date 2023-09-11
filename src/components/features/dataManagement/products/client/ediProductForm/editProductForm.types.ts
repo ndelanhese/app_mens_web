@@ -11,6 +11,7 @@ export type Product = {
   brand: string;
 };
 
-export type ProductsTableProps = {
-  rows: Array<Product>;
+export type ProductFormProps = {
+  getProductFunction: () => Product | undefined;
+  handleCloseModal: () => void;
 };

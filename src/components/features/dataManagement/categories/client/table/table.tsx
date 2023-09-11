@@ -27,8 +27,8 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
 
   const { toast } = useToast();
 
-  const createBranModalRef = useRef<RefModalProps | null>(null);
-  const editBranModalRef = useRef<RefModalProps | null>(null);
+  const createCategoryModalRef = useRef<RefModalProps | null>(null);
+  const editCategoryModalRef = useRef<RefModalProps | null>(null);
 
   const [selectedCategory, setSelectCategory] = useState<Category | undefined>(
     undefined,
@@ -96,13 +96,13 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
   );
 
   const handleCloseNewCategoryModal = useCallback(() => {
-    createBranModalRef.current?.close();
+    createCategoryModalRef.current?.close();
     setSelectCategory(undefined);
     router.refresh();
   }, [router]);
 
   const handleCloseEditCategoryModal = useCallback(() => {
-    editBranModalRef.current?.close();
+    editCategoryModalRef.current?.close();
     setSelectCategory(undefined);
     router.refresh();
   }, [router]);
@@ -127,7 +127,7 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
       newItemDialogTitle="Criar nova categoria"
       newItemTrigger={NEW_CATEGORY_TRIGGER}
       newItemDialogRef={ref => {
-        createBranModalRef.current = ref;
+        createCategoryModalRef.current = ref;
       }}
       editItemDialogTitle="Editar categoria"
       editItemDialogDescription="Editar uma categoria no sistema..."
@@ -138,7 +138,7 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
         />
       }
       editItemDialogRef={ref => {
-        editBranModalRef.current = ref;
+        editCategoryModalRef.current = ref;
       }}
       viewItemDialogTitle="Visualizar categoria"
       viewItemDialogDescription="Visualizar uma categoria no sistema..."

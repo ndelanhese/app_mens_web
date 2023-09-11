@@ -10,6 +10,7 @@ import { Products } from './page.types';
 const iterateResponse = (products?: Products) => {
   if (!products) return [];
   return products?.data?.map(product => ({
+    id: product?.id,
     name: product?.name,
     partNumber: product?.part_number,
     description: product?.description,
