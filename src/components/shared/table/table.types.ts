@@ -52,3 +52,14 @@ export type UserTableProps<T> = {
   viewItemDialogContent?: ReactNode;
   viewItemDialogRef?: (ref: RefModalProps) => void | undefined;
 };
+
+export type tableDialogProps = {
+  title?: string;
+  description?: string;
+  content?: ReactNode;
+  ref?: (ref: RefModalProps) => void | undefined;
+  trigger?: ReactNode;
+  actionCallback?: (row: any, action: TableActionCallbackOptions) => void;
+  row?: any;
+  type?: TableActionCallbackOptions;
+};

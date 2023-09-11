@@ -45,6 +45,7 @@ import {
 } from '@tanstack/react-table';
 import { Eye, Pencil, Trash } from 'lucide-react';
 import { RefModalProps, UserTableProps } from './table.types';
+import { TableDialog } from './tableDialog';
 
 export function Table<T>({
   rows,
@@ -116,9 +117,6 @@ export function Table<T>({
       };
       newItemDialogRef(ref);
     }
-  }, [newItemDialogRef]);
-
-  useEffect(() => {
     if (editItemDialogRef) {
       const ref: RefModalProps = {
         open: () => setOpenEditItem(true),
@@ -126,9 +124,6 @@ export function Table<T>({
       };
       editItemDialogRef(ref);
     }
-  }, [editItemDialogRef]);
-
-  useEffect(() => {
     if (viewItemDialogRef) {
       const ref: RefModalProps = {
         open: () => setOpenEditItem(true),
@@ -136,7 +131,7 @@ export function Table<T>({
       };
       viewItemDialogRef(ref);
     }
-  }, [viewItemDialogRef]);
+  }, [newItemDialogRef, editItemDialogRef, viewItemDialogRef]);
 
   return (
     <div className="flex w-full flex-col items-start justify-start pb-3">
@@ -151,25 +146,13 @@ export function Table<T>({
           }
         />
         <div className="mt-2 flex flex-row items-center justify-between gap-2 sm:mt-0">
-          <Dialog
-            open={openNewItem}
-            onOpenChange={isOpen => {
-              setOpenNewItem(isOpen);
-            }}
-          >
-            <DialogTrigger>{newItemTrigger ?? 'Criar novo'}</DialogTrigger>
-            <DialogContent className="flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto">
-              <DialogHeader>
-                <DialogTitle>
-                  {newItemDialogTitle ?? 'Criar novo item'}
-                </DialogTitle>
-                <DialogDescription>
-                  {newItemDialogDescription ?? 'Criar novo registro'}
-                </DialogDescription>
-              </DialogHeader>
-              {newItemDialogContent}
-            </DialogContent>
-          </Dialog>
+          <TableDialog
+            ref={newItemDialogRef}
+            trigger={newItemTrigger}
+            content={newItemDialogContent}
+            description={newItemDialogDescription}
+            title={newItemDialogTitle}
+          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">Colunas</Button>
@@ -229,50 +212,26 @@ export function Table<T>({
                   </TableCell>
                 ))}
                 <TableCell className="ml-8 flex items-end justify-end gap-1 sm:ml-0">
-                  <Dialog
-                    open={openViewItem}
-                    onOpenChange={isOpen => {
-                      setOpenViewItem(isOpen);
-                      if (isOpen) {
-                        actionCallback(row.original, 'view');
-                      }
-                    }}
-                  >
-                    <DialogTrigger>{VIEW_ITEM_TRIGGER}</DialogTrigger>
-                    <DialogContent className="flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto">
-                      <DialogHeader>
-                        <DialogTitle>
-                          {viewItemDialogTitle ?? 'Visualizar item'}
-                        </DialogTitle>
-                        <DialogDescription>
-                          {viewItemDialogDescription ?? 'Visualizar registro'}
-                        </DialogDescription>
-                      </DialogHeader>
-                      {viewItemDialogContent}
-                    </DialogContent>
-                  </Dialog>
-                  <Dialog
-                    open={openEditItem}
-                    onOpenChange={isOpen => {
-                      setOpenEditItem(isOpen);
-                      if (isOpen) {
-                        actionCallback(row.original, 'edit');
-                      }
-                    }}
-                  >
-                    <DialogTrigger>{EDIT_ITEM_TRIGGER}</DialogTrigger>
-                    <DialogContent className="flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto">
-                      <DialogHeader>
-                        <DialogTitle>
-                          {editItemDialogTitle ?? 'Editar item'}
-                        </DialogTitle>
-                        <DialogDescription>
-                          {editItemDialogDescription ?? 'Editar registro'}
-                        </DialogDescription>
-                      </DialogHeader>
-                      {editItemDialogContent}
-                    </DialogContent>
-                  </Dialog>
+                  <TableDialog
+                    ref={viewItemDialogRef}
+                    trigger={VIEW_ITEM_TRIGGER}
+                    content={viewItemDialogContent}
+                    description={viewItemDialogDescription}
+                    title={viewItemDialogTitle}
+                    actionCallback={actionCallback}
+                    row={row.original}
+                    type="view"
+                  />
+                  <TableDialog
+                    ref={editItemDialogRef}
+                    trigger={EDIT_ITEM_TRIGGER}
+                    content={editItemDialogContent}
+                    description={editItemDialogDescription}
+                    title={editItemDialogTitle}
+                    actionCallback={actionCallback}
+                    row={row.original}
+                    type="edit"
+                  />
                   <AlertDialog
                     actionLabel="Confirmar"
                     cancelLabel="Cancelar"
