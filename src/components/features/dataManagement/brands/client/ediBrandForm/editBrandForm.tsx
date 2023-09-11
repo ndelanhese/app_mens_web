@@ -1,7 +1,6 @@
 'use client';
 
-import { memo, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { memo, useEffect, useState } from 'react';
 
 import { api } from '@axios';
 
@@ -9,17 +8,23 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
-import { BrandFormProps } from './editBrandForm.types';
+import { Brand, BrandFormProps } from './editBrandForm.types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BrandFormSchema, brandFormSchema } from './editBrandForm.schema';
 
-export const EditBrandFormComponent = ({
-  brand,
+const EditBrandFormComponent = ({
+  getBrandFunction,
   handleCloseModal,
 }: BrandFormProps) => {
-  const route = useRouter();
   const { toast } = useToast();
+
+  const [brand, setBrand] = useState<Brand | undefined>(undefined);
+
+  useEffect(() => {
+    const brandData = getBrandFunction();
+    setBrand(brandData);
+  }, [getBrandFunction]);
 
   const {
     register,
@@ -33,12 +38,12 @@ export const EditBrandFormComponent = ({
   const onSubmit: SubmitHandler<BrandFormSchema> = async data => {
     try {
       await api.put(`/brands/${brand?.id}`, data);
+      handleCloseModal();
       toast({
         title: 'Marca atualizada com sucesso',
         variant: 'default',
       });
-      route.refresh();
-      handleCloseModal();
+      // route.refresh();
     } catch (error: Error | any) {
       const errorMessage = error.response.data.message ?? 'Erro desconhecido';
       toast({

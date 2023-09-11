@@ -1,20 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/shadcn/button';
 import { StyledDiv } from '@/components/ui/styledDiv/styledDiv';
 
 import { TablePagination } from '@components/shared/table/tablePagination';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@components/ui/shadcn/dialog';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -44,7 +36,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Eye, Pencil, Trash } from 'lucide-react';
-import { RefModalProps, UserTableProps } from './table.types';
+import { UserTableProps } from './table.types';
 import { TableDialog } from './tableDialog';
 
 export function Table<T>({
@@ -69,10 +61,6 @@ export function Table<T>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-
-  const [openNewItem, setOpenNewItem] = useState(false);
-  const [openEditItem, setOpenEditItem] = useState(false);
-  const [openViewItem, setOpenViewItem] = useState(false);
 
   const table = useReactTable({
     data: rows,
@@ -109,30 +97,6 @@ export function Table<T>({
     </StyledDiv>
   );
 
-  useEffect(() => {
-    if (newItemDialogRef) {
-      const ref: RefModalProps = {
-        open: () => setOpenNewItem(true),
-        close: () => setOpenNewItem(false),
-      };
-      newItemDialogRef(ref);
-    }
-    if (editItemDialogRef) {
-      const ref: RefModalProps = {
-        open: () => setOpenEditItem(true),
-        close: () => setOpenEditItem(false),
-      };
-      editItemDialogRef(ref);
-    }
-    if (viewItemDialogRef) {
-      const ref: RefModalProps = {
-        open: () => setOpenEditItem(true),
-        close: () => setOpenEditItem(false),
-      };
-      viewItemDialogRef(ref);
-    }
-  }, [newItemDialogRef, editItemDialogRef, viewItemDialogRef]);
-
   return (
     <div className="flex w-full flex-col items-start justify-start pb-3">
       <div className="flex w-full flex-col justify-between sm:flex-row sm:items-end">
@@ -147,7 +111,7 @@ export function Table<T>({
         />
         <div className="mt-2 flex flex-row items-center justify-between gap-2 sm:mt-0">
           <TableDialog
-            ref={newItemDialogRef}
+            dialogRef={newItemDialogRef}
             trigger={newItemTrigger}
             content={newItemDialogContent}
             description={newItemDialogDescription}
@@ -213,7 +177,7 @@ export function Table<T>({
                 ))}
                 <TableCell className="ml-8 flex items-end justify-end gap-1 sm:ml-0">
                   <TableDialog
-                    ref={viewItemDialogRef}
+                    dialogRef={viewItemDialogRef}
                     trigger={VIEW_ITEM_TRIGGER}
                     content={viewItemDialogContent}
                     description={viewItemDialogDescription}
@@ -223,7 +187,7 @@ export function Table<T>({
                     type="view"
                   />
                   <TableDialog
-                    ref={editItemDialogRef}
+                    dialogRef={editItemDialogRef}
                     trigger={EDIT_ITEM_TRIGGER}
                     content={editItemDialogContent}
                     description={editItemDialogDescription}

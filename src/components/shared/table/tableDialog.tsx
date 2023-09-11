@@ -14,7 +14,7 @@ import { RefModalProps, tableDialogProps } from './table.types';
 const TableDialogComponent = ({
   content,
   description,
-  ref,
+  dialogRef,
   title,
   trigger,
   actionCallback,
@@ -24,23 +24,26 @@ const TableDialogComponent = ({
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (ref) {
-      const reference: RefModalProps = {
+    if (dialogRef) {
+      const ref: RefModalProps = {
         open: () => setOpen(true),
         close: () => setOpen(false),
       };
-      ref(reference);
+      dialogRef(ref);
     }
-  }, [ref]);
+  }, [dialogRef]);
+
+  useEffect(() => {
+    if (open && actionCallback && row && type) {
+      actionCallback(row, type);
+    }
+  }, [actionCallback, open, row, type]);
 
   return (
     <Dialog
       open={open}
       onOpenChange={isOpen => {
         setOpen(isOpen);
-        if (isOpen && actionCallback && row && type) {
-          actionCallback(row, type);
-        }
       }}
     >
       <DialogTrigger>{trigger ?? 'Abrir Modal'}</DialogTrigger>
