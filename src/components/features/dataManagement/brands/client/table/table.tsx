@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
 import { TableSkeleton } from '@/components/shared/skeleton/tableSkeleton/tableSkeleton';

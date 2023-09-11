@@ -1,5 +1,3 @@
-'use client';
-
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 
 import { BrandPreviewProps } from './viewBrandForm.types';
