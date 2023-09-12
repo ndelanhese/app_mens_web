@@ -8,13 +8,16 @@ export type Product = {
   color: string;
   quantity: number;
   category: {
+    id: number;
     name: string;
   };
   brand: {
+    id: number;
     name: string;
   };
   supplier: {
-    name: string;
+    id: number;
+    corporate_name: string;
   };
 };
 

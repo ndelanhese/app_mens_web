@@ -8,16 +8,19 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
-import { Brand, BrandFormProps } from './editBrandForm.types';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseCookies } from 'nookies';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { BrandFormSchema, brandFormSchema } from './editBrandForm.schema';
+import { Brand, BrandFormProps } from './editBrandForm.types';
 
 const EditBrandFormComponent = ({
   getBrandFunction,
   handleCloseModal,
 }: BrandFormProps) => {
   const { toast } = useToast();
+
+  const { token } = parseCookies();
 
   const [brand, setBrand] = useState<Brand | undefined>(undefined);
 
@@ -37,7 +40,9 @@ const EditBrandFormComponent = ({
 
   const onSubmit: SubmitHandler<BrandFormSchema> = async data => {
     try {
-      await api.put(`/brands/${brand?.id}`, data);
+      await api.put(`/brands/${brand?.id}`, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       handleCloseModal();
       toast({
         title: 'Marca atualizada com sucesso',

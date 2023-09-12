@@ -12,11 +12,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BrandFormSchema, brandFormSchema } from './createBrandForm.schema';
 import { BrandFormProps } from './createBrandForm.types';
+import { parseCookies } from 'nookies';
 
 export const CreateBrandFormComponent = ({
   handleCloseModal,
 }: BrandFormProps) => {
   const { toast } = useToast();
+
+  const { token } = parseCookies();
 
   const {
     register,
@@ -28,7 +31,11 @@ export const CreateBrandFormComponent = ({
 
   const onSubmit: SubmitHandler<BrandFormSchema> = async data => {
     try {
-      await api.post('/brands', { ...data });
+      await api.post(
+        '/brands',
+        { ...data },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
       handleCloseModal();
       toast({
         title: 'Marca criada com sucesso',

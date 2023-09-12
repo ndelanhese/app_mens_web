@@ -15,11 +15,14 @@ import {
   categoryFormSchema,
 } from './createCategoryForm.schema';
 import { CategoryFormProps } from './createCategoryForm.types';
+import { parseCookies } from 'nookies';
 
 const CreateCategoryFormComponent = ({
   handleCloseModal,
 }: CategoryFormProps) => {
   const { toast } = useToast();
+
+  const { token } = parseCookies();
 
   const {
     register,
@@ -31,7 +34,11 @@ const CreateCategoryFormComponent = ({
 
   const onSubmit: SubmitHandler<CategoryFormSchema> = async data => {
     try {
-      await api.post('/categories', { ...data });
+      await api.post(
+        '/categories',
+        { ...data },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
       handleCloseModal();
       toast({
         title: 'Categoria criada com sucesso',
