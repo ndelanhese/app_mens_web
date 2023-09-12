@@ -1,9 +1,9 @@
-type Brand = {
+type Category = {
   id: number;
   name: string;
 };
 
-type Category = {
+type Brand = {
   id: number;
   name: string;
 };
@@ -27,6 +27,6 @@ export type Product = {
   supplier: Supplier;
 };
 
-export type ProductsTableProps = {
-  rows: Array<Product>;
+export type ProductPreviewProps = {
+  product: Product | undefined;
 };

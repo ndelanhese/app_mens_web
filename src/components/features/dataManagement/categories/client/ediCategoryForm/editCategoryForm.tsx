@@ -8,51 +8,54 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { parseCookies } from 'nookies';
+import { Category, CategoryFormProps } from './editCategoryForm.types';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { BrandFormSchema, brandFormSchema } from './editBrandForm.schema';
-import { Brand, BrandFormProps } from './editBrandForm.types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  CategoryFormSchema,
+  categoryFormSchema,
+} from './editCategoryForm.schema';
+import { parseCookies } from 'nookies';
 
-const EditBrandFormComponent = ({
-  getBrandFunction,
+const EditCategoryFormComponent = ({
+  getCategoryFunction,
   handleCloseModal,
-}: BrandFormProps) => {
+}: CategoryFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
 
-  const [brand, setBrand] = useState<Brand | undefined>(undefined);
+  const [category, setCategory] = useState<Category | undefined>(undefined);
 
   useEffect(() => {
-    const brandData = getBrandFunction();
-    setBrand(brandData);
-  }, [getBrandFunction]);
+    const categoryData = getCategoryFunction();
+    setCategory(categoryData);
+  }, [getCategoryFunction]);
 
   const {
     register,
     handleSubmit,
     setFocus,
     formState: { errors, isSubmitting },
-  } = useForm<BrandFormSchema>({
-    resolver: zodResolver(brandFormSchema),
+  } = useForm<CategoryFormSchema>({
+    resolver: zodResolver(categoryFormSchema),
   });
 
-  const onSubmit: SubmitHandler<BrandFormSchema> = async data => {
+  const onSubmit: SubmitHandler<CategoryFormSchema> = async data => {
     try {
-      await api.put(`/brands/${brand?.id}`, data, {
+      await api.put(`/categories/${category?.id}`, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
       handleCloseModal();
       toast({
-        title: 'Marca atualizada com sucesso',
+        title: 'Categoria atualizada com sucesso',
         variant: 'default',
       });
       // route.refresh();
     } catch (error: Error | any) {
       const errorMessage = error.response.data.message ?? 'Erro desconhecido';
       toast({
-        title: 'Erro ao atualizar a marca',
+        title: 'Erro ao atualizar a categoria',
         description: errorMessage,
         variant: 'destructive',
       });
@@ -69,11 +72,11 @@ const EditBrandFormComponent = ({
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex w-full flex-col gap-4">
-        <ControlledInput value={brand?.id} id="id" label="Código" readOnly />
+        <ControlledInput value={category?.id} id="id" label="Código" readOnly />
         <ControlledInput
-          defaultValue={brand?.name}
+          defaultValue={category?.name}
           id="name"
-          label="Marca"
+          label="Categoria"
           register={register}
           errorMessage={errors.name?.message}
         />
@@ -85,4 +88,4 @@ const EditBrandFormComponent = ({
   );
 };
 
-export const EditBrandForm = memo(EditBrandFormComponent);
+export const EditCategoryForm = memo(EditCategoryFormComponent);

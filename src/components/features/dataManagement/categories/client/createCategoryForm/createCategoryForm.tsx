@@ -10,13 +10,16 @@ import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { BrandFormSchema, brandFormSchema } from './createBrandForm.schema';
-import { BrandFormProps } from './createBrandForm.types';
+import {
+  CategoryFormSchema,
+  categoryFormSchema,
+} from './createCategoryForm.schema';
+import { CategoryFormProps } from './createCategoryForm.types';
 import { parseCookies } from 'nookies';
 
-export const CreateBrandFormComponent = ({
+const CreateCategoryFormComponent = ({
   handleCloseModal,
-}: BrandFormProps) => {
+}: CategoryFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
@@ -25,26 +28,26 @@ export const CreateBrandFormComponent = ({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<BrandFormSchema>({
-    resolver: zodResolver(brandFormSchema),
+  } = useForm<CategoryFormSchema>({
+    resolver: zodResolver(categoryFormSchema),
   });
 
-  const onSubmit: SubmitHandler<BrandFormSchema> = async data => {
+  const onSubmit: SubmitHandler<CategoryFormSchema> = async data => {
     try {
       await api.post(
-        '/brands',
+        '/categories',
         { ...data },
         { headers: { Authorization: `Bearer ${token}` } },
       );
       handleCloseModal();
       toast({
-        title: 'Marca criada com sucesso',
+        title: 'Categoria criada com sucesso',
         variant: 'default',
       });
     } catch (error: Error | any) {
       const errorMessage = error.response.data.message ?? 'Erro desconhecido';
       toast({
-        title: 'Erro ao criar a marca',
+        title: 'Erro ao criar a categoria',
         description: errorMessage,
         variant: 'destructive',
       });
@@ -58,7 +61,7 @@ export const CreateBrandFormComponent = ({
     >
       <ControlledInput
         id="name"
-        label="Marca"
+        label="Categoria"
         register={register}
         errorMessage={errors.name?.message}
       />
@@ -70,4 +73,4 @@ export const CreateBrandFormComponent = ({
   );
 };
 
-export const CreateBrandForm = memo(CreateBrandFormComponent);
+export const CreateCategoryForm = memo(CreateCategoryFormComponent);
