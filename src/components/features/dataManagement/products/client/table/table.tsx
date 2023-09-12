@@ -99,14 +99,14 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
         header: ({ column }) => (
           <TableColumnHeader column={column} title="Categoria" />
         ),
-        accessorKey: 'category',
+        accessorKey: 'category.name',
         id: 'Categoria',
       },
       {
         header: ({ column }) => (
           <TableColumnHeader column={column} title="Marca" />
         ),
-        accessorKey: 'brand',
+        accessorKey: 'brand.name',
         id: 'Marca',
       },
     ],
@@ -133,7 +133,7 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
         });
       }
     },
-    [router, toast],
+    [router, toast, token],
   );
 
   const handleRowClick = useCallback(

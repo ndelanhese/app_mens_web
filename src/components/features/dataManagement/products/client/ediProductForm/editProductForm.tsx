@@ -1,6 +1,13 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  Suspense,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { parseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { title } from 'process';
 
@@ -10,6 +17,7 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { toast, useToast } from '@components/ui/shadcn/toast/use-toast';
 import { Combobox } from '@components/ui/selects/select';
+import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -19,8 +27,11 @@ import {
   BrandsResponse,
   CategoriesResponse,
   Category,
+  ComboboxOption,
   Product,
   ProductFormProps,
+  Supplier,
+  SuppliersResponse,
 } from './editProductForm.types';
 import { parseCookies } from 'nookies';
 
@@ -37,6 +48,7 @@ const EditProductFormComponent = ({
     undefined,
   );
   const [brands, setBrands] = useState<Brand[] | undefined>(undefined);
+  const [suppliers, setSuppliers] = useState<Supplier[] | undefined>(undefined);
 
   useEffect(() => {
     const productData = getProductFunction();
@@ -77,50 +89,88 @@ const EditProductFormComponent = ({
     }
   }, [toast, token]);
 
+  const getSuppliers = useCallback(async () => {
+    try {
+      const { data: suppliersResponse } = await api.get<SuppliersResponse>(
+        '/suppliers',
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setSuppliers(suppliersResponse.data);
+    } catch (error: Error | any) {
+      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      toast({
+        title: 'Erro ao buscar fornecedores',
+        description: errorMessage,
+        variant: 'destructive',
+      });
+    }
+  }, [toast, token]);
+
   useEffect(() => {
     getBrands();
     getCategories();
-  }, [getBrands, getCategories]);
+    getSuppliers();
+  }, [getBrands, getCategories, getSuppliers]);
 
-  const convertToComboboxOptions = (data: Brand[] | Category[]) => {
+  function convertToComboboxOptions<T>(
+    data: T[],
+    idKey: keyof T,
+    labelKey: keyof T,
+  ): ComboboxOption[] {
     return data.map(item => ({
-      value: item.id.toString(),
-      label: item.name,
+      value: String(item[idKey]),
+      label: String(item[labelKey]),
     }));
-  };
-
+  }
   const memorizedBrandsOptions = useMemo(() => {
     if (brands) {
-      return convertToComboboxOptions(brands);
+      return convertToComboboxOptions(brands, 'id', 'name');
     }
     return [];
   }, [brands]);
 
   const memorizedCategoriesOptions = useMemo(() => {
     if (categories) {
-      return convertToComboboxOptions(categories);
+      return convertToComboboxOptions(categories, 'id', 'name');
     }
     return [];
   }, [categories]);
+
+  const memorizedSuppliersOptions = useMemo(() => {
+    if (suppliers) {
+      return convertToComboboxOptions(suppliers, 'id', 'corporate_name');
+    }
+    return [];
+  }, [suppliers]);
 
   const {
     register,
     handleSubmit,
     setFocus,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<ProductFormSchema>({
     resolver: zodResolver(productFormSchema),
   });
 
   const onSubmit: SubmitHandler<ProductFormSchema> = async data => {
+    const { category, brand, supplier, ...oldParams } = data;
+    const params = {
+      ...oldParams,
+      category_id: Number(category),
+      brand_id: Number(brand),
+      supplier_id: Number(supplier),
+    };
+
     try {
-      await api.put(`/products/${product?.id}`, data);
+      await api.put(`/products/${product?.id}`, params, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       handleCloseModal();
       toast({
         title: 'Produto atualizado com sucesso',
         variant: 'default',
       });
-      // route.refresh();
     } catch (error: Error | any) {
       const errorMessage = error.response.data.message ?? 'Erro desconhecido';
       toast({
@@ -135,12 +185,21 @@ const EditProductFormComponent = ({
     setFocus('name');
   }, [setFocus]);
 
+  if (
+    !product ||
+    memorizedBrandsOptions.length < 1 ||
+    memorizedCategoriesOptions.length < 1
+  ) {
+    // TODO -> Add skeleton
+    return <h1>Carregando...</h1>;
+  }
+
   return (
     <form
-      className="flex w-full flex-col gap-6"
+      className="flex h-full w-full flex-col gap-6"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex w-full flex-col gap-4 overflow-y-auto sm:max-h-[30rem]">
+      <div className="flex h-5/6 w-full flex-col gap-4 overflow-y-auto sm:h-auto sm:max-h-[30rem]">
         <ControlledInput value={product?.id} id="id" label="Código" readOnly />
         <ControlledInput
           defaultValue={product?.name}
@@ -153,8 +212,9 @@ const EditProductFormComponent = ({
           defaultValue={product?.partNumber}
           id="partNumber"
           label="Part Number"
-          register={register}
-          errorMessage={errors.partNumber?.message}
+          // register={register}
+          // errorMessage={errors.partNumber?.message}
+          disabled
         />
         <ControlledInput
           defaultValue={product?.description}
@@ -169,6 +229,7 @@ const EditProductFormComponent = ({
           label="Preço"
           register={register}
           errorMessage={errors.price?.message}
+          type="number"
         />
         <ControlledInput
           defaultValue={product?.size}
@@ -190,33 +251,43 @@ const EditProductFormComponent = ({
           label="Quantidade"
           register={register}
           errorMessage={errors.quantity?.message}
+          type="number"
         />
-        <ControlledInput
-          defaultValue={product?.category}
-          id="category"
+        <ControlledSelect
           label="Categoria"
-          register={register}
+          name="category"
+          control={control}
           errorMessage={errors.category?.message}
-        />
-        <ControlledInput
-          defaultValue={product?.brand}
-          id="brand"
-          label="Marca"
-          register={register}
-          errorMessage={errors.brand?.message}
-        />
-        <Combobox
-          options={memorizedBrandsOptions}
-          placeHolder="Selecione uma marca"
-          searchLabel="Pesquisar marca"
-        />
-        <Combobox
           options={memorizedCategoriesOptions}
+          defaultValue={product?.category.id.toString()}
           placeHolder="Selecione uma categoria"
           searchLabel="Pesquisar categoria"
+          emptyLabel="Sem categorias cadastradas"
+        />
+        <ControlledSelect
+          label="Marca"
+          name="brand"
+          control={control}
+          errorMessage={errors.brand?.message}
+          options={memorizedBrandsOptions}
+          defaultValue={product?.brand.id.toString()}
+          placeHolder="Selecione uma marca"
+          searchLabel="Pesquisar marca"
+          emptyLabel="Sem marcas cadastradas"
+        />
+        <ControlledSelect
+          label="Fornecer"
+          name="supplier"
+          control={control}
+          errorMessage={errors.supplier?.message}
+          options={memorizedSuppliersOptions}
+          defaultValue={product?.supplier.id.toString()}
+          placeHolder="Selecione um fornecedor"
+          searchLabel="Pesquisar fornecedor"
+          emptyLabel="Sem fornecedores cadastradas"
         />
       </div>
-      <Button disabled={isSubmitting} type="submit" className="sm:self-end">
+      <Button disabled={isSubmitting} type="submit" className=" sm:self-end">
         Alterar
       </Button>
     </form>

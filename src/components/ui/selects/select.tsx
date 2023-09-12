@@ -26,9 +26,25 @@ export const Combobox = ({
   placeHolder,
   searchLabel,
   emptyLabel,
+  defaultValue,
+  onChange,
 }: SelectProps) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(defaultValue ?? '');
+
+  const handleValueChange = (currentValue: string) => {
+    const selectedValue =
+      options.find(
+        option =>
+          option.label.toLocaleLowerCase() === currentValue.toLocaleLowerCase(),
+      )?.value ?? '';
+    setValue(selectedValue === value ? '' : selectedValue);
+    setOpen(false);
+
+    if (onChange) {
+      onChange(selectedValue);
+    }
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -45,19 +61,13 @@ export const Combobox = ({
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
+      <PopoverContent className="flex w-[19.5rem] p-0 sm:w-[29rem]">
         <Command>
           <CommandInput placeholder={searchLabel ?? 'Pesquisar...'} />
           <CommandEmpty>{emptyLabel ?? 'Sem resultados'}</CommandEmpty>
           <CommandGroup>
             {options.map(option => (
-              <CommandItem
-                key={option.value}
-                onSelect={currentValue => {
-                  setValue(currentValue === value ? '' : currentValue);
-                  setOpen(false);
-                }}
-              >
+              <CommandItem key={option.value} onSelect={handleValueChange}>
                 <Check
                   className={cn(
                     'mr-2 h-4 w-4',

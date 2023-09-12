@@ -18,8 +18,9 @@ const iterateResponse = (products?: Products) => {
     size: product?.size,
     color: product?.color,
     quantity: product?.quantity,
-    category: product?.category?.name,
-    brand: product?.brand?.name,
+    category: product?.category,
+    brand: product?.brand,
+    supplier: product.supplier,
   }));
 };
 

@@ -1,3 +1,13 @@
+type Category = {
+  id: number;
+  name: string;
+};
+
+type Brand = {
+  id: number;
+  name: string;
+};
+
 export type Product = {
   id: number;
   name: string;
@@ -7,8 +17,8 @@ export type Product = {
   size: string;
   color: string;
   quantity: number;
-  category: string;
-  brand: string;
+  category: Category;
+  brand: Brand;
 };
 
 export type ProductPreviewProps = {

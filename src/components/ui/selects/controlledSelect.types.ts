@@ -4,10 +4,14 @@ export type SelectOption = {
 };
 
 export type SelectProps = {
+  name: string;
+  label: string;
   options: SelectOption[];
   placeHolder?: string;
   searchLabel?: string;
   emptyLabel?: string;
   defaultValue?: string;
-  onChange?: (currentValue: string) => void;
+  className?: string;
+  errorMessage?: string;
+  control: any;
 };

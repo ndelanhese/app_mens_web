@@ -1,3 +1,18 @@
+type Brand = {
+  id: number;
+  name: string;
+};
+
+type Category = {
+  id: number;
+  name: string;
+};
+
+type Supplier = {
+  id: number;
+  corporate_name: string;
+};
+
 export type Product = {
   id: number;
   name: string;
@@ -7,8 +22,9 @@ export type Product = {
   size: string;
   color: string;
   quantity: number;
-  category: string;
-  brand: string;
+  category: Category;
+  brand: Brand;
+  supplier: Supplier;
 };
 
 export type ProductsTableProps = {

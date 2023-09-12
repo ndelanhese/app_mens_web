@@ -39,13 +39,13 @@ export const ViewProductForm = ({ product }: ProductPreviewProps) => {
         readOnly
       />
       <ControlledInput
-        value={product?.category}
+        value={product?.category.name}
         id="category"
         label="Categoria"
         readOnly
       />
       <ControlledInput
-        value={product?.brand}
+        value={product?.brand.name}
         id="brand"
         label="Marca"
         readOnly
