@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { parseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { title } from 'process';
 
@@ -58,7 +58,7 @@ const EditProductFormComponent = ({
         variant: 'destructive',
       });
     }
-  }, [toast]);
+  }, [toast, token]);
 
   const getCategories = useCallback(async () => {
     try {
@@ -75,7 +75,7 @@ const EditProductFormComponent = ({
         variant: 'destructive',
       });
     }
-  }, [toast]);
+  }, [toast, token]);
 
   useEffect(() => {
     getBrands();
@@ -88,6 +88,20 @@ const EditProductFormComponent = ({
       label: item.name,
     }));
   };
+
+  const memorizedBrandsOptions = useMemo(() => {
+    if (brands) {
+      return convertToComboboxOptions(brands);
+    }
+    return [];
+  }, [brands]);
+
+  const memorizedCategoriesOptions = useMemo(() => {
+    if (categories) {
+      return convertToComboboxOptions(categories);
+    }
+    return [];
+  }, [categories]);
 
   const {
     register,
@@ -191,8 +205,16 @@ const EditProductFormComponent = ({
           register={register}
           errorMessage={errors.brand?.message}
         />
-        <Combobox options={convertToComboboxOptions(brands ?? [])} />
-        <Combobox options={convertToComboboxOptions(categories ?? [])} />
+        <Combobox
+          options={memorizedBrandsOptions}
+          placeHolder="Selecione uma marca"
+          searchLabel="Pesquisar marca"
+        />
+        <Combobox
+          options={memorizedCategoriesOptions}
+          placeHolder="Selecione uma categoria"
+          searchLabel="Pesquisar categoria"
+        />
       </div>
       <Button disabled={isSubmitting} type="submit" className="sm:self-end">
         Alterar

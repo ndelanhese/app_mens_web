@@ -21,11 +21,14 @@ import { ViewBrandForm } from '../../server/viewBrandForm/viewBrandForm';
 import { CreateBrandForm } from '../createBrandForm/createBrandForm';
 import { EditBrandForm } from '../ediBrandForm/editBrandForm';
 import { Brand, BrandsTableProps } from './table.types';
+import { parseCookies } from 'nookies';
 
 export const BrandsTable = ({ rows }: BrandsTableProps) => {
   const router = useRouter();
 
   const { toast } = useToast();
+
+  const { token } = parseCookies();
 
   const createBranModalRef = useRef<RefModalProps | null>(null);
   const editBranModalRef = useRef<RefModalProps | null>(null);
@@ -57,7 +60,9 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
   const handleDeleteItem = useCallback(
     async (id: number) => {
       try {
-        await api.delete(`/brands/${id}`);
+        await api.delete(`/brands/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         router.refresh();
         toast({
           title: 'Marca deletada com sucesso',

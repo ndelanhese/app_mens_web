@@ -21,11 +21,14 @@ import { Plus } from 'lucide-react';
 import { CreateProductForm } from '../createProductForm/createProductForm';
 import { EditProductForm } from '../ediProductForm/editProductForm';
 import { ViewProductForm } from '../../server/viewProductForm/viewProductForm';
+import { parseCookies } from 'nookies';
 
 const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
   const router = useRouter();
 
   const { toast } = useToast();
+
+  const { token } = parseCookies();
 
   const createProductModalRef = useRef<RefModalProps | null>(null);
   const editProductModalRef = useRef<RefModalProps | null>(null);
@@ -113,7 +116,9 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
   const handleDeleteItem = useCallback(
     async (id: number) => {
       try {
-        await api.delete(`/products/${id}`);
+        await api.delete(`/products/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         router.refresh();
         toast({
           title: 'Produto deletado com sucesso',

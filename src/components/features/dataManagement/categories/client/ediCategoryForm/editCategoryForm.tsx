@@ -15,12 +15,15 @@ import {
   CategoryFormSchema,
   categoryFormSchema,
 } from './editCategoryForm.schema';
+import { parseCookies } from 'nookies';
 
 const EditCategoryFormComponent = ({
   getCategoryFunction,
   handleCloseModal,
 }: CategoryFormProps) => {
   const { toast } = useToast();
+
+  const { token } = parseCookies();
 
   const [category, setCategory] = useState<Category | undefined>(undefined);
 
@@ -40,7 +43,9 @@ const EditCategoryFormComponent = ({
 
   const onSubmit: SubmitHandler<CategoryFormSchema> = async data => {
     try {
-      await api.put(`/categories/${category?.id}`, data);
+      await api.put(`/categories/${category?.id}`, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       handleCloseModal();
       toast({
         title: 'Categoria atualizada com sucesso',

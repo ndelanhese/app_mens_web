@@ -21,7 +21,12 @@ import {
 import { Check, ChevronDown } from 'lucide-react';
 import { SelectProps } from './select.types';
 
-export const Combobox = ({ options }: SelectProps) => {
+export const Combobox = ({
+  options,
+  placeHolder,
+  searchLabel,
+  emptyLabel,
+}: SelectProps) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
 
@@ -32,18 +37,18 @@ export const Combobox = ({ options }: SelectProps) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="w-full justify-between rounded-lg py-6 text-md font-re"
         >
           {value
             ? options.find(option => option.value === value)?.label
-            : 'Select framework...'}
+            : placeHolder}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandInput placeholder={searchLabel ?? 'Pesquisar...'} />
+          <CommandEmpty>{emptyLabel ?? 'Sem resultados'}</CommandEmpty>
           <CommandGroup>
             {options.map(option => (
               <CommandItem

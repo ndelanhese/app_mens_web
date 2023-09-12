@@ -1,11 +1,12 @@
 'use client';
 
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
 
 import { Table } from '@/components/shared/table/table';
 import { api } from '@axios';
 
+import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import {
   RefModalProps,
   TableActionCallbackOptions,
@@ -14,18 +15,20 @@ import {
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 
-import { Category, CategoriesTableProps } from './table.types';
 import { Plus } from 'lucide-react';
+import { parseCookies } from 'nookies';
 import { ViewCategoryForm } from '../../server/viewCategoryForm/viewCategoryForm';
-import { EditCategoryForm } from '../ediCategoryForm/editCategoryForm';
 import { CreateCategoryForm } from '../createCategoryForm/createCategoryForm';
+import { EditCategoryForm } from '../ediCategoryForm/editCategoryForm';
+import { CategoriesTableProps, Category } from './table.types';
 
 const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
   const router = useRouter();
 
   const { toast } = useToast();
+
+  const { token } = parseCookies();
 
   const createCategoryModalRef = useRef<RefModalProps | null>(null);
   const editCategoryModalRef = useRef<RefModalProps | null>(null);
@@ -57,7 +60,9 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
   const handleDeleteItem = useCallback(
     async (id: number) => {
       try {
-        await api.delete(`/categories/${id}`);
+        await api.delete(`/categories/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         router.refresh();
         toast({
           title: 'Categoria deletada com sucesso',

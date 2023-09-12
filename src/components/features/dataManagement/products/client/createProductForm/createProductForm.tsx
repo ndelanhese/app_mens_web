@@ -15,9 +15,12 @@ import {
   productFormSchema,
 } from './createProductForm.schema';
 import { ProductFormProps } from './createProductForm.types';
+import { parseCookies } from 'nookies';
 
 const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
   const { toast } = useToast();
+
+  const { token } = parseCookies();
 
   const {
     register,
@@ -29,7 +32,11 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
 
   const onSubmit: SubmitHandler<ProductFormSchema> = async data => {
     try {
-      await api.post('/products', { ...data });
+      await api.post(
+        '/products',
+        { ...data },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
       handleCloseModal();
       toast({
         title: 'Produto criado com sucesso',

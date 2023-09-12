@@ -5,4 +5,7 @@ export type SelectOption = {
 
 export type SelectProps = {
   options: SelectOption[];
+  placeHolder?: string;
+  searchLabel?: string;
+  emptyLabel?: string;
 };
