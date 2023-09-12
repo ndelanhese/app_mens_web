@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 export const productFormSchema = z.object({
   name: z.string().nonempty('O nome é obrigatário'),
-  // partNumber: z.string().nonempty('O part number é obrigatário'),
   description: z.string().nonempty('A descrição é obrigatária'),
   price: z.string().nonempty('O preço deve ser maior que zero'),
   size: z.string().nonempty('O tamanho é obrigatário'),

@@ -1,3 +1,23 @@
+export type Category = {
+  id: number;
+  name: string;
+};
+
+export type Brand = {
+  id: number;
+  name: string;
+};
+
+export type Supplier = {
+  id: number;
+  corporate_name: string;
+};
+
+export type ComboboxOption = {
+  value: string;
+  label: string;
+};
+
 export type Product = {
   id: number;
   name: string;
@@ -7,8 +27,21 @@ export type Product = {
   size: string;
   color: string;
   quantity: number;
-  category: string;
-  brand: string;
+  category: Category;
+  brand: Brand;
+  supplier: Supplier;
+};
+
+export type CategoriesResponse = {
+  data: Category[];
+};
+
+export type BrandsResponse = {
+  data: Brand[];
+};
+
+export type SuppliersResponse = {
+  data: Supplier[];
 };
 
 export type ProductFormProps = {

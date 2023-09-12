@@ -1,25 +1,16 @@
 'use client';
 
-import {
-  Suspense,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { parseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
-import { title } from 'process';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { api } from '@axios';
 
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { toast, useToast } from '@components/ui/shadcn/toast/use-toast';
-import { Combobox } from '@components/ui/selects/select';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ProductFormSchema, productFormSchema } from './editProductForm.schema';
 import {
@@ -33,7 +24,6 @@ import {
   Supplier,
   SuppliersResponse,
 } from './editProductForm.types';
-import { parseCookies } from 'nookies';
 
 const EditProductFormComponent = ({
   getProductFunction,

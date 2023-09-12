@@ -8,6 +8,11 @@ type Brand = {
   name: string;
 };
 
+type Supplier = {
+  id: number;
+  corporate_name: string;
+};
+
 export type Product = {
   id: number;
   name: string;
@@ -19,6 +24,7 @@ export type Product = {
   quantity: number;
   category: Category;
   brand: Brand;
+  supplier: Supplier;
 };
 
 export type ProductPreviewProps = {

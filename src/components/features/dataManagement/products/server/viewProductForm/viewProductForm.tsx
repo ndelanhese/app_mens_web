@@ -50,6 +50,12 @@ export const ViewProductForm = ({ product }: ProductPreviewProps) => {
         label="Marca"
         readOnly
       />
+      <ControlledInput
+        value={product?.supplier.corporate_name}
+        id="supplier"
+        label="Fornecedor"
+        readOnly
+      />
     </div>
   );
 };
