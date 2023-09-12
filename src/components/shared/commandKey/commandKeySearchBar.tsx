@@ -16,7 +16,7 @@ export const CommandKeySearchBar = () => {
         <Search className="h-4 w-4" />
       </div>
       <Input
-        className="border border-black-10 bg-white-100 pl-8 pr-11 dark:border-white-10 dark:bg-black-100"
+        className="bg-white border border-black-10 pl-8 pr-11 dark:border-white-10 dark:bg-zinc-950"
         placeholder="Pesquisar..."
         onClick={() => setOpen(true)}
       />
