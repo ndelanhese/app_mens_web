@@ -1,17 +1,28 @@
 'use client';
 
-import { memo, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
+import { parseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
+import { title } from 'process';
 
 import { api } from '@axios';
 
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { toast, useToast } from '@components/ui/shadcn/toast/use-toast';
+import { Combobox } from '@components/ui/selects/select';
 
-import { Product, ProductFormProps } from './editProductForm.types';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { ProductFormSchema, productFormSchema } from './editProductForm.schema';
+import {
+  Brand,
+  BrandsResponse,
+  CategoriesResponse,
+  Category,
+  Product,
+  ProductFormProps,
+} from './editProductForm.types';
+import { parseCookies } from 'nookies';
 
 const EditProductFormComponent = ({
   getProductFunction,
@@ -19,12 +30,64 @@ const EditProductFormComponent = ({
 }: ProductFormProps) => {
   const { toast } = useToast();
 
+  const { token } = parseCookies();
+
   const [product, setProduct] = useState<Product | undefined>(undefined);
+  const [categories, setCategories] = useState<Category[] | undefined>(
+    undefined,
+  );
+  const [brands, setBrands] = useState<Brand[] | undefined>(undefined);
 
   useEffect(() => {
     const productData = getProductFunction();
     setProduct(productData);
   }, [getProductFunction]);
+
+  const getBrands = useCallback(async () => {
+    try {
+      const { data: brandsResponse } = await api.get<BrandsResponse>(
+        '/brands',
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setBrands(brandsResponse.data);
+    } catch (error: Error | any) {
+      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      toast({
+        title: 'Erro ao buscar marcas',
+        description: errorMessage,
+        variant: 'destructive',
+      });
+    }
+  }, [toast]);
+
+  const getCategories = useCallback(async () => {
+    try {
+      const { data: categoriesResponse } = await api.get<CategoriesResponse>(
+        '/categories',
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setCategories(categoriesResponse.data);
+    } catch (error: Error | any) {
+      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      toast({
+        title: 'Erro ao buscar categorias',
+        description: errorMessage,
+        variant: 'destructive',
+      });
+    }
+  }, [toast]);
+
+  useEffect(() => {
+    getBrands();
+    getCategories();
+  }, [getBrands, getCategories]);
+
+  const convertToComboboxOptions = (data: Brand[] | Category[]) => {
+    return data.map(item => ({
+      value: item.id.toString(),
+      label: item.name,
+    }));
+  };
 
   const {
     register,
@@ -128,6 +191,8 @@ const EditProductFormComponent = ({
           register={register}
           errorMessage={errors.brand?.message}
         />
+        <Combobox options={convertToComboboxOptions(brands ?? [])} />
+        <Combobox options={convertToComboboxOptions(categories ?? [])} />
       </div>
       <Button disabled={isSubmitting} type="submit" className="sm:self-end">
         Alterar
