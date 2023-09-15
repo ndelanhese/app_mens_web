@@ -26,11 +26,15 @@ export function middleware(request: NextRequest) {
 
   if (!token && pathname !== '/signin') {
     const ONE_MINUTE_IN_SECONDS = 60;
-    return NextResponse.redirect(new URL('/signin', request.url), {
-      headers: {
-        'Set-Cookie': `redirectTo=${request.url}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
+    return NextResponse.redirect(
+      new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/signin`),
+      {
+        headers: {
+          // TODO -> change this url to use env base path
+          'Set-Cookie': `redirectTo=${request.url}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
+        },
       },
-    });
+    );
   }
 
   if (pathname === '/signin' && token) {
