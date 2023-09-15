@@ -77,7 +77,7 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
         });
       }
     },
-    [router, toast],
+    [router, toast, token],
   );
 
   const handleRowClick = useCallback(
