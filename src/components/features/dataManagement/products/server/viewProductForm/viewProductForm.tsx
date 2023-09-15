@@ -4,7 +4,7 @@ import { ProductPreviewProps } from './viewProductForm.types';
 
 export const ViewProductForm = ({ product }: ProductPreviewProps) => {
   return (
-    <div className="flex w-full flex-col gap-4 overflow-y-auto sm:max-h-[30rem]">
+    <div className="grid grid-cols-1 gap-4 overflow-y-auto sm:max-h-[30rem] sm:grid-cols-2">
       <ControlledInput value={product?.id} id="id" label="Código" readOnly />
       <ControlledInput value={product?.name} id="name" label="Nome" readOnly />
       <ControlledInput

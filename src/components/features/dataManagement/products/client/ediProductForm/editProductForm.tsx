@@ -189,7 +189,7 @@ const EditProductFormComponent = ({
       className="flex h-full w-full flex-col gap-6"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex h-5/6 w-full flex-col gap-4 overflow-y-auto sm:h-auto sm:max-h-[30rem]">
+      <div className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:max-h-[30rem] sm:grid-cols-2">
         <ControlledInput value={product?.id} id="id" label="Código" readOnly />
         <ControlledInput
           defaultValue={product?.name}

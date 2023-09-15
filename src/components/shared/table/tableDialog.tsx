@@ -47,7 +47,7 @@ const TableDialogComponent = ({
       }}
     >
       <DialogTrigger>{trigger ?? 'Abrir Modal'}</DialogTrigger>
-      <DialogContent className="flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto">
+      <DialogContent className="flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto sm:min-w-[60rem]">
         <DialogHeader>
           <DialogTitle>{title ?? 'Titulo'}</DialogTitle>
           <DialogDescription>{description ?? 'Descrição'}</DialogDescription>
