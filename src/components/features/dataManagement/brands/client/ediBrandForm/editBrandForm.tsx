@@ -32,7 +32,6 @@ const EditBrandFormComponent = ({
   const {
     register,
     handleSubmit,
-    setFocus,
     formState: { errors, isSubmitting },
   } = useForm<BrandFormSchema>({
     resolver: zodResolver(brandFormSchema),
@@ -48,7 +47,6 @@ const EditBrandFormComponent = ({
         title: 'Marca atualizada com sucesso',
         variant: 'default',
       });
-      // route.refresh();
     } catch (error: Error | any) {
       const errorMessage = error.response.data.message ?? 'Erro desconhecido';
       toast({
@@ -58,10 +56,6 @@ const EditBrandFormComponent = ({
       });
     }
   };
-
-  useEffect(() => {
-    setFocus('name');
-  }, [setFocus]);
 
   return (
     <form
