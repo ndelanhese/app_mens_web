@@ -12,8 +12,6 @@ export async function POST(request: NextRequest) {
       email,
       password,
     });
-    const redirectTo = request.cookies.get('redirectTo')?.value;
-    const redirectUrl = redirectTo ?? new URL('/', request.url);
     const currentDate = new Date();
     currentDate.setHours(currentDate.getHours() + 24);
     const expirationTimeInSeconds = Math.floor(

@@ -21,24 +21,32 @@ import { NextRequest, NextResponse } from 'next/server';
 // }
 
 export function middleware(request: NextRequest) {
+  // TODO -> add token validation with private key
   const token = request.cookies.get('token')?.value;
   const { pathname } = request.nextUrl;
 
   if (!token && pathname !== '/signin') {
     const ONE_MINUTE_IN_SECONDS = 60;
+
+    const redirectURL = new URL(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${pathname}`,
+    );
+
+    console.log(redirectURL);
     return NextResponse.redirect(
       new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/signin`),
       {
         headers: {
-          // TODO -> change this url to use env base path
-          'Set-Cookie': `redirectTo=${request.url}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
+          'Set-Cookie': `redirectTo=${redirectURL}; Path=/; max-age=${ONE_MINUTE_IN_SECONDS};`,
         },
       },
     );
   }
 
   if (pathname === '/signin' && token) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(
+      new URL(process.env.NEXT_PUBLIC_BASE_URL, request.url),
+    );
   }
 
   // caller function to verify if the route is a protected route

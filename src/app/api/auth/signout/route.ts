@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-  const redirectUrl = new URL('/', request.url);
+  const redirectUrl = new URL(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/signin`,
+    request.url,
+  );
   const TOKEN_COOKIE = 'token=; Path=/; max-age=0;';
   const REDIRECT_TO_COOKIE = 'redirectTo=; Path=/; max-age=0;';
   const header = new Headers();
