@@ -12,10 +12,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { signin } from './api';
 import { SigninSchema, signinSchema } from './signinForm.schema';
 import { parseCookies } from 'nookies';
+import { useTheme } from 'next-themes';
 
 export const SigninForm = () => {
   const router = useRouter();
   const { toast } = useToast();
+  const { theme } = useTheme();
 
   const {
     register,
@@ -51,6 +53,8 @@ export const SigninForm = () => {
     }
   };
 
+  console.log(theme);
+
   return (
     <form
       className="flex flex-col gap-7 sm:w-[24.25rem]"
@@ -73,7 +77,11 @@ export const SigninForm = () => {
         />
       </div>
       <Button size="lg" color="primary">
-        {isSubmitting ? <Spinner className="dark:text-white" /> : 'Acessar'}
+        {isSubmitting ? (
+          <Spinner fillColor={theme === 'light' ? '#fff' : '#000'} />
+        ) : (
+          'Acessar'
+        )}
       </Button>
     </form>
   );
