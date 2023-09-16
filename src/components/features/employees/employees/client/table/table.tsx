@@ -28,13 +28,6 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="E-mail" />
-        ),
-        accessorKey: 'email',
-        id: 'E-mail',
-      },
-      {
-        header: ({ column }) => (
           <TableColumnHeader column={column} title="Celular" />
         ),
         accessorKey: 'phone',
