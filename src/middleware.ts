@@ -32,7 +32,6 @@ export function middleware(request: NextRequest) {
       `${process.env.NEXT_PUBLIC_BASE_URL}${pathname}`,
     );
 
-    console.log(redirectURL);
     return NextResponse.redirect(
       new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/signin`),
       {

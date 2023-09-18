@@ -5,6 +5,6 @@ export type Employee = {
   phone: string;
 };
 
-export type EmployeesTableProps = {
-  rows: Array<Employee>;
+export type EmployeeFormProps = {
+  handleCloseModal: () => void;
 };

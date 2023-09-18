@@ -10,6 +10,7 @@ import { Employees } from './page.types';
 const iterateResponse = (employees?: Employees) => {
   if (!employees) return [];
   return employees?.data?.map(employee => ({
+    id: employee?.id,
     name: employee?.name,
     cpf: employee?.cpf,
     phone: employee?.phone,
