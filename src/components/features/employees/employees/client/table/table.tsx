@@ -14,11 +14,14 @@ import {
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
+import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 
 import { Employee, EmployeesTableProps } from './table.types';
 import { ViewEmployeeForm } from '../../server/viewEmployeeForm/viewEmployeeForm';
 import { parseCookies } from 'nookies';
 import { Plus } from 'lucide-react';
+import { EditEmployeeForm } from '../ediEmployeeForm/editEmployeeForm';
+import { CreateEmployeeForm } from '../createEmployeeForm/createEmployeeForm';
 
 const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
   const router = useRouter();
@@ -116,6 +119,14 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
     router.refresh();
   }, [router]);
 
+  const getEmployeesFunction = useCallback(() => {
+    return selectedEmployee;
+  }, [selectedEmployee]);
+
+  if (!rows || rows.length < 1) {
+    return <TableSkeleton />;
+  }
+
   return (
     <Table
       tableColumns={tableColumns}
@@ -123,6 +134,9 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
       rows={rows}
       actionLabel="Ação"
       actionCallback={handleRowClick}
+      newItemDialogContent={
+        <CreateEmployeeForm handleCloseModal={handleCloseNewEmployeeModal} />
+      }
       newItemTrigger={NEW_EMPLOYEE_TRIGGER}
       viewItemDialogTitle="Visualizar funcionário"
       viewItemDialogDescription="Visualizar um funcionário no sistema..."
@@ -137,6 +151,12 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
       editItemDialogRef={ref => {
         editEmployeeModalRef.current = ref;
       }}
+      editItemDialogContent={
+        <EditEmployeeForm
+          getEmployeesFunction={getEmployeesFunction}
+          handleCloseModal={handleCloseEditEmployeeModal}
+        />
+      }
     />
   );
 };
