@@ -14,6 +14,7 @@ export interface InputVariants
   label: string;
   register?: any;
   errorMessage?: string;
+  isRequired?: boolean;
 }
 
 export const ControlledInput: FC<InputVariants> = ({
@@ -22,11 +23,15 @@ export const ControlledInput: FC<InputVariants> = ({
   className,
   register,
   errorMessage,
+  isRequired = false,
   ...props
 }) => {
   return (
     <div className={controlledInput({ className })}>
-      <label className="mb-2 text-black-40 dark:text-white-80">{label}</label>
+      <label className="mb-2 text-black-40 dark:text-white-80">
+        {label}
+        {isRequired && <span className="text-red-700"> *</span>}
+      </label>
       <Input
         id={id}
         {...props}

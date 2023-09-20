@@ -14,8 +14,8 @@ export type Supplier = {
 };
 
 export type ComboboxOption = {
+  key: string;
   value: string;
-  label: string;
 };
 
 export type Product = {

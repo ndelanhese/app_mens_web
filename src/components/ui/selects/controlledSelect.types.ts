@@ -1,5 +1,5 @@
 export type SelectOption = {
-  label: string;
+  key: string;
   value: string;
 };
 
@@ -14,4 +14,5 @@ export type SelectProps = {
   className?: string;
   errorMessage?: string;
   control: any;
+  isRequired?: boolean;
 };
