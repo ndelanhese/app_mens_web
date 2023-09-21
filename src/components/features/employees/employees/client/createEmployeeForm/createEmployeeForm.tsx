@@ -9,6 +9,8 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
+import { convertStringToSlug } from '@utils/helpers/stringManipulation';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -17,6 +19,8 @@ import {
   employeeFormSchema,
 } from './createEmployeeForm.schema';
 import {
+  CitiesResponse,
+  CityResponse,
   EmployeeFormProps,
   StateResponse,
   StatesResponse,
@@ -30,6 +34,18 @@ const CreateEmployeeFormComponent = ({
   const { token } = parseCookies();
 
   const [states, setStates] = useState<StateResponse[] | undefined>(undefined);
+  const [cities, setCities] = useState<CityResponse[] | undefined>(undefined);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    getValues,
+    formState: { errors, isSubmitting },
+  } = useForm<EmployeeFormSchema>({
+    resolver: zodResolver(employeeFormSchema),
+  });
 
   const getStates = useCallback(async () => {
     try {
@@ -47,9 +63,42 @@ const CreateEmployeeFormComponent = ({
     }
   }, [toast, token]);
 
+  const getCities = useCallback(async () => {
+    try {
+      const { data } = await api.get<CitiesResponse>(
+        `/cities?uf=${getValues('address.state')}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      setCities(data.data);
+    } catch (error: Error | any) {
+      const errorMessage = error.response.data.message ?? undefined;
+      toast({
+        title: 'Erro ao buscar cidades',
+        description: errorMessage,
+        variant: 'destructive',
+      });
+    }
+  }, [getValues, toast, token]);
+
   useEffect(() => {
     getStates();
   }, [getStates]);
+
+  useEffect(() => {
+    if (watch('address.state')) {
+      getCities();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getCities, watch('address.state')]);
+
+  const convertCitiesToComboboxOptions = (data: CityResponse[]) => {
+    return data.map(item => ({
+      key: convertStringToSlug(item.name_with_municipality),
+      value: item.isMunicipality ? item.name : item.name_with_municipality,
+    }));
+  };
 
   const memorizedStates = useMemo(() => {
     if (states) {
@@ -58,14 +107,12 @@ const CreateEmployeeFormComponent = ({
     return [];
   }, [states]);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isSubmitting },
-  } = useForm<EmployeeFormSchema>({
-    resolver: zodResolver(employeeFormSchema),
-  });
+  const memorizedCities = useMemo(() => {
+    if (cities) {
+      return convertCitiesToComboboxOptions(cities);
+    }
+    return [];
+  }, [cities]);
 
   const onSubmit: SubmitHandler<EmployeeFormSchema> = async data => {
     try {
@@ -199,13 +246,16 @@ const CreateEmployeeFormComponent = ({
         searchLabel="Pesquisar estado"
         emptyLabel="Sem estados cadastrados"
       />
-      <ControlledInput
-        id="address.city"
+      <ControlledSelect
         label="Cidade"
+        name="address.city"
+        control={control}
         isRequired
-        register={register}
         errorMessage={errors.address?.city?.message}
-        placeholder="Ex. São Paulo"
+        options={memorizedCities}
+        placeHolder="Selecione uma cidade"
+        searchLabel="Pesquisar cidade"
+        emptyLabel="Sem cidades cadastrados"
       />
       <Button disabled={isSubmitting} type="submit" className="sm:col-start-2">
         Criar novo funcionário

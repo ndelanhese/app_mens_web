@@ -11,14 +11,14 @@ export const getFirstName = (fullName?: string) => {
  * This function is used to remove special characters from a string.
  */
 export const removeSpecialCharacters = (str: string): string => {
-  return str.toLowerCase().replace(/[^\w\s]/g, '');
+  return str?.toLowerCase()?.replace(/[^\w\s]/g, '');
 };
 
 /**
  * This function is used to replace spaces with underscores in a string.
  */
 const replaceSpacesWithUnderscores = (str: string): string => {
-  return str.replace(/\s+/g, '_');
+  return str?.replace(/\s+/g, '_');
 };
 
 /**
