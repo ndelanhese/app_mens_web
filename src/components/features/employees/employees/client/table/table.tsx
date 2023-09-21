@@ -157,6 +157,8 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
           handleCloseModal={handleCloseEditEmployeeModal}
         />
       }
+      deleteItemTitle="Excluir funcionário"
+      deleteItemDescription="Deseja realmente excluir o funcionário?"
     />
   );
 };

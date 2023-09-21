@@ -1,5 +1,6 @@
 import { FC, InputHTMLAttributes } from 'react';
 
+import { FieldValue, FieldValues, UseFormRegister } from 'react-hook-form';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const input = tv({
@@ -22,7 +23,7 @@ export interface InputVariants
   extends InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof input> {
   id: string;
-  register?: any;
+  register?: UseFormRegister<FieldValue<FieldValues>>;
   errorMessage?: string;
 }
 

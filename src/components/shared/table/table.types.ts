@@ -51,6 +51,8 @@ export type UserTableProps<T> = {
   viewItemDialogDescription?: string;
   viewItemDialogContent?: ReactNode;
   viewItemDialogRef?: (ref: RefModalProps) => void | undefined;
+  deleteItemTitle?: string;
+  deleteItemDescription?: string;
 };
 
 export type tableDialogProps = {

@@ -42,6 +42,7 @@ const CreateEmployeeFormComponent = ({
     control,
     watch,
     getValues,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<EmployeeFormSchema>({
     resolver: zodResolver(employeeFormSchema),
@@ -89,13 +90,16 @@ const CreateEmployeeFormComponent = ({
   useEffect(() => {
     if (watch('address.state')) {
       getCities();
+      setValue('address.city', '');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getCities, watch('address.state')]);
 
   const convertCitiesToComboboxOptions = (data: CityResponse[]) => {
     return data.map(item => ({
-      key: convertStringToSlug(item.name_with_municipality),
+      key: convertStringToSlug(
+        item.isMunicipality ? item.name : item.name_with_municipality,
+      ),
       value: item.isMunicipality ? item.name : item.name_with_municipality,
     }));
   };
@@ -116,9 +120,24 @@ const CreateEmployeeFormComponent = ({
 
   const onSubmit: SubmitHandler<EmployeeFormSchema> = async data => {
     try {
+      const { address, ...restData } = data;
+      const { state, city, ...restAddress } = address;
+      const stateValue = memorizedStates.find(item => item.key === state)
+        ?.value;
+      const cityValue = memorizedCities.find(item => item.key === city)?.value;
+
+      const newEmployee = {
+        ...restData,
+        address: {
+          ...restAddress,
+          state: stateValue,
+          city: cityValue,
+        },
+      };
+
       await api.post(
         '/employees',
-        { ...data },
+        { ...newEmployee },
         { headers: { Authorization: `Bearer ${token}` } },
       );
       handleCloseModal();

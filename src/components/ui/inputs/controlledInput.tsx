@@ -2,6 +2,7 @@ import { FC, InputHTMLAttributes } from 'react';
 
 import { tv, type VariantProps } from 'tailwind-variants';
 import { Input } from './input';
+import { FieldValue, FieldValues, UseFormRegister } from 'react-hook-form';
 
 const controlledInput = tv({
   base: 'flex flex-col transition-colors',
@@ -12,7 +13,7 @@ export interface InputVariants
     VariantProps<typeof controlledInput> {
   id: string;
   label: string;
-  register?: any;
+  register?: UseFormRegister<FieldValue<FieldValues>>;
   errorMessage?: string;
   isRequired?: boolean;
 }
