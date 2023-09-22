@@ -62,7 +62,7 @@ const SidebarComponent = () => {
   return isSidebarOpen ? (
     <aside
       className={twMerge(
-        'absolute z-10 h-[100svh] w-screen border-r border-black-10 bg-white-100 p-5 dark:border-white-10 dark:bg-black-100 sm:relative sm:w-56',
+        'absolute z-10 h-[100svh] w-screen border-r border-black-10 bg-white-100 p-5 dark:border-white-10 dark:bg-zinc-950 sm:relative sm:w-56',
         isSidebarOpen ? 'block' : 'hidden sm:block',
       )}
     >
@@ -83,7 +83,7 @@ const SidebarComponent = () => {
           <Button
             variant="outline"
             size="icon"
-            className="bg-white-100 dark:bg-black-100 sm:hidden"
+            className="bg-white-100 dark:bg-zinc-950 sm:hidden"
             onClick={handleLinkClick}
           >
             <X className="h-5 w-5" />
@@ -229,7 +229,7 @@ const SidebarComponent = () => {
     <Button
       variant="outline"
       size="icon"
-      className="absolute left-5 top-3 flex bg-white-100 dark:bg-black-100 sm:hidden"
+      className="absolute left-5 top-3 flex bg-white-100 dark:bg-zinc-950 sm:hidden"
       onClick={() => setIsSidebarOpen(!isSidebarOpen)}
     >
       <SidebarOpen className="h-5 w-5" />

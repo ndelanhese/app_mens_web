@@ -16,6 +16,7 @@ export const ControlledSelect = ({
   errorMessage,
   control,
 }: SelectProps) => {
+  // TODO -> Fix vertical scroll (isn't work)
   return (
     <Controller
       name={name}

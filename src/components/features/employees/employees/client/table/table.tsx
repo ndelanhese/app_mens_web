@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { Table } from '@/components/shared/table/table';
 import { api } from '@axios';
+import { ControlledSelect } from '@/components/ui/selects/controlledSelect';
 
 import {
   RefModalProps,

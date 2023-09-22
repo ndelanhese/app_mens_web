@@ -8,6 +8,7 @@ import { api } from '@axios';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { MaskedInput } from '@components/ui/inputs/maskedInput';
 
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 
@@ -168,59 +169,66 @@ const CreateEmployeeFormComponent = ({
         errorMessage={errors.name?.message}
         placeholder="Ex. João da Silva"
       />
-      <ControlledInput
+      <MaskedInput
         id="cpf"
         label="CPF"
         isRequired
         register={register}
         errorMessage={errors.cpf?.message}
         placeholder="Ex. 123.456.789-10"
+        mask="999.999.999-99"
       />
-      <ControlledInput
+      <MaskedInput
         id="rg"
         label="RG"
         register={register}
         errorMessage={errors.rg?.message}
         placeholder="Ex. 12.345.678-9"
+        mask="99.999.999-9"
       />
-      <ControlledInput
+      <MaskedInput
         id="birth_date"
         label="Data de nascimento"
         isRequired
         register={register}
         errorMessage={errors.birth_date?.message}
         placeholder="Ex. 01/01/2000"
+        mask="99/99/9999"
       />
-      <ControlledInput
+      <MaskedInput
         id="phone"
         label="Celular"
         isRequired
         register={register}
         errorMessage={errors.phone?.message}
         placeholder="Ex. (11) 99999-9999"
+        mask="(99) 99999-9999"
       />
-      <ControlledInput
+      <MaskedInput
         id="pis_pasep"
         label="PIS/PASEP"
         isRequired
         register={register}
         errorMessage={errors.pis_pasep?.message}
-        placeholder="Ex. 123456789-10"
+        placeholder="Ex. 123.45678.91-0"
+        mask="999.99999.99-9"
       />
-      <ControlledInput
+      <MaskedInput
         id="admission_date"
         label="Data de admissão"
         isRequired
         register={register}
         errorMessage={errors.admission_date?.message}
         placeholder="Ex. 01/01/2000"
+        mask="99/99/9999"
       />
-      <ControlledInput
+      <MaskedInput
         id="resignation_date"
         label="Data de demissão"
         register={register}
         errorMessage={errors.resignation_date?.message}
         placeholder="Ex. 01/01/2000"
+        mask="99/99/9999"
       />
       <ControlledInput
         id="address.address"
@@ -246,13 +254,14 @@ const CreateEmployeeFormComponent = ({
         errorMessage={errors.address?.district?.message}
         placeholder="Ex. Centro"
       />
-      <ControlledInput
+      <MaskedInput
         id="address.postal_code"
         label="CEP"
         isRequired
         register={register}
         errorMessage={errors.address?.postal_code?.message}
         placeholder="Ex. 12345-678"
+        mask="99999-999"
       />
       <ControlledSelect
         label="Estado"
@@ -276,7 +285,7 @@ const CreateEmployeeFormComponent = ({
         searchLabel="Pesquisar cidade"
         emptyLabel="Sem cidades cadastrados"
       />
-      <Button disabled={isSubmitting} type="submit" className="sm:col-start-2">
+      <Button isLoading={isSubmitting} type="submit" className="sm:col-start-2">
         Criar novo funcionário
       </Button>
     </form>

@@ -61,7 +61,7 @@ export const Combobox = ({
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="flex w-[19.5rem] p-0 sm:w-[29rem]">
+      <PopoverContent className="flex w-[23.5rem] p-0 sm:w-[29rem]">
         <Command>
           <CommandInput placeholder={searchLabel ?? 'Pesquisar...'} />
           <CommandEmpty>{emptyLabel ?? 'Sem resultados'}</CommandEmpty>
