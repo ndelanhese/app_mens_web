@@ -36,7 +36,7 @@ const EditCategoryFormComponent = ({
 
   const onSubmit: SubmitHandler<CategoryFormSchema> = async data => {
     try {
-      await api.put(`/categories/${category?.id}`, data, {
+      await api.put(`/promotions-categories/${category?.id}`, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
       handleCloseModal();

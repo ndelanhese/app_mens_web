@@ -77,7 +77,7 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
         });
       }
     },
-    [router, toast],
+    [router, toast, token],
   );
 
   const handleRowClick = useCallback(
@@ -112,13 +112,10 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
     router.refresh();
   }, [router]);
 
-  const getCategoryFunction = useCallback(() => {
-    return selectedCategory;
-  }, [selectedCategory]);
-
   if (rows.length < 1) {
     return <TableSkeleton />;
   }
+
   return (
     <Table
       tableColumns={tableColumns}
@@ -138,7 +135,7 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
       editItemDialogDescription="Editar uma categoria no sistema..."
       editItemDialogContent={
         <EditCategoryForm
-          getCategoryFunction={getCategoryFunction}
+          category={selectedCategory}
           handleCloseModal={handleCloseEditCategoryModal}
         />
       }

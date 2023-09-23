@@ -5,5 +5,4 @@ export type Category = {
 
 export type CategoryFormProps = {
   handleCloseModal: () => void;
-  category: Category | undefined;
 };

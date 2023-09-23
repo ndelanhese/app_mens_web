@@ -12,14 +12,14 @@ const iterateResponse = (promotions?: Promotions) => {
   return promotions?.data?.map(promotion => ({
     name: promotion?.name,
     description: promotion?.description,
-    discount: String(promotion?.discount_amount), // TODO -> add util to format currency
-    initialDate: promotion?.initial_date, // TODO -> add util to format date
-    finalDate: promotion?.final_date, // TODO -> add util to format date
+    discount: String(promotion?.discount_amount),
+    initialDate: promotion?.initial_date,
+    finalDate: promotion?.final_date,
     status: promotion?.status,
     category: promotion?.category?.name,
     products: promotion?.products
       ?.map(({ product }) => product?.name)
-      .join(', '), // TODO -> add util to format array and prevent duplicate
+      .join(', '),
   }));
 };
 
