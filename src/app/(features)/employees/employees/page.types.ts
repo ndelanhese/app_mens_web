@@ -1,3 +1,12 @@
+type Address = {
+  address: string;
+  number: string;
+  district: string;
+  postal_code: string;
+  city: string;
+  state: string;
+};
+
 export type Employee = {
   id: number;
   name: string;
@@ -9,6 +18,7 @@ export type Employee = {
   admission_date: string;
   resignation_date: string | null;
   status: string;
+  addresses: Address[];
   createdAt: string;
   updatedAt: string;
 };

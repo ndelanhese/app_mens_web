@@ -101,8 +101,8 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
     labelKey: keyof T,
   ): ComboboxOption[] {
     return data.map(item => ({
-      value: String(item[idKey]),
-      label: String(item[labelKey]),
+      key: String(item[idKey]),
+      value: String(item[labelKey]),
     }));
   }
   const memorizedBrandsOptions = useMemo(() => {

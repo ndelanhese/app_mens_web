@@ -195,8 +195,8 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
       editItemDialogDescription="Editar um produto no sistema..."
       editItemDialogContent={
         <EditProductForm
-          getProductFunction={getProductFunction}
           handleCloseModal={handleCloseEditProductModal}
+          product={selectedProduct}
         />
       }
       editItemDialogRef={ref => {

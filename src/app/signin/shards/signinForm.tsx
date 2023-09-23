@@ -76,12 +76,8 @@ export const SigninForm = () => {
           errorMessage={errors?.password?.message}
         />
       </div>
-      <Button size="lg" color="primary">
-        {isSubmitting ? (
-          <Spinner fillColor={theme === 'light' ? '#fff' : '#000'} />
-        ) : (
-          'Acessar'
-        )}
+      <Button size="lg" color="primary" isLoading={isSubmitting}>
+        Acessar
       </Button>
     </form>
   );

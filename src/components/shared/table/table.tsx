@@ -42,7 +42,7 @@ import { TableDialog } from './tableDialog';
 export function Table<T>({
   rows,
   tableColumns,
-  filter,
+  filter, // Todo -> add am array
   actionCallback,
   newItemDialogContent,
   newItemDialogTitle,
@@ -57,6 +57,8 @@ export function Table<T>({
   viewItemDialogTitle,
   viewItemDialogDescription,
   viewItemDialogRef,
+  deleteItemDescription,
+  deleteItemTitle,
 }: UserTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -199,9 +201,12 @@ export function Table<T>({
                   <AlertDialog
                     actionLabel="Confirmar"
                     cancelLabel="Cancelar"
-                    description="Você tem certeza que deseja excluir este item?"
+                    description={
+                      deleteItemDescription ??
+                      'Você tem certeza que deseja excluir este item?'
+                    }
                     onAction={() => actionCallback(row.original, 'delete')}
-                    title="Excluir"
+                    title={deleteItemTitle ?? 'Excluir'}
                     trigger={DELETE_ITEM_TRIGGER}
                   />
                 </TableCell>

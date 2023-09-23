@@ -13,7 +13,21 @@ const iterateResponse = (employees?: Employees) => {
     id: employee?.id,
     name: employee?.name,
     cpf: employee?.cpf,
+    rg: employee?.rg,
+    birthDate: employee?.birth_date,
     phone: employee?.phone,
+    pisPasep: employee?.pis_pasep,
+    admissionDate: employee?.admission_date,
+    resignationDate: employee?.resignation_date,
+    status: employee?.status,
+    addresses: employee?.addresses?.map(address => ({
+      address: address.address,
+      number: address.number,
+      district: address.district,
+      postalCode: address.postal_code,
+      city: address.city,
+      state: address.state,
+    })),
   }));
 };
 

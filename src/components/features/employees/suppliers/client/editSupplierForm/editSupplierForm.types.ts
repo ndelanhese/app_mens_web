@@ -7,36 +7,26 @@ type AddressResponse = {
   state: string;
 };
 
-export type EmployeeResponse = {
+export type SupplierResponse = {
   id: number;
-  name: string;
-  cpf: string;
-  rg: string;
-  birth_date: string;
-  phone: string;
-  pis_pase: string;
-  admission_date: string;
-  resignation_date: string;
+  contact_name: string;
+  corporate_name: string;
+  cnpj: string;
   addresses: AddressResponse[];
 };
 
-export type EmployeeTable = {
+export type SupplierTable = {
   id: number;
-  name: string;
-  cpf: string;
-  rg: string;
-  birthDate: string;
-  phone: string;
-  pisPasep: string;
-  admissionDate: string;
-  resignationDate: string | null;
+  contactName: string;
+  corporateName: string;
+  cnpj: string;
   status: string;
   addresses: AddressResponse[] | [];
 };
 
-export type EmployeeFormProps = {
+export type SupplierFormProps = {
   handleCloseModal: () => void;
-  employee: EmployeeTable | undefined;
+  supplier: SupplierTable | undefined;
 };
 
 export type CityResponse = {

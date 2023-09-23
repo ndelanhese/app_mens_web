@@ -27,6 +27,7 @@
       "@/*": ["./src/*"],
       "@contexts/*": ["./src/contexts/*"],
       "@axios": ["./src/services/axios.ts"],
+      "@fetchApi": ["./src/services/fetchApi.ts"],
       "@components/*": ["./src/components/*"],
       "@utils/*": ["./src/utils/*"],
       "@features-components/*": ["./src/components/features/*"],

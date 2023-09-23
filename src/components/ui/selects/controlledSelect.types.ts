@@ -1,5 +1,7 @@
+import { Control, FieldValue, FieldValues } from 'react-hook-form';
+
 export type SelectOption = {
-  label: string;
+  key: string;
   value: string;
 };
 
@@ -13,5 +15,6 @@ export type SelectProps = {
   defaultValue?: string;
   className?: string;
   errorMessage?: string;
-  control: any;
+  control: Control<FieldValue<FieldValues>>;
+  isRequired?: boolean;
 };

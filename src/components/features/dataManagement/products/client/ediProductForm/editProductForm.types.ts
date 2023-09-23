@@ -14,8 +14,8 @@ export type Supplier = {
 };
 
 export type ComboboxOption = {
+  key: string;
   value: string;
-  label: string;
 };
 
 export type Product = {
@@ -45,6 +45,6 @@ export type SuppliersResponse = {
 };
 
 export type ProductFormProps = {
-  getProductFunction: () => Product | undefined;
   handleCloseModal: () => void;
+  product: Product | undefined;
 };

@@ -2,20 +2,20 @@ type Address = {
   address: string;
   number: string;
   district: string;
-  postal_code: string;
+  postalCode: string;
   city: string;
   state: string;
 };
 
 export type Supplier = {
   id: number;
-  contact_name: string;
-  corporate_name: string;
+  contactName: string;
+  corporateName: string;
   cnpj: string;
   status: string;
-  addresses: Address[];
+  addresses: Address[] | [];
 };
 
-export type Suppliers = {
-  data: Supplier[];
+export type SupplierPreviewProps = {
+  supplier: Supplier | undefined;
 };

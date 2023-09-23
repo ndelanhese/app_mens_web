@@ -16,19 +16,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
-  EmployeeFormSchema,
-  employeeFormSchema,
-} from './createEmployeeForm.schema';
+  SupplierFormSchema,
+  supplierFormSchema,
+} from './createSupplierForm.schema';
 import {
   CityResponse,
-  EmployeeFormProps,
+  SupplierFormProps,
   StateResponse,
-} from './createEmployeeForm.types';
+} from './createSupplierForm.types';
 import { getCities, getStates } from '../../api/apiData';
 
-const CreateEmployeeFormComponent = ({
+const CreateSupplierFormComponent = ({
   handleCloseModal,
-}: EmployeeFormProps) => {
+}: SupplierFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
@@ -43,8 +43,8 @@ const CreateEmployeeFormComponent = ({
     watch,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<EmployeeFormSchema>({
-    resolver: zodResolver(employeeFormSchema),
+  } = useForm<SupplierFormSchema>({
+    resolver: zodResolver(supplierFormSchema),
   });
 
   const stateResponse = useCallback(async () => {
@@ -96,7 +96,7 @@ const CreateEmployeeFormComponent = ({
     return [];
   }, [cities]);
 
-  const onSubmit: SubmitHandler<EmployeeFormSchema> = async data => {
+  const onSubmit: SubmitHandler<SupplierFormSchema> = async data => {
     try {
       const { address, ...restData } = data;
       const { state, city, ...restAddress } = address;
@@ -104,7 +104,7 @@ const CreateEmployeeFormComponent = ({
         ?.value;
       const cityValue = memorizedCities.find(item => item.key === city)?.value;
 
-      const newEmployee = {
+      const newSupplier = {
         ...restData,
         address: {
           ...restAddress,
@@ -114,19 +114,19 @@ const CreateEmployeeFormComponent = ({
       };
 
       await api.post(
-        '/employees',
-        { ...newEmployee },
+        '/suppliers',
+        { ...newSupplier },
         { headers: { Authorization: `Bearer ${token}` } },
       );
       handleCloseModal();
       toast({
-        title: 'Funcionário criado com sucesso',
+        title: 'Fornecedor criado com sucesso',
         variant: 'default',
       });
     } catch (error: Error | any) {
       const errorMessage = error.response.data.message ?? 'Erro desconhecido';
       toast({
-        title: 'Erro ao criar o funcionário',
+        title: 'Erro ao criar o fornecedor',
         description: errorMessage,
         variant: 'destructive',
       });
@@ -139,73 +139,29 @@ const CreateEmployeeFormComponent = ({
       onSubmit={handleSubmit(onSubmit)}
     >
       <ControlledInput
-        id="name"
-        label="Nome"
+        id="contact_name"
+        label="Nome do contato"
         isRequired
         register={register}
-        errorMessage={errors.name?.message}
+        errorMessage={errors.contact_name?.message}
         placeholder="Ex. João da Silva"
       />
+      <ControlledInput
+        id="corporate_name"
+        label="Nome do fornecedor"
+        isRequired
+        register={register}
+        errorMessage={errors.corporate_name?.message}
+        placeholder="Ex. João da Silva ltda."
+      />
       <MaskedInput
-        id="cpf"
-        label="CPF"
+        id="cnpj"
+        label="CNPJ"
         isRequired
         control={control}
-        errorMessage={errors.cpf?.message}
-        placeholder="Ex. 123.456.789-10"
-        mask="999.999.999-99"
-      />
-      <MaskedInput
-        id="rg"
-        label="RG"
-        control={control}
-        errorMessage={errors.rg?.message}
-        placeholder="Ex. 12.345.678-9"
-        mask="99.999.999-9"
-      />
-      <MaskedInput
-        id="birth_date"
-        label="Data de nascimento"
-        isRequired
-        control={control}
-        errorMessage={errors.birth_date?.message}
-        placeholder="Ex. 01/01/2000"
-        mask="99/99/9999"
-      />
-      <MaskedInput
-        id="phone"
-        label="Celular"
-        isRequired
-        control={control}
-        errorMessage={errors.phone?.message}
-        placeholder="Ex. (11) 99999-9999"
-        mask="(99) 99999-9999"
-      />
-      <MaskedInput
-        id="pis_pasep"
-        label="PIS/PASEP"
-        isRequired
-        control={control}
-        errorMessage={errors.pis_pasep?.message}
-        placeholder="Ex. 123.45678.91-0"
-        mask="999.99999.99-9"
-      />
-      <MaskedInput
-        id="admission_date"
-        label="Data de admissão"
-        isRequired
-        control={control}
-        errorMessage={errors.admission_date?.message}
-        placeholder="Ex. 01/01/2000"
-        mask="99/99/9999"
-      />
-      <MaskedInput
-        id="resignation_date"
-        label="Data de demissão"
-        control={control}
-        errorMessage={errors.resignation_date?.message}
-        placeholder="Ex. 01/01/2000"
-        mask="99/99/9999"
+        errorMessage={errors.cnpj?.message}
+        placeholder="Ex. 12.345.678/9012-34"
+        mask="99.999.999/9999-99"
       />
       <ControlledInput
         id="address.address"
@@ -262,11 +218,15 @@ const CreateEmployeeFormComponent = ({
         searchLabel="Pesquisar cidade"
         emptyLabel="Sem cidades cadastrados"
       />
-      <Button isLoading={isSubmitting} type="submit" className="sm:col-start-2">
-        Criar novo funcionário
+      <Button
+        isLoading={isSubmitting}
+        type="submit"
+        className="sm:col-start-2 sm:h-fit sm:self-end"
+      >
+        Criar novo fornecedor
       </Button>
     </form>
   );
 };
 
-export const CreateEmployeeForm = memo(CreateEmployeeFormComponent);
+export const CreateSupplierForm = memo(CreateSupplierFormComponent);

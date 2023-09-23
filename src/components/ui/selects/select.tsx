@@ -30,15 +30,15 @@ export const Combobox = ({
   onChange,
 }: SelectProps) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(defaultValue ?? '');
+  const [key, setValue] = useState(defaultValue ?? '');
 
   const handleValueChange = (currentValue: string) => {
     const selectedValue =
       options.find(
         option =>
-          option.label.toLocaleLowerCase() === currentValue.toLocaleLowerCase(),
-      )?.value ?? '';
-    setValue(selectedValue === value ? '' : selectedValue);
+          option.value.toLocaleLowerCase() === currentValue.toLocaleLowerCase(),
+      )?.key ?? '';
+    setValue(selectedValue === key ? '' : selectedValue);
     setOpen(false);
 
     if (onChange) {
@@ -55,26 +55,26 @@ export const Combobox = ({
           aria-expanded={open}
           className="w-full justify-between rounded-lg py-6 text-md font-re"
         >
-          {value
-            ? options.find(option => option.value === value)?.label
+          {key
+            ? options.find(option => option.key === key)?.value
             : placeHolder}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="flex w-[19.5rem] p-0 sm:w-[29rem]">
+      <PopoverContent className="flex w-[23.5rem] p-0 sm:w-[29rem]">
         <Command>
           <CommandInput placeholder={searchLabel ?? 'Pesquisar...'} />
           <CommandEmpty>{emptyLabel ?? 'Sem resultados'}</CommandEmpty>
-          <CommandGroup>
+          <CommandGroup className="max-h-80 overflow-y-auto">
             {options.map(option => (
-              <CommandItem key={option.value} onSelect={handleValueChange}>
+              <CommandItem key={option.key} onSelect={handleValueChange}>
                 <Check
                   className={cn(
                     'mr-2 h-4 w-4',
-                    value === option.value ? 'opacity-100' : 'opacity-0',
+                    key === option.key ? 'opacity-100' : 'opacity-0',
                   )}
                 />
-                {option.label}
+                {option.value}
               </CommandItem>
             ))}
           </CommandGroup>

@@ -17,19 +17,19 @@ import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { getCities, getStates } from '../../api/apiData';
 import {
-  EmployeeFormSchema,
-  employeeFormSchema,
-} from './editEmployeeForm.schema';
+  SupplierFormSchema,
+  supplierFormSchema,
+} from './editSupplierForm.schema';
 import {
   CityResponse,
-  EmployeeFormProps,
+  SupplierFormProps,
   StateResponse,
-} from './editEmployeeForm.types';
+} from './editSupplierForm.types';
 
-const EditEmployeeFormComponent = ({
+const EditSupplierFormComponent = ({
   handleCloseModal,
-  employee,
-}: EmployeeFormProps) => {
+  supplier,
+}: SupplierFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
@@ -44,8 +44,8 @@ const EditEmployeeFormComponent = ({
     watch,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<EmployeeFormSchema>({
-    resolver: zodResolver(employeeFormSchema),
+  } = useForm<SupplierFormSchema>({
+    resolver: zodResolver(supplierFormSchema),
   });
 
   const stateResponse = useCallback(async () => {
@@ -97,27 +97,27 @@ const EditEmployeeFormComponent = ({
     return [];
   }, [cities]);
 
-  const onSubmit: SubmitHandler<EmployeeFormSchema> = async data => {
+  const onSubmit: SubmitHandler<SupplierFormSchema> = async data => {
     try {
-      await api.put(`/employees/${employee?.id}`, data, {
+      await api.put(`/suppliers/${supplier?.id}`, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
       handleCloseModal();
       toast({
-        title: 'Funcionário atualizado com sucesso',
+        title: 'Fornecedor atualizado com sucesso',
         variant: 'default',
       });
     } catch (error: Error | any) {
       const errorMessage = error.response.data.message ?? 'Erro desconhecido';
       toast({
-        title: 'Erro ao atualizar o funcionário',
+        title: 'Erro ao atualizar o fornecedor',
         description: errorMessage,
         variant: 'destructive',
       });
     }
   };
 
-  if (!employee || memorizedStates.length < 1) {
+  if (!supplier || memorizedStates.length < 1) {
     // TODO -> Add skeleton
     return <h1>Carregando...</h1>;
   }
@@ -129,90 +129,41 @@ const EditEmployeeFormComponent = ({
       className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {employee && (
+      {supplier && (
         <>
           <ControlledInput
             id="id"
             label="Código"
-            defaultValue={employee?.id}
+            defaultValue={supplier?.id}
             readOnly
           />
           <ControlledInput
-            id="name"
-            label="Nome"
+            id="contact_name"
+            label="Nome do contato"
             isRequired
             register={register}
-            errorMessage={errors.name?.message}
-            defaultValue={employee?.name}
+            errorMessage={errors.contact_name?.message}
+            defaultValue={supplier?.contactName}
             placeholder="Ex. João da Silva"
           />
+          <ControlledInput
+            id="corporate_name"
+            label="Nome do fornecedor"
+            isRequired
+            register={register}
+            errorMessage={errors.corporate_name?.message}
+            defaultValue={supplier?.corporateName}
+            placeholder="Ex. João da Silva ltda."
+          />
           <MaskedInput
-            id="cpf"
-            label="CPF"
+            id="cnpj"
+            label="CNPJ"
             isRequired
             control={control}
-            errorMessage={errors.cpf?.message}
-            defaultValue={employee?.cpf}
-            placeholder="Ex. 123.456.789-10"
-            mask="999.999.999-99"
-          />
-          <MaskedInput
-            id="rg"
-            label="RG"
-            control={control}
-            errorMessage={errors.rg?.message}
-            defaultValue={employee?.rg}
-            placeholder="Ex. 12.345.678-9"
-            mask="99.999.999-9"
-          />
-          <MaskedInput
-            id="birth_date"
-            label="Data de nascimento"
-            isRequired
-            control={control}
-            errorMessage={errors.birth_date?.message}
-            defaultValue={employee?.birthDate}
-            placeholder="Ex. 01/01/2000"
-            mask="99/99/9999"
-          />
-          <MaskedInput
-            id="phone"
-            label="Celular"
-            isRequired
-            control={control}
-            errorMessage={errors.phone?.message}
-            defaultValue={employee?.phone}
-            placeholder="Ex. (11) 99999-9999"
-            mask="(99) 99999-9999"
-          />
-          <MaskedInput
-            id="pis_pasep"
-            label="PIS/PASEP"
-            isRequired
-            control={control}
-            errorMessage={errors.pis_pasep?.message}
-            defaultValue={employee?.pisPasep}
-            placeholder="Ex. 123.45678.91-0"
-            mask="999.99999.99-9"
-          />
-          <MaskedInput
-            id="admission_date"
-            label="Data de admissão"
-            isRequired
-            control={control}
-            errorMessage={errors.admission_date?.message}
-            defaultValue={employee?.admissionDate}
-            placeholder="Ex. 01/01/2000"
-            mask="99/99/9999"
-          />
-          <MaskedInput
-            id="resignation_date"
-            label="Data de demissão"
-            control={control}
-            errorMessage={errors.resignation_date?.message}
-            defaultValue={employee?.resignationDate ?? undefined}
-            placeholder="Ex. 01/01/2000"
-            mask="99/99/9999"
+            errorMessage={errors.cnpj?.message}
+            defaultValue={supplier?.cnpj}
+            placeholder="Ex. 12.345.678/9012-34"
+            mask="99.999.999/9999-99"
           />
           <ControlledInput
             id="address.address"
@@ -220,7 +171,7 @@ const EditEmployeeFormComponent = ({
             isRequired
             register={register}
             errorMessage={errors.address?.address?.message}
-            defaultValue={employee?.addresses?.[0]?.address}
+            defaultValue={supplier?.addresses?.[0]?.address}
             placeholder="Ex. Rua de casa"
           />
           <ControlledInput
@@ -229,7 +180,7 @@ const EditEmployeeFormComponent = ({
             isRequired
             register={register}
             errorMessage={errors.address?.number?.message}
-            defaultValue={employee?.addresses?.[0]?.number}
+            defaultValue={supplier?.addresses?.[0]?.number}
             placeholder="Ex. 123A"
           />
           <ControlledInput
@@ -238,7 +189,7 @@ const EditEmployeeFormComponent = ({
             isRequired
             register={register}
             errorMessage={errors.address?.district?.message}
-            defaultValue={employee?.addresses?.[0]?.district}
+            defaultValue={supplier?.addresses?.[0]?.district}
             placeholder="Ex. Centro"
           />
           <MaskedInput
@@ -247,7 +198,7 @@ const EditEmployeeFormComponent = ({
             isRequired
             control={control}
             errorMessage={errors.address?.postal_code?.message}
-            defaultValue={employee?.addresses?.[0]?.postalCode}
+            defaultValue={supplier?.addresses?.[0]?.postalCode}
             placeholder="Ex. 12345-678"
             mask="99999-999"
           />
@@ -259,7 +210,7 @@ const EditEmployeeFormComponent = ({
             errorMessage={errors.address?.state?.message}
             defaultValue={
               memorizedStates.find(
-                state => state.key === employee?.addresses?.[0]?.state,
+                state => state.key === supplier?.addresses?.[0]?.state,
               )?.key
             }
             options={memorizedStates}
@@ -275,7 +226,7 @@ const EditEmployeeFormComponent = ({
             errorMessage={errors.address?.city?.message}
             defaultValue={
               memorizedCities.find(
-                city => city.key === employee?.addresses?.[0]?.city,
+                city => city.key === supplier?.addresses?.[0]?.city,
               )?.key
             }
             options={memorizedCities}
@@ -290,10 +241,10 @@ const EditEmployeeFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Alterar funcionário
+        Alterar fornecedor
       </Button>
     </form>
   );
 };
 
-export const EditEmployeeForm = memo(EditEmployeeFormComponent);
+export const EditSupplierForm = memo(EditSupplierFormComponent);

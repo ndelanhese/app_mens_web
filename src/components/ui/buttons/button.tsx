@@ -1,5 +1,10 @@
+'use client';
+
 import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
 
+import { Spinner } from '@components/icons/spinner';
+
+import { useTheme } from 'next-themes';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const button = tv({
@@ -26,7 +31,7 @@ const button = tv({
     {
       color: 'primary',
       disabled: true,
-      className: 'hover:bg-black-5',
+      className: 'hover:bg-neutral-950',
     },
     {
       color: 'outline',
@@ -56,6 +61,7 @@ export interface ButtonVariants
     VariantProps<typeof button> {
   children: ReactNode;
   color?: 'primary' | 'outline' | 'opaque' | 'white';
+  isLoading?: boolean;
 }
 
 export const Button: FC<ButtonVariants> = ({
@@ -64,11 +70,22 @@ export const Button: FC<ButtonVariants> = ({
   size,
   disabled,
   children,
+  isLoading = false,
   ...props
 }) => {
+  const { theme } = useTheme();
+
   return (
-    <button className={button({ className, color, size, disabled })} {...props}>
-      {children}
+    <button
+      className={button({ className, color, size, disabled })}
+      {...props}
+      disabled={isLoading}
+    >
+      {isLoading ? (
+        <Spinner fillColor={theme === 'light' ? '#fff' : '#000'} />
+      ) : (
+        children
+      )}
     </button>
   );
 };

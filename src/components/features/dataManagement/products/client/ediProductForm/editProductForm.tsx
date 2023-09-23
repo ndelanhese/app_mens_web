@@ -19,31 +19,24 @@ import {
   CategoriesResponse,
   Category,
   ComboboxOption,
-  Product,
   ProductFormProps,
   Supplier,
   SuppliersResponse,
 } from './editProductForm.types';
 
 const EditProductFormComponent = ({
-  getProductFunction,
   handleCloseModal,
+  product,
 }: ProductFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
 
-  const [product, setProduct] = useState<Product | undefined>(undefined);
   const [categories, setCategories] = useState<Category[] | undefined>(
     undefined,
   );
   const [brands, setBrands] = useState<Brand[] | undefined>(undefined);
   const [suppliers, setSuppliers] = useState<Supplier[] | undefined>(undefined);
-
-  useEffect(() => {
-    const productData = getProductFunction();
-    setProduct(productData);
-  }, [getProductFunction]);
 
   const getBrands = useCallback(async () => {
     try {
@@ -108,8 +101,8 @@ const EditProductFormComponent = ({
     labelKey: keyof T,
   ): ComboboxOption[] {
     return data.map(item => ({
-      value: String(item[idKey]),
-      label: String(item[labelKey]),
+      key: String(item[idKey]),
+      value: String(item[labelKey]),
     }));
   }
   const memorizedBrandsOptions = useMemo(() => {

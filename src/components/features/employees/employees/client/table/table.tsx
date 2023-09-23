@@ -119,10 +119,6 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
     router.refresh();
   }, [router]);
 
-  const getEmployeesFunction = useCallback(() => {
-    return selectedEmployee;
-  }, [selectedEmployee]);
-
   if (!rows || rows.length < 1) {
     return <TableSkeleton />;
   }
@@ -153,10 +149,12 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
       }}
       editItemDialogContent={
         <EditEmployeeForm
-          getEmployeesFunction={getEmployeesFunction}
           handleCloseModal={handleCloseEditEmployeeModal}
+          employee={selectedEmployee}
         />
       }
+      deleteItemTitle="Excluir funcionário"
+      deleteItemDescription="Deseja realmente excluir o funcionário?"
     />
   );
 };
