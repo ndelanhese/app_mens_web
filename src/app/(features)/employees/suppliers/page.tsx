@@ -3,20 +3,29 @@ import { cookies } from 'next/headers';
 import { cache } from 'react';
 
 import { api } from '@axios';
-import { SuppliersTable } from '@features-components/employees/suppliers/client/table/table';
+
+import { SuppliersTable } from '@components/features/employees/suppliers/client/table/table';
 
 import { Suppliers } from './page.types';
 
 const iterateResponse = (suppliers?: Suppliers) => {
   if (!suppliers) return [];
   return suppliers?.data?.map(supplier => ({
+    id: supplier.id,
     contactName: supplier?.contact_name,
     corporateName: supplier?.corporate_name,
     cnpj: supplier?.cnpj,
+    status: supplier?.status,
+    addresses: supplier?.addresses?.map(address => ({
+      address: address.address,
+      number: address.number,
+      district: address.district,
+      postalCode: address.postal_code,
+      city: address.city,
+      state: address.state,
+    })),
   }));
 };
-
-export const revalidate = 3600;
 
 const getSuppliers = cache(async () => {
   try {

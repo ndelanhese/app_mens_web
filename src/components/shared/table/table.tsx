@@ -42,7 +42,7 @@ import { TableDialog } from './tableDialog';
 export function Table<T>({
   rows,
   tableColumns,
-  filter,
+  filter, // Todo -> add am array
   actionCallback,
   newItemDialogContent,
   newItemDialogTitle,
