@@ -18,7 +18,7 @@ export type Employee = {
   admission_date: string;
   resignation_date: string | null;
   status: string;
-  address: Address[];
+  addresses: Address[];
   createdAt: string;
   updatedAt: string;
 };

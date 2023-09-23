@@ -120,10 +120,6 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
     router.refresh();
   }, [router]);
 
-  const getEmployeesFunction = useCallback(() => {
-    return selectedEmployee;
-  }, [selectedEmployee]);
-
   if (!rows || rows.length < 1) {
     return <TableSkeleton />;
   }

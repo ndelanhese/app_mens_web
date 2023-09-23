@@ -45,6 +45,6 @@ export type SuppliersResponse = {
 };
 
 export type ProductFormProps = {
-  getProductFunction: () => Product | undefined;
   handleCloseModal: () => void;
+  product: Product | undefined;
 };

@@ -1,4 +1,4 @@
-export const convertStatus = (status: string) => {
+export const convertStatus = (status: string | undefined) => {
   switch (status) {
     case 'active':
       return 'Ativo';

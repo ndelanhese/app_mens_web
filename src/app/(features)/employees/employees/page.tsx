@@ -20,13 +20,13 @@ const iterateResponse = (employees?: Employees) => {
     admissionDate: employee?.admission_date,
     resignationDate: employee?.resignation_date,
     status: employee?.status,
-    address: employee?.address?.map(address => ({
-      address,
-      number: address?.number,
-      district: address?.district,
-      postalCode: address?.postal_code,
-      city: address?.city,
-      state: address?.state,
+    addresses: employee?.addresses?.map(address => ({
+      address: address.address,
+      number: address.number,
+      district: address.district,
+      postalCode: address.postal_code,
+      city: address.city,
+      state: address.state,
     })),
   }));
 };

@@ -1,3 +1,5 @@
+'use client';
+
 import { Controller } from 'react-hook-form';
 import { Combobox } from './select';
 import { SelectProps } from './controlledSelect.types';

@@ -2,7 +2,7 @@ type AddressResponse = {
   address: string;
   number: string;
   district: string;
-  postal_code: string;
+  postalCode: string;
   city: string;
   state: string;
 };
@@ -18,7 +18,7 @@ export type Employee = {
   admissionDate: string;
   resignationDate: string | null;
   status: string;
-  address: AddressResponse[] | [];
+  addresses: AddressResponse[] | [];
 };
 
 export type EmployeesTableProps = {

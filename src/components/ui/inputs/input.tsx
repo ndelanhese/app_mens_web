@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, InputHTMLAttributes } from 'react';
 
 import { FieldValue, FieldValues, UseFormRegister } from 'react-hook-form';
