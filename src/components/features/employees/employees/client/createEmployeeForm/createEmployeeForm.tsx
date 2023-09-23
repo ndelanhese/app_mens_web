@@ -20,12 +20,11 @@ import {
   employeeFormSchema,
 } from './createEmployeeForm.schema';
 import {
-  CitiesResponse,
   CityResponse,
   EmployeeFormProps,
   StateResponse,
-  StatesResponse,
 } from './createEmployeeForm.types';
+import { getCities, getStates } from '../../api/apiData';
 
 const CreateEmployeeFormComponent = ({
   handleCloseModal,
@@ -42,59 +41,37 @@ const CreateEmployeeFormComponent = ({
     handleSubmit,
     control,
     watch,
-    getValues,
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<EmployeeFormSchema>({
     resolver: zodResolver(employeeFormSchema),
   });
 
-  const getStates = useCallback(async () => {
-    try {
-      const { data } = await api.get<StatesResponse>('/states', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setStates(data.data);
-    } catch (error: Error | any) {
-      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
-      toast({
-        title: 'Erro ao buscar estados',
-        description: errorMessage,
-        variant: 'destructive',
-      });
-    }
-  }, [toast, token]);
+  const stateResponse = useCallback(async () => {
+    const response = await getStates();
+    setStates(response);
+  }, []);
 
-  const getCities = useCallback(async () => {
-    try {
-      const { data } = await api.get<CitiesResponse>(
-        `/cities?uf=${getValues('address.state')}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      setCities(data.data);
-    } catch (error: Error | any) {
-      const errorMessage = error.response.data.message ?? undefined;
-      toast({
-        title: 'Erro ao buscar cidades',
-        description: errorMessage,
-        variant: 'destructive',
-      });
+  const handleSelectState = useCallback(async () => {
+    const state = watch('address.state');
+    if (state) {
+      const response = await getCities(state);
+      setCities(response);
+      setValue('address.city', '');
     }
-  }, [getValues, toast, token]);
+  }, [setValue, watch]);
 
   useEffect(() => {
-    getStates();
-  }, [getStates]);
+    stateResponse();
+  }, [stateResponse]);
 
   useEffect(() => {
     if (watch('address.state')) {
-      getCities();
+      handleSelectState();
       setValue('address.city', '');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getCities, watch('address.state')]);
+  }, [handleSelectState, watch('address.state')]);
 
   const convertCitiesToComboboxOptions = (data: CityResponse[]) => {
     return data.map(item => ({
@@ -173,7 +150,7 @@ const CreateEmployeeFormComponent = ({
         id="cpf"
         label="CPF"
         isRequired
-        register={register}
+        control={control}
         errorMessage={errors.cpf?.message}
         placeholder="Ex. 123.456.789-10"
         mask="999.999.999-99"
@@ -181,7 +158,7 @@ const CreateEmployeeFormComponent = ({
       <MaskedInput
         id="rg"
         label="RG"
-        register={register}
+        control={control}
         errorMessage={errors.rg?.message}
         placeholder="Ex. 12.345.678-9"
         mask="99.999.999-9"
@@ -190,7 +167,7 @@ const CreateEmployeeFormComponent = ({
         id="birth_date"
         label="Data de nascimento"
         isRequired
-        register={register}
+        control={control}
         errorMessage={errors.birth_date?.message}
         placeholder="Ex. 01/01/2000"
         mask="99/99/9999"
@@ -199,7 +176,7 @@ const CreateEmployeeFormComponent = ({
         id="phone"
         label="Celular"
         isRequired
-        register={register}
+        control={control}
         errorMessage={errors.phone?.message}
         placeholder="Ex. (11) 99999-9999"
         mask="(99) 99999-9999"
@@ -208,7 +185,7 @@ const CreateEmployeeFormComponent = ({
         id="pis_pasep"
         label="PIS/PASEP"
         isRequired
-        register={register}
+        control={control}
         errorMessage={errors.pis_pasep?.message}
         placeholder="Ex. 123.45678.91-0"
         mask="999.99999.99-9"
@@ -217,7 +194,7 @@ const CreateEmployeeFormComponent = ({
         id="admission_date"
         label="Data de admissão"
         isRequired
-        register={register}
+        control={control}
         errorMessage={errors.admission_date?.message}
         placeholder="Ex. 01/01/2000"
         mask="99/99/9999"
@@ -225,7 +202,7 @@ const CreateEmployeeFormComponent = ({
       <MaskedInput
         id="resignation_date"
         label="Data de demissão"
-        register={register}
+        control={control}
         errorMessage={errors.resignation_date?.message}
         placeholder="Ex. 01/01/2000"
         mask="99/99/9999"
@@ -258,7 +235,7 @@ const CreateEmployeeFormComponent = ({
         id="address.postal_code"
         label="CEP"
         isRequired
-        register={register}
+        control={control}
         errorMessage={errors.address?.postal_code?.message}
         placeholder="Ex. 12345-678"
         mask="99999-999"

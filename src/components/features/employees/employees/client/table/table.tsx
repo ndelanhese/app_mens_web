@@ -154,8 +154,8 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
       }}
       editItemDialogContent={
         <EditEmployeeForm
-          getEmployeesFunction={getEmployeesFunction}
           handleCloseModal={handleCloseEditEmployeeModal}
+          employee={selectedEmployee}
         />
       }
       deleteItemTitle="Excluir funcionário"
