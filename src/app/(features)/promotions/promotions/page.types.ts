@@ -18,13 +18,11 @@ export type Promotion = {
   status: string;
   category: PromotionCategory;
   products: Array<{
-    product: {
-      id: number;
-      part_number: string;
-      name: string;
-      price: number;
-      quantity: number;
-    };
+    id: number;
+    part_number: string;
+    name: string;
+    price: number;
+    quantity: number;
   }>;
 };
 

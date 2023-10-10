@@ -17,9 +17,7 @@ const iterateResponse = (promotions?: Promotions) => {
     finalDate: promotion?.final_date,
     status: promotion?.status,
     category: promotion?.category?.name,
-    products: promotion?.products
-      ?.map(({ product }) => product?.name)
-      .join(', '),
+    products: promotion?.products?.map(product => product?.name).join(', '),
   }));
 };
 
