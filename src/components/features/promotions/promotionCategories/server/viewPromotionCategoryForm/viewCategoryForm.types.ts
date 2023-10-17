@@ -3,7 +3,6 @@ export type Category = {
   name: string;
 };
 
-export type CategoryFormProps = {
-  handleCloseModal: () => void;
+export type CategoryPreviewProps = {
   category: Category | undefined;
 };

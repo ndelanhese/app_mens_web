@@ -6,6 +6,7 @@ import './globals.css';
 import { Toaster } from '@components/ui/shadcn/toast/toaster';
 
 import { ThemeProvider } from '@contexts/theme';
+import { SidebarDrawerProvider } from '@contexts/sidebarDrawer/sidebarDrawer.context';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -57,7 +58,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         className={`${inter.variable} flex min-h-[100svh] w-screen overflow-x-hidden bg-white-100 font-sans antialiased dark:bg-zinc-950`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <SidebarDrawerProvider>{children}</SidebarDrawerProvider>
           <Toaster />
         </ThemeProvider>
       </body>

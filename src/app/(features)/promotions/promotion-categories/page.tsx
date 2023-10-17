@@ -9,8 +9,9 @@ import { Categories } from './page.types';
 
 const iterateResponse = (categories?: Categories) => {
   if (!categories) return [];
-  return categories?.data?.map(user => ({
-    name: user?.name,
+  return categories?.data?.map(category => ({
+    id: category.id,
+    name: category?.name,
   }));
 };
 

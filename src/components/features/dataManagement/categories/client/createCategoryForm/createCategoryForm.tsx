@@ -56,7 +56,7 @@ const CreateCategoryFormComponent = ({
 
   return (
     <form
-      className="flex h-full w-full flex-col gap-6 sm:h-auto"
+      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
       onSubmit={handleSubmit(onSubmit)}
     >
       <ControlledInput
@@ -64,10 +64,15 @@ const CreateCategoryFormComponent = ({
         label="Categoria"
         register={register}
         errorMessage={errors.name?.message}
+        isRequired
       />
 
-      <Button disabled={isSubmitting} type="submit" className="sm:self-end">
-        Criar
+      <Button
+        disabled={isSubmitting}
+        type="submit"
+        className="sm:col-start-2 sm:h-fit sm:self-end"
+      >
+        Criar categoria
       </Button>
     </form>
   );
