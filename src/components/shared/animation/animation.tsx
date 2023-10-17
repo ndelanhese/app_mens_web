@@ -80,6 +80,21 @@ export const Animation = ({
         center: { x: 0, opacity: 1 },
         exit: { x: '-100%', opacity: 0 },
       },
+
+      resizeHorizontal: {
+        enter: {
+          width: 0,
+          opacity: 0,
+        },
+        center: {
+          width: 'auto',
+          opacity: 1,
+        },
+        exit: {
+          width: 0,
+          opacity: 0,
+        },
+      },
     };
 
     return src[variant];
