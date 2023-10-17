@@ -53,8 +53,6 @@ export const SigninForm = () => {
     }
   };
 
-  console.log(theme);
-
   return (
     <form
       className="flex flex-col gap-7 sm:w-[24.25rem]"
