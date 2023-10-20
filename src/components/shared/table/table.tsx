@@ -35,7 +35,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Eye, Pencil, Trash } from 'lucide-react';
+import { Eye, Pencil, Search, Trash } from 'lucide-react';
 import { UserTableProps } from './table.types';
 import { TableDialog } from './tableDialog';
 
@@ -102,15 +102,20 @@ export function Table<T>({
   return (
     <div className="flex w-full flex-col items-start justify-start pb-3">
       <div className="flex w-full flex-col justify-between sm:flex-row sm:items-end">
-        <Input
-          id="search"
-          className="sm:max-w-xs"
-          placeholder="Pesquisar..."
-          value={(table.getColumn(filter)?.getFilterValue() as string) ?? ''}
-          onChange={event =>
-            table.getColumn(filter)?.setFilterValue(event.target.value)
-          }
-        />
+        <div className="relative flex flex-row items-center">
+          <div className="absolute left-2 flex flex-row items-center gap-1">
+            <Search className="h-4 w-4" />
+          </div>
+          <Input
+            id="search"
+            className="pl-8"
+            placeholder="Pesquisar..."
+            value={(table.getColumn(filter)?.getFilterValue() as string) ?? ''}
+            onChange={event =>
+              table.getColumn(filter)?.setFilterValue(event.target.value)
+            }
+          />
+        </div>
         <div className="mt-2 flex flex-row items-center justify-between gap-2 sm:mt-0">
           <TableDialog
             dialogRef={newItemDialogRef}

@@ -77,7 +77,7 @@ const SidebarComponent = () => {
                   variant="outline"
                   size="icon"
                   className="bg-white-100 dark:bg-zinc-950 sm:hidden"
-                  onClick={handleToggleSidebar}
+                  onClick={() => isMobile && handleToggleSidebar()}
                 >
                   <X className="h-5 w-5" />
                 </Button>
@@ -86,7 +86,7 @@ const SidebarComponent = () => {
                 <Link href="/" passHref>
                   <nav
                     className="rounded-lg p-4 font-medium hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
-                    onClick={handleToggleSidebar}
+                    onClick={() => isMobile && handleToggleSidebar()}
                   >
                     Dashboard
                   </nav>
@@ -100,13 +100,13 @@ const SidebarComponent = () => {
                           href="/administration/users"
                           title="Usuários"
                           icon={Users}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                         <SidebarLink
                           href="/administration/roles-permissions"
                           title="Papéis e Permissões"
                           icon={ScrollText}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                       </div>
                     </AccordionContent>
@@ -119,19 +119,19 @@ const SidebarComponent = () => {
                           href="/data-management/brands"
                           title="Marcas"
                           icon={Tags}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                         <SidebarLink
                           href="/data-management/categories"
                           title="Categorias"
                           icon={Library}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                         <SidebarLink
                           href="/data-management/products"
                           title="Produtos"
                           icon={PackageOpen}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                       </div>
                     </AccordionContent>
@@ -144,13 +144,13 @@ const SidebarComponent = () => {
                           href="/customers/orders"
                           title="Pedidos"
                           icon={Newspaper}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                         <SidebarLink
                           href="/customers/sales"
                           title="Vendas"
                           icon={ShoppingCart}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                       </div>
                     </AccordionContent>
@@ -163,13 +163,13 @@ const SidebarComponent = () => {
                           href="/employees/employees"
                           title="Funcionários"
                           icon={PersonStanding}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                         <SidebarLink
                           href="/employees/suppliers"
                           title="Fornecedores"
                           icon={Container}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                       </div>
                     </AccordionContent>
@@ -182,7 +182,7 @@ const SidebarComponent = () => {
                           href="/financial/summaries"
                           title="Relatórios financeiros"
                           icon={ClipboardList}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                       </div>
                     </AccordionContent>
@@ -195,13 +195,13 @@ const SidebarComponent = () => {
                           href="/promotions/promotion-categories"
                           title="Categorias"
                           icon={WalletCards}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                         <SidebarLink
                           href="/promotions/promotions"
                           title="Promoções"
                           icon={Percent}
-                          onClick={handleToggleSidebar}
+                          onClick={() => isMobile && handleToggleSidebar()}
                         />
                       </div>
                     </AccordionContent>
