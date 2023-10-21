@@ -91,6 +91,8 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
     async (row: Employee, action: TableActionCallbackOptions) => {
       const { id } = row;
 
+      console.log(row);
+
       setSelectEmployee(row);
 
       if (action === 'delete') {

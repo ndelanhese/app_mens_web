@@ -31,14 +31,14 @@ export const ViewEmployeeForm = ({ employee }: EmployeePreviewProps) => {
         readOnly
       />
       <ControlledInput
-        value={convertDateToString(employee?.admissionDate)}
+        value={employee?.admissionDate}
         id="admissionDate"
         label="Data de admissão"
         readOnly
       />
       {employee?.resignationDate && (
         <ControlledInput
-          value={convertDateToString(employee.resignationDate)}
+          value={employee.resignationDate}
           id="resignationDate"
           label="Data de demissão"
           readOnly
