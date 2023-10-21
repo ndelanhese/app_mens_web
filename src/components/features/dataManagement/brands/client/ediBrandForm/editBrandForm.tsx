@@ -59,20 +59,18 @@ const EditBrandFormComponent = ({
 
   return (
     <form
-      className="flex w-full flex-col gap-6"
+      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex w-full flex-col gap-4">
-        <ControlledInput value={brand?.id} id="id" label="Código" readOnly />
-        <ControlledInput
-          defaultValue={brand?.name}
-          id="name"
-          label="Marca"
-          register={register}
-          errorMessage={errors.name?.message}
-        />
-      </div>
-      <Button disabled={isSubmitting} type="submit" className="sm:self-end">
+      <ControlledInput value={brand?.id} id="id" label="Código" readOnly />
+      <ControlledInput
+        defaultValue={brand?.name}
+        id="name"
+        label="Marca"
+        register={register}
+        errorMessage={errors.name?.message}
+      />
+      <Button disabled={isSubmitting} type="submit" className="sm:col-start-2">
         Alterar
       </Button>
     </form>

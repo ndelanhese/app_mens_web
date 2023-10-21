@@ -53,7 +53,7 @@ export const CreateBrandFormComponent = ({
 
   return (
     <form
-      className="flex h-full w-full flex-col gap-6 sm:h-auto"
+      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
       onSubmit={handleSubmit(onSubmit)}
     >
       <ControlledInput
@@ -63,7 +63,11 @@ export const CreateBrandFormComponent = ({
         errorMessage={errors.name?.message}
       />
 
-      <Button disabled={isSubmitting} type="submit" className="sm:self-end">
+      <Button
+        disabled={isSubmitting}
+        type="submit"
+        className="sm:col-start-2 sm:h-min sm:self-end"
+      >
         Criar
       </Button>
     </form>
