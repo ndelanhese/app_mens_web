@@ -1,18 +1,27 @@
 name: Build and test
 on:
-  pull_request:
-    branches:
-      - main
+  - push
+  - pull_request
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 8
+
       - name: Install dependencies
         run: pnpm install
+
       - name: Build
         run: pnpm build
+
       - name: Check build success
         run: |
           if [ -f .next/dist/index.html ]; then
