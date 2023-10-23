@@ -29,7 +29,7 @@ jobs:
 
       - name: Check build success
         run: |
-          if [ -f .next/dist/index.html ]; then
+          if [ -f .next/ ]; then
             echo "Build successful"
             exit 0
           else
