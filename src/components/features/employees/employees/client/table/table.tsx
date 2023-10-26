@@ -91,8 +91,6 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
     async (row: Employee, action: TableActionCallbackOptions) => {
       const { id } = row;
 
-      console.log(row);
-
       setSelectEmployee(row);
 
       if (action === 'delete') {
@@ -130,7 +128,6 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
       tableColumns={tableColumns}
       filter="Nome"
       rows={rows}
-      actionLabel="Ação"
       actionCallback={handleRowClick}
       newItemDialogContent={
         <CreateEmployeeForm handleCloseModal={handleCloseNewEmployeeModal} />
