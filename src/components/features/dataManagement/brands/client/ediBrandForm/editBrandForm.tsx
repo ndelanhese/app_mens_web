@@ -75,6 +75,7 @@ const EditBrandFormComponent = ({
         label="Marca"
         register={register}
         errorMessage={errors.name?.message}
+        isRequired
       />
       <Button disabled={isSubmitting} type="submit" className="sm:col-start-2">
         Alterar

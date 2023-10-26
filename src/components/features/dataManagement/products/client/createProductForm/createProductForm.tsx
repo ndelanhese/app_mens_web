@@ -174,12 +174,14 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
       className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:max-h-[30rem] sm:grid-cols-2"
       onSubmit={handleSubmit(onSubmit)}
     >
+      {/* TODO -> add masked input */}
       <ControlledInput
         id="name"
         label="Nome"
         register={register}
         errorMessage={errors.name?.message}
         placeholder="Nome do produto"
+        isRequired
       />
       <ControlledInput
         id="description"
@@ -189,12 +191,23 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         placeholder="Descrição do produto"
       />
       <ControlledInput
+        id="purchase_price"
+        label="Preço de compra"
+        register={register}
+        errorMessage={errors.price?.message}
+        placeholder="Preço de compra produto"
+        type="number"
+        inputMode="decimal"
+      />
+      <ControlledInput
         id="price"
         label="Preço"
         register={register}
         errorMessage={errors.price?.message}
         placeholder="Preço do produto"
         type="number"
+        inputMode="decimal"
+        isRequired
       />
       <ControlledInput
         id="size"
@@ -217,6 +230,8 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         errorMessage={errors.quantity?.message}
         placeholder="Quantidade do produto"
         type="number"
+        inputMode="numeric"
+        isRequired
       />
       <ControlledSelect
         label="Categoria"
@@ -227,6 +242,7 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         placeHolder="Selecione uma categoria"
         searchLabel="Pesquisar categoria"
         emptyLabel="Sem categorias cadastradas"
+        isRequired
       />
       <ControlledSelect
         label="Marca"
@@ -237,6 +253,7 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         placeHolder="Selecione uma marca"
         searchLabel="Pesquisar marca"
         emptyLabel="Sem marcas cadastradas"
+        isRequired
       />
       <ControlledSelect
         label="Fornecer"
@@ -247,6 +264,7 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         placeHolder="Selecione um fornecedor"
         searchLabel="Pesquisar fornecedor"
         emptyLabel="Sem fornecedores cadastradas"
+        isRequired
       />
 
       <Button disabled={isSubmitting} type="submit" className="sm:self-end">

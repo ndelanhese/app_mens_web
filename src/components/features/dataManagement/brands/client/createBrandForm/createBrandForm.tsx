@@ -62,6 +62,7 @@ export const CreateBrandFormComponent = ({
         label="Marca"
         register={register}
         errorMessage={errors.name?.message}
+        isRequired
       />
 
       <Button
