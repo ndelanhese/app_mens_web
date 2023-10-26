@@ -17,7 +17,7 @@ export const getStates = async () => {
     });
     return data.data;
   } catch (error: Error | any) {
-    const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+    const errorMessage = error?.response?.data?.message ?? 'Erro desconhecido';
     toast({
       title: 'Erro ao buscar estados',
       description: errorMessage,
@@ -33,7 +33,7 @@ export const getCities = async (state: string) => {
     });
     return data.data;
   } catch (error: Error | any) {
-    const errorMessage = error.response.data.message ?? undefined;
+    const errorMessage = error?.response?.data?.message ?? undefined;
     toast({
       title: 'Erro ao buscar cidades',
       description: errorMessage,
@@ -49,7 +49,7 @@ export const getEmployee = async (id: number) => {
     });
     return data;
   } catch (error: Error | any) {
-    const errorMessage = error.response.data.message ?? undefined;
+    const errorMessage = error?.response?.data?.message ?? undefined;
     toast({
       title: 'Erro ao buscar funcionário',
       description: errorMessage,
