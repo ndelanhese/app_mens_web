@@ -66,7 +66,7 @@ export const CreateBrandFormComponent = ({
       <Button
         disabled={isSubmitting}
         type="submit"
-        className="sm:col-start-2 sm:h-min sm:self-end"
+        className="sm:col-start-2 sm:self-end"
       >
         Criar
       </Button>

@@ -32,10 +32,15 @@ const EditBrandFormComponent = ({
   const {
     register,
     handleSubmit,
+    setFocus,
     formState: { errors, isSubmitting },
   } = useForm<BrandFormSchema>({
     resolver: zodResolver(brandFormSchema),
   });
+
+  useEffect(() => {
+    setFocus('name');
+  }, [setFocus]);
 
   const onSubmit: SubmitHandler<BrandFormSchema> = async data => {
     try {
