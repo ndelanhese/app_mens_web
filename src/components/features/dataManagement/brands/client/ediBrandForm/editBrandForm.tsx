@@ -73,6 +73,7 @@ const EditBrandFormComponent = ({
         defaultValue={brand?.name}
         id="name"
         label="Marca"
+        placeholder="Marca"
         register={register}
         errorMessage={errors.name?.message}
         isRequired

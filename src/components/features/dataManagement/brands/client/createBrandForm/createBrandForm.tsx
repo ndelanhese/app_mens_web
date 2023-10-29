@@ -60,6 +60,7 @@ export const CreateBrandFormComponent = ({
       <ControlledInput
         id="name"
         label="Marca"
+        placeholder="Marca"
         register={register}
         errorMessage={errors.name?.message}
         isRequired
