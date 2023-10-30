@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/shadcn/button';
@@ -40,7 +40,7 @@ import { SidebarLink } from './sidebarLink';
 import { parseCookies } from 'nookies';
 import { AnimatePresence } from 'framer-motion';
 
-const SidebarComponent = () => {
+export const Sidebar = () => {
   const { open, handleToggleSidebar } = useSidebarDrawer();
 
   const [isMobile, setIsMobile] = useState(false);
@@ -228,5 +228,3 @@ const SidebarComponent = () => {
     </AnimatePresence>
   );
 };
-
-export const Sidebar = memo(SidebarComponent);
