@@ -199,9 +199,7 @@ const EditProductFormComponent = ({
           defaultValue={product?.partNumber}
           id="partNumber"
           label="Part Number"
-          // register={register}
-          // errorMessage={errors.partNumber?.message}
-          disabled
+          readOnly
         />
         <ControlledInput
           defaultValue={product?.description}
@@ -209,6 +207,7 @@ const EditProductFormComponent = ({
           label="Descrição"
           register={register}
           errorMessage={errors.description?.message}
+          isRequired
         />
         <ControlledInput
           defaultValue={product?.price}

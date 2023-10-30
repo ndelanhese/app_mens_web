@@ -4,7 +4,7 @@ import { CategoryPreviewProps } from './viewCategoryForm.types';
 
 export const ViewCategoryForm = ({ category }: CategoryPreviewProps) => {
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2">
       <ControlledInput value={category?.id} id="id" label="Código" readOnly />
       <ControlledInput
         value={category?.name}

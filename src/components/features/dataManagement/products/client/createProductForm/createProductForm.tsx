@@ -189,6 +189,7 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         register={register}
         errorMessage={errors.description?.message}
         placeholder="Descrição do produto"
+        isRequired
       />
       <ControlledInput
         id="purchase_price"

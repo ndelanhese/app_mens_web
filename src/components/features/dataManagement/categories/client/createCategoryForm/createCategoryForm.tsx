@@ -17,9 +17,7 @@ import {
 import { CategoryFormProps } from './createCategoryForm.types';
 import { parseCookies } from 'nookies';
 
-const CreateCategoryFormComponent = ({
-  handleCloseModal,
-}: CategoryFormProps) => {
+export const CreateCategoryForm = ({ handleCloseModal }: CategoryFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
@@ -63,6 +61,7 @@ const CreateCategoryFormComponent = ({
       <ControlledInput
         id="name"
         label="Categoria"
+        placeholder="Categoria"
         register={register}
         errorMessage={errors.name?.message}
         isRequired
@@ -78,5 +77,3 @@ const CreateCategoryFormComponent = ({
     </form>
   );
 };
-
-export const CreateCategoryForm = memo(CreateCategoryFormComponent);

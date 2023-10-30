@@ -55,9 +55,11 @@ export const Combobox = ({
           aria-expanded={open}
           className="w-full justify-between rounded-lg py-6 text-md font-re"
         >
-          {key
-            ? options.find(option => option.key === key)?.value
-            : placeHolder}
+          {key ? (
+            options.find(option => option.key === key)?.value
+          ) : (
+            <span className="text-zinc-700">{placeHolder}</span>
+          )}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -65,7 +67,7 @@ export const Combobox = ({
         <Command>
           <CommandInput placeholder={searchLabel ?? 'Pesquisar...'} />
           <CommandEmpty>{emptyLabel ?? 'Sem resultados'}</CommandEmpty>
-          <CommandGroup className="max-h-80 overflow-y-auto">
+          <CommandGroup className="max-h-80">
             {options.map(option => (
               <CommandItem key={option.key} onSelect={handleValueChange}>
                 <Check
