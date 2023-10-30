@@ -9,6 +9,7 @@ import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 
@@ -119,8 +120,7 @@ const EditEmployeeFormComponent = ({
   };
 
   if (!employee || memorizedStates.length < 1) {
-    // TODO -> Add skeleton
-    return <h1>Carregando...</h1>;
+    return <TableSkeleton />;
   }
 
   // TODO -> fix addresses list
