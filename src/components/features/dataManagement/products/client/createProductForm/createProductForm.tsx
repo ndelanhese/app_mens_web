@@ -3,13 +3,15 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { api } from '@axios';
-import { ControlledSelect } from '@/components/ui/selects/controlledSelect';
 
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
+import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   ProductFormSchema,
@@ -25,7 +27,6 @@ import {
   Supplier,
   SuppliersResponse,
 } from './createProductForm.types';
-import { parseCookies } from 'nookies';
 
 const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
   const { toast } = useToast();
@@ -170,11 +171,7 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
   };
 
   return (
-    <form
-      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:max-h-[30rem] sm:grid-cols-2"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      {/* TODO -> add masked input */}
+    <FormGrid onSubmit={handleSubmit(onSubmit)}>
       <ControlledInput
         id="name"
         label="Nome"
@@ -268,10 +265,10 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         isRequired
       />
 
-      <Button disabled={isSubmitting} type="submit" className="sm:self-end">
-        Criar
+      <Button disabled={isSubmitting} type="submit" className="sm:col-start-2">
+        Criar Produto
       </Button>
-    </form>
+    </FormGrid>
   );
 };
 
