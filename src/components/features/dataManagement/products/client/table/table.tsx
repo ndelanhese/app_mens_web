@@ -168,10 +168,6 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
     router.refresh();
   }, [router]);
 
-  const getProductFunction = useCallback(() => {
-    return selectedProduct;
-  }, [selectedProduct]);
-
   if (rows.length < 1) {
     return <TableSkeleton />;
   }

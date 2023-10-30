@@ -128,7 +128,6 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
       tableColumns={tableColumns}
       filter="Nome"
       rows={rows}
-      actionLabel="Ação"
       actionCallback={handleRowClick}
       newItemDialogContent={
         <CreateEmployeeForm handleCloseModal={handleCloseNewEmployeeModal} />

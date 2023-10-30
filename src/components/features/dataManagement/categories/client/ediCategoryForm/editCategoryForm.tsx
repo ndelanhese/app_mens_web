@@ -45,7 +45,8 @@ const EditCategoryFormComponent = ({
         variant: 'default',
       });
     } catch (error: Error | any) {
-      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      const errorMessage =
+        error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
         title: 'Erro ao atualizar a categoria',
         description: errorMessage,
@@ -68,6 +69,7 @@ const EditCategoryFormComponent = ({
         defaultValue={category?.name}
         id="name"
         label="Categoria"
+        placeholder="Categoria"
         register={register}
         errorMessage={errors.name?.message}
         isRequired

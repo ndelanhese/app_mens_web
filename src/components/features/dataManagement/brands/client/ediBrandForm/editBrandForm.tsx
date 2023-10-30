@@ -32,10 +32,15 @@ const EditBrandFormComponent = ({
   const {
     register,
     handleSubmit,
+    setFocus,
     formState: { errors, isSubmitting },
   } = useForm<BrandFormSchema>({
     resolver: zodResolver(brandFormSchema),
   });
+
+  useEffect(() => {
+    setFocus('name');
+  }, [setFocus]);
 
   const onSubmit: SubmitHandler<BrandFormSchema> = async data => {
     try {
@@ -48,7 +53,8 @@ const EditBrandFormComponent = ({
         variant: 'default',
       });
     } catch (error: Error | any) {
-      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      const errorMessage =
+        error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
         title: 'Erro ao atualizar a marca',
         description: errorMessage,
@@ -59,20 +65,20 @@ const EditBrandFormComponent = ({
 
   return (
     <form
-      className="flex w-full flex-col gap-6"
+      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex w-full flex-col gap-4">
-        <ControlledInput value={brand?.id} id="id" label="Código" readOnly />
-        <ControlledInput
-          defaultValue={brand?.name}
-          id="name"
-          label="Marca"
-          register={register}
-          errorMessage={errors.name?.message}
-        />
-      </div>
-      <Button disabled={isSubmitting} type="submit" className="sm:self-end">
+      <ControlledInput value={brand?.id} id="id" label="Código" readOnly />
+      <ControlledInput
+        defaultValue={brand?.name}
+        id="name"
+        label="Marca"
+        placeholder="Marca"
+        register={register}
+        errorMessage={errors.name?.message}
+        isRequired
+      />
+      <Button disabled={isSubmitting} type="submit" className="sm:col-start-2">
         Alterar
       </Button>
     </form>

@@ -1,9 +1,10 @@
+import { twMerge } from 'tailwind-merge';
 import { IconProps } from './icons.types';
 
 export const Spinner = ({ className, fillColor }: IconProps) => {
   return (
     <svg
-      className={`${className} animate-spin`}
+      className={twMerge('animate-spin', className)}
       fill="none"
       height="20"
       viewBox="0 0 20 20"

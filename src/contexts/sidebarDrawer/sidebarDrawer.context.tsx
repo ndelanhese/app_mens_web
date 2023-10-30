@@ -23,7 +23,10 @@ export const SidebarDrawerProvider = ({
 }: SidebarDrawerProviderProps) => {
   const { 'mens.sidebar_status': sidebarStatus } = parseCookies();
 
-  const sidebarIsOpenOnCookies = sidebarStatus !== 'false';
+  const sidebarIsOpenOnCookies = useMemo(
+    () => sidebarStatus !== 'false',
+    [sidebarStatus],
+  );
 
   const [open, setOpen] = useState<boolean>(sidebarIsOpenOnCookies ?? true);
 

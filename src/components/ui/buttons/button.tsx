@@ -81,8 +81,11 @@ export const Button: FC<ButtonVariants> = ({
       {...props}
       disabled={isLoading}
     >
-      {isLoading ? (
-        <Spinner fillColor={theme === 'light' ? '#fff' : '#000'} />
+      {isLoading || disabled ? (
+        <Spinner
+          fillColor={theme === 'light' ? '#fff' : '#000'}
+          className="h-6 w-6"
+        />
       ) : (
         children
       )}

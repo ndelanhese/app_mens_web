@@ -46,7 +46,8 @@ const EditProductFormComponent = ({
       );
       setBrands(brandsResponse.data);
     } catch (error: Error | any) {
-      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      const errorMessage =
+        error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
         title: 'Erro ao buscar marcas',
         description: errorMessage,
@@ -63,7 +64,8 @@ const EditProductFormComponent = ({
       );
       setCategories(categoriesResponse.data);
     } catch (error: Error | any) {
-      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      const errorMessage =
+        error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
         title: 'Erro ao buscar categorias',
         description: errorMessage,
@@ -80,7 +82,8 @@ const EditProductFormComponent = ({
       );
       setSuppliers(suppliersResponse.data);
     } catch (error: Error | any) {
-      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      const errorMessage =
+        error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
         title: 'Erro ao buscar fornecedores',
         description: errorMessage,
@@ -155,7 +158,8 @@ const EditProductFormComponent = ({
         variant: 'default',
       });
     } catch (error: Error | any) {
-      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      const errorMessage =
+        error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
         title: 'Erro ao atualizar o produto',
         description: errorMessage,
@@ -195,9 +199,7 @@ const EditProductFormComponent = ({
           defaultValue={product?.partNumber}
           id="partNumber"
           label="Part Number"
-          // register={register}
-          // errorMessage={errors.partNumber?.message}
-          disabled
+          readOnly
         />
         <ControlledInput
           defaultValue={product?.description}
@@ -205,6 +207,7 @@ const EditProductFormComponent = ({
           label="Descrição"
           register={register}
           errorMessage={errors.description?.message}
+          isRequired
         />
         <ControlledInput
           defaultValue={product?.price}

@@ -57,10 +57,12 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       <body
         className={`${inter.variable} flex min-h-[100svh] w-screen overflow-x-hidden bg-white-100 font-sans antialiased dark:bg-zinc-950`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <SidebarDrawerProvider>{children}</SidebarDrawerProvider>
-          <Toaster />
-        </ThemeProvider>
+        <SidebarDrawerProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </SidebarDrawerProvider>
       </body>
     </html>
   );

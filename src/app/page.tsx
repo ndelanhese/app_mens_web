@@ -2,6 +2,7 @@ import { Header } from '@components/shared/header/header';
 import { Sidebar } from '@components/shared/sidebar/sidebar';
 
 const Home = () => (
+  // TODO -> use features scroll
   <div className="flex h-screen w-screen flex-col">
     <div className="flex flex-1">
       <Sidebar />

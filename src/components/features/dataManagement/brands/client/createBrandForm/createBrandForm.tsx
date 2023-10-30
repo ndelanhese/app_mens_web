@@ -42,7 +42,8 @@ export const CreateBrandFormComponent = ({
         variant: 'default',
       });
     } catch (error: Error | any) {
-      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      const errorMessage =
+        error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
         title: 'Erro ao criar a marca',
         description: errorMessage,
@@ -53,17 +54,23 @@ export const CreateBrandFormComponent = ({
 
   return (
     <form
-      className="flex h-full w-full flex-col gap-6 sm:h-auto"
+      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
       onSubmit={handleSubmit(onSubmit)}
     >
       <ControlledInput
         id="name"
         label="Marca"
+        placeholder="Marca"
         register={register}
         errorMessage={errors.name?.message}
+        isRequired
       />
 
-      <Button disabled={isSubmitting} type="submit" className="sm:self-end">
+      <Button
+        disabled={isSubmitting}
+        type="submit"
+        className="sm:col-start-2 sm:self-end"
+      >
         Criar
       </Button>
     </form>

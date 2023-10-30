@@ -45,7 +45,8 @@ const CreateCategoryFormComponent = ({
         variant: 'default',
       });
     } catch (error: Error | any) {
-      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      const errorMessage =
+        error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
         title: 'Erro ao criar a categoria',
         description: errorMessage,

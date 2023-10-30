@@ -17,9 +17,7 @@ import {
 import { CategoryFormProps } from './createCategoryForm.types';
 import { parseCookies } from 'nookies';
 
-const CreateCategoryFormComponent = ({
-  handleCloseModal,
-}: CategoryFormProps) => {
+export const CreateCategoryForm = ({ handleCloseModal }: CategoryFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
@@ -45,7 +43,8 @@ const CreateCategoryFormComponent = ({
         variant: 'default',
       });
     } catch (error: Error | any) {
-      const errorMessage = error.response.data.message ?? 'Erro desconhecido';
+      const errorMessage =
+        error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
         title: 'Erro ao criar a categoria',
         description: errorMessage,
@@ -62,6 +61,7 @@ const CreateCategoryFormComponent = ({
       <ControlledInput
         id="name"
         label="Categoria"
+        placeholder="Categoria"
         register={register}
         errorMessage={errors.name?.message}
         isRequired
@@ -77,5 +77,3 @@ const CreateCategoryFormComponent = ({
     </form>
   );
 };
-
-export const CreateCategoryForm = memo(CreateCategoryFormComponent);
