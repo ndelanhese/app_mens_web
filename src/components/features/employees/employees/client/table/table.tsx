@@ -126,7 +126,6 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
   return (
     <Table
       tableColumns={tableColumns}
-      filter="Nome"
       rows={rows}
       actionCallback={handleRowClick}
       newItemDialogContent={

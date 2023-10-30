@@ -119,7 +119,6 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
   return (
     <Table
       tableColumns={tableColumns}
-      filter="Nome"
       rows={rows}
       actionCallback={handleRowClick}
       newItemDialogContent={

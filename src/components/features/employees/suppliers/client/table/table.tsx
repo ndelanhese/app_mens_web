@@ -126,7 +126,6 @@ const SuppliersTableComponent = ({ rows }: SuppliersTableProps) => {
   return (
     <Table
       tableColumns={tableColumns}
-      filter="Empresa"
       rows={rows}
       actionLabel="Ação"
       actionCallback={handleRowClick}

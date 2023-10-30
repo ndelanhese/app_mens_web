@@ -79,7 +79,6 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
   return (
     <Table
       tableColumns={tableColumns}
-      filter="Nome"
       rows={rows}
       actionLabel="Ação"
       actionCallback={handleRowClick}
