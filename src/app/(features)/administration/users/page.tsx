@@ -13,10 +13,16 @@ const iterateResponse = (users?: Users) => {
   if (!users) return [];
   return users?.data?.map(user => ({
     id: user?.id,
-    name: user?.employee?.name,
-    cpf: user?.employee?.cpf,
     email: user?.email,
     phone: user?.employee?.phone,
+    user: user?.user,
+    status: user?.status,
+    employee: {
+      name: user?.employee?.name,
+      cpf: user?.employee?.cpf,
+    },
+    user_roles: user.user_roles,
+    permissions: user.permissions,
   }));
 };
 

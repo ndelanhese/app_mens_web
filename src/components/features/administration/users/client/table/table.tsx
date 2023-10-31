@@ -19,6 +19,7 @@ import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSk
 import { User, UserTableProps } from './table.types';
 import { parseCookies } from 'nookies';
 import { Plus } from 'lucide-react';
+import { ViewUserForm } from '../../server/viewUserForm/viewUserForm';
 
 const UserTableComponent = ({ rows }: UserTableProps) => {
   const router = useRouter();
@@ -38,14 +39,14 @@ const UserTableComponent = ({ rows }: UserTableProps) => {
         header: ({ column }) => (
           <TableColumnHeader column={column} title="Nome" />
         ),
-        accessorKey: 'name',
+        accessorKey: 'employee.name',
         id: 'Nome',
       },
       {
         header: ({ column }) => (
           <TableColumnHeader column={column} title="CPF" />
         ),
-        accessorKey: 'cpf',
+        accessorKey: 'employee.cpf',
         id: 'CPF',
       },
       {
@@ -133,7 +134,7 @@ const UserTableComponent = ({ rows }: UserTableProps) => {
       newItemTrigger={NEW_USER_TRIGGER}
       viewItemDialogTitle="Visualizar usuário"
       viewItemDialogDescription="Visualizar um usuário no sistema..."
-      viewItemDialogContent={<p>content</p>}
+      viewItemDialogContent={<ViewUserForm user={selectedUser} />}
       newItemDialogDescription="Criar um novo usuário no sistema."
       newItemDialogTitle="Criar novo usuário"
       newItemDialogRef={ref => {

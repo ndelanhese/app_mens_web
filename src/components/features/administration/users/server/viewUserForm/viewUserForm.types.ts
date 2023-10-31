@@ -13,17 +13,16 @@ type permission = {
   name: string;
 };
 
-export type User = {
+type User = {
   id: number;
-  email: string;
-  phone: string;
   user: string;
+  email: string;
   status: string;
   employee: Employee;
   user_roles: Array<role>;
   permissions: Array<permission>;
 };
 
-export type UserTableProps = {
-  rows: Array<User>;
+export type UserData = {
+  user: User | undefined;
 };
