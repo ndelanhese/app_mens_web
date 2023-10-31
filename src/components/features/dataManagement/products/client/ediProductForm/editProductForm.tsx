@@ -8,6 +8,7 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -182,101 +183,100 @@ const EditProductFormComponent = ({
   }
 
   return (
-    <form
-      className="flex h-full w-full flex-col gap-6"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:max-h-[30rem] sm:grid-cols-2">
-        <ControlledInput value={product?.id} id="id" label="Código" readOnly />
-        <ControlledInput
-          defaultValue={product?.name}
-          id="name"
-          label="Nome"
-          register={register}
-          errorMessage={errors.name?.message}
-        />
-        <ControlledInput
-          defaultValue={product?.partNumber}
-          id="partNumber"
-          label="Part Number"
-          readOnly
-        />
-        <ControlledInput
-          defaultValue={product?.description}
-          id="description"
-          label="Descrição"
-          register={register}
-          errorMessage={errors.description?.message}
-          isRequired
-        />
-        <ControlledInput
-          defaultValue={product?.price}
-          id="price"
-          label="Preço"
-          register={register}
-          errorMessage={errors.price?.message}
-          type="number"
-        />
-        <ControlledInput
-          defaultValue={product?.size}
-          id="size"
-          label="Tamanho"
-          register={register}
-          errorMessage={errors.size?.message}
-        />
-        <ControlledInput
-          defaultValue={product?.color}
-          id="color"
-          label="Cor"
-          register={register}
-          errorMessage={errors.color?.message}
-        />
-        <ControlledInput
-          defaultValue={product?.quantity}
-          id="quantity"
-          label="Quantidade"
-          register={register}
-          errorMessage={errors.quantity?.message}
-          type="number"
-        />
-        <ControlledSelect
-          label="Categoria"
-          name="category"
-          control={control}
-          errorMessage={errors.category?.message}
-          options={memorizedCategoriesOptions}
-          defaultValue={product?.category.id.toString()}
-          placeHolder="Selecione uma categoria"
-          searchLabel="Pesquisar categoria"
-          emptyLabel="Sem categorias cadastradas"
-        />
-        <ControlledSelect
-          label="Marca"
-          name="brand"
-          control={control}
-          errorMessage={errors.brand?.message}
-          options={memorizedBrandsOptions}
-          defaultValue={product?.brand.id.toString()}
-          placeHolder="Selecione uma marca"
-          searchLabel="Pesquisar marca"
-          emptyLabel="Sem marcas cadastradas"
-        />
-        <ControlledSelect
-          label="Fornecer"
-          name="supplier"
-          control={control}
-          errorMessage={errors.supplier?.message}
-          options={memorizedSuppliersOptions}
-          defaultValue={product?.supplier.id.toString()}
-          placeHolder="Selecione um fornecedor"
-          searchLabel="Pesquisar fornecedor"
-          emptyLabel="Sem fornecedores cadastradas"
-        />
-      </div>
-      <Button disabled={isSubmitting} type="submit" className=" sm:self-end">
-        Alterar
+    <FormGrid onSubmit={handleSubmit(onSubmit)}>
+      <ControlledInput value={product?.id} id="id" label="Código" readOnly />
+      <ControlledInput
+        defaultValue={product?.name}
+        id="name"
+        label="Nome"
+        register={register}
+        errorMessage={errors.name?.message}
+      />
+      <ControlledInput
+        defaultValue={product?.partNumber}
+        id="partNumber"
+        label="Part Number"
+        readOnly
+      />
+      <ControlledInput
+        defaultValue={product?.description}
+        id="description"
+        label="Descrição"
+        register={register}
+        errorMessage={errors.description?.message}
+        isRequired
+      />
+      <ControlledInput
+        defaultValue={product?.price}
+        id="price"
+        label="Preço"
+        register={register}
+        errorMessage={errors.price?.message}
+        type="number"
+      />
+      <ControlledInput
+        defaultValue={product?.size}
+        id="size"
+        label="Tamanho"
+        register={register}
+        errorMessage={errors.size?.message}
+      />
+      <ControlledInput
+        defaultValue={product?.color}
+        id="color"
+        label="Cor"
+        register={register}
+        errorMessage={errors.color?.message}
+      />
+      <ControlledInput
+        defaultValue={product?.quantity}
+        id="quantity"
+        label="Quantidade"
+        register={register}
+        errorMessage={errors.quantity?.message}
+        type="number"
+      />
+      <ControlledSelect
+        label="Categoria"
+        name="category"
+        control={control}
+        errorMessage={errors.category?.message}
+        options={memorizedCategoriesOptions}
+        defaultValue={product?.category.id.toString()}
+        placeHolder="Selecione uma categoria"
+        searchLabel="Pesquisar categoria"
+        emptyLabel="Sem categorias cadastradas"
+      />
+      <ControlledSelect
+        label="Marca"
+        name="brand"
+        control={control}
+        errorMessage={errors.brand?.message}
+        options={memorizedBrandsOptions}
+        defaultValue={product?.brand.id.toString()}
+        placeHolder="Selecione uma marca"
+        searchLabel="Pesquisar marca"
+        emptyLabel="Sem marcas cadastradas"
+      />
+      <ControlledSelect
+        label="Fornecer"
+        name="supplier"
+        control={control}
+        errorMessage={errors.supplier?.message}
+        options={memorizedSuppliersOptions}
+        defaultValue={product?.supplier.id.toString()}
+        placeHolder="Selecione um fornecedor"
+        searchLabel="Pesquisar fornecedor"
+        emptyLabel="Sem fornecedores cadastradas"
+      />
+      <Button
+        disabled={isSubmitting}
+        type="submit"
+        className="h-fit self-end sm:col-start-2"
+      >
+        Alterar Produto
       </Button>
-    </form>
+    </FormGrid>
   );
 };
 

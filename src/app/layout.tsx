@@ -30,7 +30,6 @@ export const metadata: Metadata = {
     'Delanhese',
     'Nathan Delanhese',
   ],
-  colorScheme: 'dark light',
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL),
   openGraph: {
     title: {

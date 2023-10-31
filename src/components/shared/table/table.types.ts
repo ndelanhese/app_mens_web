@@ -35,7 +35,6 @@ export interface RefModalProps {
 export type UserTableProps<T> = {
   rows: Array<T>;
   tableColumns: Array<TableColumn<T>>;
-  filter: string;
   actionLabel?: string;
   actionCallback: (row: T, action: TableActionCallbackOptions) => void;
   newItemTrigger?: ReactNode;

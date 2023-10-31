@@ -123,7 +123,6 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
   return (
     <Table
       tableColumns={tableColumns}
-      filter="Nome"
       rows={rows}
       actionCallback={handleRowClick}
       newItemDialogContent={

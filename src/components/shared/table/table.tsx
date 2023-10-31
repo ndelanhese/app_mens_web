@@ -42,7 +42,6 @@ import { TableDialog } from './tableDialog';
 export function Table<T>({
   rows,
   tableColumns,
-  filter, // Todo -> add an array
   actionCallback,
   newItemDialogContent,
   newItemDialogTitle,
@@ -61,7 +60,7 @@ export function Table<T>({
   deleteItemTitle,
 }: UserTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable({
@@ -71,13 +70,13 @@ export function Table<T>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
+      globalFilter,
     },
   });
 
@@ -110,10 +109,8 @@ export function Table<T>({
             id="search"
             className="pl-8"
             placeholder="Pesquisar..."
-            value={(table.getColumn(filter)?.getFilterValue() as string) ?? ''}
-            onChange={event =>
-              table.getColumn(filter)?.setFilterValue(event.target.value)
-            }
+            value={globalFilter ?? ''}
+            onChange={({ target }) => setGlobalFilter(String(target.value))}
           />
         </div>
         <div className="mt-2 flex flex-row items-center justify-between gap-2 sm:mt-0">

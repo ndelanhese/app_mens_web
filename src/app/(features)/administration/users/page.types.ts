@@ -13,6 +13,16 @@ type Employee = {
   updatedAt: string;
 };
 
+type role = {
+  id: number;
+  name: string;
+};
+
+type permission = {
+  id: number;
+  name: string;
+};
+
 export type User = {
   id: number;
   user: string;
@@ -22,6 +32,8 @@ export type User = {
   createdAt: string;
   updatedAt: string;
   employee: Employee;
+  user_roles: Array<role>;
+  permissions: Array<permission>;
 };
 
 export type Users = {
