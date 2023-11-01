@@ -30,7 +30,7 @@ export const SigninForm = () => {
   const redirect = () => {
     const { redirectTo } = parseCookies();
     if (!redirectTo) {
-      router.push('/');
+      router.push('/dashboard');
       return;
     }
     router.push(redirectTo);
