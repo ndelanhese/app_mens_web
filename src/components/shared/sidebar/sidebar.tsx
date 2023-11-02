@@ -61,15 +61,15 @@ export const Sidebar = () => {
           <aside className="absolute z-10 h-[100svh] w-screen border-r border-black-10 bg-white-100 p-5 dark:border-white-10 dark:bg-zinc-950 sm:relative sm:w-56">
             <div className="flex h-full w-full flex-col justify-between">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 px-4 pt-2">
-                  <Avatar className="h-6 w-6">
+                <div className="flex items-center gap-4 px-4 pt-2">
+                  <Avatar className="h-8 w-8">
                     <AvatarImage
                       src="https://source.unsplash.com/random/24x24"
                       alt="@ndelanhese"
                     />
                     <AvatarFallback></AvatarFallback>
                   </Avatar>
-                  <span className="text-md font-re dark:text-white-100">
+                  <span className="text-lg font-re dark:text-white-100">
                     {userName}
                   </span>
                 </div>
