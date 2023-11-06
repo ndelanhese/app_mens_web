@@ -21,6 +21,7 @@ import { parseCookies } from 'nookies';
 import { Plus } from 'lucide-react';
 import { ViewUserForm } from '../../server/viewUserForm/viewUserForm';
 import { EditUserForm } from '../editUserForm/editUserForm';
+import { CreateUserForm } from '../createUserForm/createUserForm';
 
 export const UserTable = ({ rows }: UserTableProps) => {
   const router = useRouter();
@@ -131,7 +132,9 @@ export const UserTable = ({ rows }: UserTableProps) => {
       tableColumns={tableColumns}
       rows={rows}
       actionCallback={handleRowClick}
-      newItemDialogContent={<p>content</p>}
+      newItemDialogContent={
+        <CreateUserForm handleCloseModal={handleCloseNewUserModal} />
+      }
       newItemTrigger={NEW_USER_TRIGGER}
       viewItemDialogTitle="Visualizar usuário"
       viewItemDialogDescription="Visualizar um usuário no sistema..."
@@ -146,7 +149,12 @@ export const UserTable = ({ rows }: UserTableProps) => {
       editItemDialogRef={ref => {
         editUserModalRef.current = ref;
       }}
-      editItemDialogContent={<EditUserForm user={selectedUser} />}
+      editItemDialogContent={
+        <EditUserForm
+          user={selectedUser}
+          handleCloseModal={handleCloseEditUserModal}
+        />
+      }
       deleteItemTitle="Excluir usuário"
       deleteItemDescription="Deseja realmente excluir o usuário?"
     />
