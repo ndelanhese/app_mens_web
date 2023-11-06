@@ -3,14 +3,27 @@ type Employee = {
   cpf: string;
 };
 
-export type UserData = {
-  user: {
-    id: number;
-    user: string;
-    email: string;
-    status: string;
-    employee: Employee;
-    users_roles: Array<number>;
-    permissions: Array<number>;
-  };
+type role = {
+  id: number;
+  name: string;
+};
+
+type permission = {
+  id: number;
+  name: string;
+};
+
+export type User = {
+  id: number;
+  email: string;
+  phone: string;
+  user: string;
+  status: string;
+  employee: Employee;
+  user_roles: Array<role>;
+  permissions: Array<permission>;
+};
+
+export type EditUserFormProps = {
+  user: User | undefined;
 };

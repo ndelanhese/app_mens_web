@@ -20,8 +20,9 @@ import { User, UserTableProps } from './table.types';
 import { parseCookies } from 'nookies';
 import { Plus } from 'lucide-react';
 import { ViewUserForm } from '../../server/viewUserForm/viewUserForm';
+import { EditUserForm } from '../editUserForm/editUserForm';
 
-const UserTableComponent = ({ rows }: UserTableProps) => {
+export const UserTable = ({ rows }: UserTableProps) => {
   const router = useRouter();
 
   const { toast } = useToast();
@@ -145,11 +146,9 @@ const UserTableComponent = ({ rows }: UserTableProps) => {
       editItemDialogRef={ref => {
         editUserModalRef.current = ref;
       }}
-      editItemDialogContent={<p>content</p>}
+      editItemDialogContent={<EditUserForm user={selectedUser} />}
       deleteItemTitle="Excluir usuário"
       deleteItemDescription="Deseja realmente excluir o usuário?"
     />
   );
 };
-
-export const UserTable = memo(UserTableComponent);

@@ -2,9 +2,8 @@
 
 import { memo, useCallback, useMemo } from 'react';
 
-import { Table } from '@/components/shared/table/table';
-import { TableColumn } from '@/components/shared/table/table.types';
-
+import { Table } from '@components/shared/table/table';
+import { TableColumn } from '@components/shared/table/table.types';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 
 import { Promotion, PromotionsTableProps } from './table.types';

@@ -3,10 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/shadcn/button';
-import { getFirstName } from '@/utils/helpers/stringManipulation';
-import { useSidebarDrawer } from '@/hooks/useSidebarDrawer/useSidebarDrawer';
+import { useSidebarDrawer } from '@hooks/useSidebarDrawer/useSidebarDrawer';
 
+import { Button } from '@components/ui/shadcn/button';
 import {
   Accordion,
   AccordionContent,
@@ -19,6 +18,8 @@ import {
   AvatarImage,
 } from '@components/ui/shadcn/avatar';
 import { Animation } from '@components/shared/animation/animation';
+
+import { getFirstName } from '@utils/helpers/stringManipulation';
 
 import {
   LogOut,

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@shadcn-utils';
 
 import { Button } from '@components/ui/shadcn/button';
 import {

@@ -11,7 +11,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from '@/components/ui/shadcn/command/command';
+} from '@components/ui/shadcn/command/command';
 
 import { CreditCard, Settings, User } from 'lucide-react';
 import { CommandKeyProps } from './commandKey.types';

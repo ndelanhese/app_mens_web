@@ -3,9 +3,9 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { Table } from '@/components/shared/table/table';
 import { api } from '@axios';
 
+import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,
   TableActionCallbackOptions,

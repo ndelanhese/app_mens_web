@@ -3,8 +3,9 @@
 
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
-import { Dialog, DialogContent } from '@/components/ui/shadcn/command/dialog';
+import { cn } from '@shadcn-utils';
+
+import { Dialog, DialogContent } from '@components/ui/shadcn/command/dialog';
 
 import { DialogProps } from '@radix-ui/react-dialog';
 import { Command as CommandPrimitive } from 'cmdk';

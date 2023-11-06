@@ -1,4 +1,4 @@
-import { CommandGroup } from '@/components/ui/shadcn/command/command';
+import { CommandGroup } from '@components/ui/shadcn/command/command';
 
 import {
   ClipboardList,
