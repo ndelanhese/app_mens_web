@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 
-import { Button } from '@/components/ui/shadcn/button';
-import { StyledDiv } from '@/components/ui/styledDiv/styledDiv';
-
+import { Button } from '@components/ui/shadcn/button';
+import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { TablePagination } from '@components/shared/table/tablePagination';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
 import {

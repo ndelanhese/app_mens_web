@@ -2,22 +2,20 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Spinner } from '@components/icons/spinner';
 import { Button } from '@components/ui/buttons/button';
 import { Input } from '@components/ui/inputs/input';
+import { PasswordInput } from '@components/ui/inputs/passwordInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { signin } from './api';
 import { SigninSchema, signinSchema } from './signinForm.schema';
-import { parseCookies } from 'nookies';
-import { useTheme } from 'next-themes';
 
 export const SigninForm = () => {
   const router = useRouter();
   const { toast } = useToast();
-  const { theme } = useTheme();
 
   const {
     register,
@@ -30,7 +28,7 @@ export const SigninForm = () => {
   const redirect = () => {
     const { redirectTo } = parseCookies();
     if (!redirectTo) {
-      router.push('/');
+      router.push('/dashboard');
       return;
     }
     router.push(redirectTo);
@@ -61,15 +59,14 @@ export const SigninForm = () => {
       <div className="flex flex-col gap-4">
         <Input
           id="email"
-          placeholder="e-mail"
+          placeholder="E-mail"
           register={register}
           errorMessage={errors?.email?.message}
           transform="lowercase"
         />
-        <Input
+        <PasswordInput
           id="password"
-          placeholder="senha"
-          type="password"
+          placeholder="Senha"
           register={register}
           errorMessage={errors?.password?.message}
         />

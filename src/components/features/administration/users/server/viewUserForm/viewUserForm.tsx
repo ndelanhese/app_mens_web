@@ -1,5 +1,4 @@
-import { FormGrid } from '@/components/shared/formGrid/formGrid';
-
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 
 import { convertStatus } from '@utils/status';

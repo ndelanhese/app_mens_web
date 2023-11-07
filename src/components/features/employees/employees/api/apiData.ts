@@ -1,5 +1,6 @@
-import { toast } from '@/components/ui/shadcn/toast/use-toast';
-import { api } from '@/services/axios';
+import { api } from '@axios';
+
+import { toast } from '@components/ui/shadcn/toast/use-toast';
 
 import {
   StatesResponse,

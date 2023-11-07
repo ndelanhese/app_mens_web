@@ -24,7 +24,6 @@ export type User = {
   permissions: Array<permission>;
 };
 
-export type EditUserFormProps = {
-  user: User | undefined;
+export type CreateUserFormProps = {
   handleCloseModal: () => void;
 };

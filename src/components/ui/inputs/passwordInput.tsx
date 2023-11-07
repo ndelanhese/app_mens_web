@@ -1,18 +1,19 @@
 'use client';
 
-import { ComponentType, FC, InputHTMLAttributes, ReactNode } from 'react';
+import { FC, InputHTMLAttributes, useState } from 'react';
 
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { FieldValue, FieldValues, UseFormRegister } from 'react-hook-form';
 import { tv, type VariantProps } from 'tailwind-variants';
 import { Input } from './input';
-import { FieldValue, FieldValues, UseFormRegister } from 'react-hook-form';
 
-const controlledInput = tv({
+const passwordInput = tv({
   base: 'flex flex-col transition-colors',
 });
 
 export interface InputVariants
   extends InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof controlledInput> {
+    VariantProps<typeof passwordInput> {
   id: string;
   label?: string;
   register?: UseFormRegister<FieldValue<FieldValues>>;
@@ -20,7 +21,7 @@ export interface InputVariants
   isRequired?: boolean;
 }
 
-export const ControlledInput: FC<InputVariants> = ({
+export const PasswordInput: FC<InputVariants> = ({
   id,
   label,
   className,
@@ -29,8 +30,10 @@ export const ControlledInput: FC<InputVariants> = ({
   isRequired = false,
   ...props
 }) => {
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
   return (
-    <div className={controlledInput({ className })}>
+    <div className={passwordInput({ className })}>
       {label && (
         <label className="mb-2 text-black-40 dark:text-white-80">
           {label}
@@ -43,7 +46,23 @@ export const ControlledInput: FC<InputVariants> = ({
           {...props}
           register={register}
           errorMessage={errorMessage}
+          type={isVisible ? 'text' : 'password'}
+          className="pr-14"
         />
+
+        <button
+          type="button"
+          className="absolute right-6"
+          onClick={() => {
+            setIsVisible(prev => !prev);
+          }}
+        >
+          {isVisible ? (
+            <EyeOffIcon className="h-5 w-5" />
+          ) : (
+            <EyeIcon className="h-5 w-5" />
+          )}
+        </button>
       </div>
     </div>
   );

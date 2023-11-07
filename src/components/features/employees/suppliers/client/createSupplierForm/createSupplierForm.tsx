@@ -2,9 +2,9 @@
 
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { ControlledSelect } from '@/components/ui/selects/controlledSelect';
 import { api } from '@axios';
 
+import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';

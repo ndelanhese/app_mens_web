@@ -31,6 +31,7 @@
       "@fetchApi": ["./src/services/fetchApi.ts"],
       "@components/*": ["./src/components/*"],
       "@utils/*": ["./src/utils/*"],
+      "@shadcn-utils": ["./src/lib/utils.ts"],
       "@features-components/*": ["./src/components/features/*"],
     }
   },

@@ -37,7 +37,7 @@ export const Input: FC<InputVariants> = ({
   ...props
 }) => {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex w-full flex-col gap-1">
       <input
         className={input({ className })}
         {...props}

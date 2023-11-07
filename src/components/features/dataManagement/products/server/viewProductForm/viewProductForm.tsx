@@ -1,10 +1,11 @@
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 
 import { ProductPreviewProps } from './viewProductForm.types';
 
 export const ViewProductForm = ({ product }: ProductPreviewProps) => {
   return (
-    <div className="grid grid-cols-1 gap-4 overflow-y-auto sm:max-h-[30rem] sm:grid-cols-2">
+    <FormGrid>
       <ControlledInput value={product?.id} id="id" label="Código" readOnly />
       <ControlledInput value={product?.name} id="name" label="Nome" readOnly />
       <ControlledInput
@@ -56,6 +57,6 @@ export const ViewProductForm = ({ product }: ProductPreviewProps) => {
         label="Fornecedor"
         readOnly
       />
-    </div>
+    </FormGrid>
   );
 };

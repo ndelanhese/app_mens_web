@@ -7,6 +7,7 @@ import { api } from '@axios';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -14,7 +15,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { BrandFormSchema, brandFormSchema } from './editBrandForm.schema';
 import { Brand, BrandFormProps } from './editBrandForm.types';
 
-const EditBrandFormComponent = ({
+export const EditBrandForm = ({
   getBrandFunction,
   handleCloseModal,
 }: BrandFormProps) => {
@@ -64,10 +65,7 @@ const EditBrandFormComponent = ({
   };
 
   return (
-    <form
-      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <FormGrid onSubmit={handleSubmit(onSubmit)}>
       <ControlledInput value={brand?.id} id="id" label="Código" readOnly />
       <ControlledInput
         defaultValue={brand?.name}
@@ -81,8 +79,6 @@ const EditBrandFormComponent = ({
       <Button disabled={isSubmitting} type="submit" className="sm:col-start-2">
         Alterar
       </Button>
-    </form>
+    </FormGrid>
   );
 };
-
-export const EditBrandForm = memo(EditBrandFormComponent);

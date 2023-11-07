@@ -44,7 +44,13 @@ export function middleware(request: NextRequest) {
 
   if (pathname === '/signin' && token) {
     return NextResponse.redirect(
-      new URL(process.env.NEXT_PUBLIC_BASE_URL, request.url),
+      new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`, request.url),
+    );
+  }
+
+  if (pathname === '/') {
+    return NextResponse.redirect(
+      new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`, request.url),
     );
   }
 
@@ -65,6 +71,7 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/',
+    '/dashboard/:path*',
     '/signin/:path*',
     '/administration/users/:path*',
     '/administration/roles-permissions/:path*',
