@@ -6,6 +6,7 @@ import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { PasswordInput } from '@components/ui/inputs/passwordInput';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -73,7 +74,7 @@ export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
         isRequired
         type="email"
       />
-      <ControlledInput
+      <PasswordInput
         id="password"
         label="Senha"
         placeholder="ex: S3nh4.user"
@@ -81,7 +82,7 @@ export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
         errorMessage={errors.password?.message}
         isRequired
       />
-      <ControlledInput
+      <PasswordInput
         id="confirm_password"
         label="Confirmar Senha"
         placeholder="ex: S3nh4.user"
