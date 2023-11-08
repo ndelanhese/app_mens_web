@@ -9,6 +9,7 @@ export const editUserFormSchema = z
     user: z.string().min(1, 'O usuário é obrigatório'),
     password: z
       .string()
+      .min(1, 'A senha é obrigatória')
       .regex(/.*[A-Z].*/, 'Uma letra maiúscula')
       .regex(/.*[a-z].*/, 'Uma letra minuscula')
       .regex(/.*\d.*/, 'Um número')
