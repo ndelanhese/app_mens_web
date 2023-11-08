@@ -58,7 +58,7 @@ export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
       {/* TODO -> add employee */}
 
       <ControlledInput
-        id="name"
+        id="user"
         label="Usuário"
         placeholder="Ex: nome.sobrenome"
         register={register}
