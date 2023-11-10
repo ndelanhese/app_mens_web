@@ -1,0 +1,20 @@
+import { cookies } from 'next/headers';
+
+import { api } from '@axios';
+
+import { Roles } from './page.types';
+
+export const getRoles = async () => {
+  try {
+    const cookiesStore = cookies();
+    const token = cookiesStore.get('token')?.value;
+    const { data } = await api.get<Roles>('/acl/roles', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error: Error | any) {
+    console.log(error?.response?.data?.message);
+  }
+};

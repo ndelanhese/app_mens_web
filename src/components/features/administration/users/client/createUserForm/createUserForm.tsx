@@ -12,8 +12,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
-  EditUserFormSchema,
-  editUserFormSchema,
+  CreateUserFormSchema,
+  createUserFormSchema,
 } from './createUserForm.schema';
 import { CreateUserFormProps } from './createUserForm.types';
 
@@ -26,11 +26,11 @@ export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<EditUserFormSchema>({
-    resolver: zodResolver(editUserFormSchema),
+  } = useForm<CreateUserFormSchema>({
+    resolver: zodResolver(createUserFormSchema),
   });
 
-  const onSubmit: SubmitHandler<EditUserFormSchema> = async data => {
+  const onSubmit: SubmitHandler<CreateUserFormSchema> = async data => {
     try {
       await api.post(
         '/users',

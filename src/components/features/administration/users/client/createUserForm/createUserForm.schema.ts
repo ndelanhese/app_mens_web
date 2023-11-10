@@ -2,7 +2,7 @@ import path from 'path';
 
 import { z } from 'zod';
 
-export const editUserFormSchema = z
+export const createUserFormSchema = z
   .object({
     // employee: z.number().min(1, 'O funcionário é obrigatório'),
     email: z.string().email('O e-mail é inválido'),
@@ -30,4 +30,4 @@ export const editUserFormSchema = z
     },
   );
 
-export type EditUserFormSchema = z.infer<typeof editUserFormSchema>;
+export type CreateUserFormSchema = z.infer<typeof createUserFormSchema>;
