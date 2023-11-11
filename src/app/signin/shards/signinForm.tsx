@@ -71,7 +71,12 @@ export const SigninForm = () => {
           errorMessage={errors?.password?.message}
         />
       </div>
-      <Button size="lg" color="primary" isLoading={isSubmitting}>
+      <Button
+        size="lg"
+        color="primary"
+        isLoading={isSubmitting}
+        name="Access Button"
+      >
         Acessar
       </Button>
     </form>
