@@ -119,7 +119,7 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
     router.refresh();
   }, [router]);
 
-  if (!rows || rows.length < 1) {
+  if (!rows) {
     return <TableSkeleton />;
   }
 

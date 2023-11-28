@@ -130,7 +130,7 @@ export const UserTable = ({ rows }: UserTableProps) => {
     router.refresh();
   }, [router]);
 
-  if (!rows || rows.length < 1) {
+  if (!rows) {
     return <TableSkeleton />;
   }
 

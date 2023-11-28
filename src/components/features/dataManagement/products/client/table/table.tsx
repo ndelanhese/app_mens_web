@@ -168,7 +168,7 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
     router.refresh();
   }, [router]);
 
-  if (rows.length < 1) {
+  if (!rows) {
     return <TableSkeleton />;
   }
 
