@@ -13,7 +13,7 @@ const iterateResponse = (promotions?: Promotions) => {
     id: promotion?.id,
     name: promotion?.name,
     description: promotion?.description,
-    discount: String(promotion?.discount_amount),
+    discount: promotion?.formatted_discount,
     initialDate: promotion?.initial_date,
     finalDate: promotion?.final_date,
     status: promotion?.status,
