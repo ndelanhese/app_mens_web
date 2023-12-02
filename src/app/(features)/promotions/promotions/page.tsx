@@ -10,6 +10,7 @@ import { Promotions } from './page.types';
 const iterateResponse = (promotions?: Promotions) => {
   if (!promotions) return [];
   return promotions?.data?.map(promotion => ({
+    id: promotion?.id,
     name: promotion?.name,
     description: promotion?.description,
     discount: String(promotion?.discount_amount),

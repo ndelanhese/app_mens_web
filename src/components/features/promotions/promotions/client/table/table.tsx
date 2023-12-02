@@ -1,16 +1,51 @@
 'use client';
 
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
+import { api } from '@axios';
+
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
+import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
-import { TableColumn } from '@components/shared/table/table.types';
+import {
+  RefModalProps,
+  TableActionCallbackOptions,
+  TableColumn,
+} from '@components/shared/table/table.types';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 
 import { Promotion, PromotionsTableProps } from './table.types';
+import { parseCookies } from 'nookies';
+import { Plus } from 'lucide-react';
+import { ViewPromotionForm } from '../../server/viewPromotionForm/viewPromotionForm';
+import { CreatePromotionForm } from '../createPromotionForm/createPromotionForm';
+import { EditPromotionForm } from '../editPromotionForm/editPromotionForm';
 
 const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
+  const router = useRouter();
+
+  const { toast } = useToast();
+
+  const { token } = parseCookies();
+
+  const createPromotionModalRef = useRef<RefModalProps | null>(null);
+  const editPromotionModalRef = useRef<RefModalProps | null>(null);
+
+  const [selectedPromotion, setSelectPromotion] = useState<
+    Promotion | undefined
+  >(undefined);
+
   const tableColumns: Array<TableColumn<Promotion>> = useMemo(
     () => [
+      {
+        header: ({ column }) => (
+          <TableColumnHeader column={column} title="Código" />
+        ),
+        accessorKey: 'id',
+        id: 'Código',
+      },
       {
         header: ({ column }) => (
           <TableColumnHeader column={column} title="Nome" />
@@ -55,13 +90,6 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="Categoria" />
-        ),
-        accessorKey: 'category',
-        id: 'Categoria',
-      },
-      {
-        header: ({ column }) => (
           <TableColumnHeader column={column} title="Produtos" />
         ),
         accessorKey: 'products',
@@ -71,16 +99,95 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
     [],
   );
 
-  const handleRowClick = useCallback((row: Promotion) => {
-    console.log(row);
-  }, []);
+  const handleDeleteItem = useCallback(
+    async (id: number) => {
+      try {
+        await api.delete(`/promotions/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        router.refresh();
+        toast({
+          title: 'Promoção deletada com sucesso',
+        });
+      } catch (error: Error | any) {
+        const message =
+          error?.response?.data?.message ?? 'Erro ao deletar o item';
+        toast({
+          title: 'Erro ao deletar',
+          description: message,
+          variant: 'destructive',
+        });
+      }
+    },
+    [router, toast, token],
+  );
+
+  const handleRowClick = useCallback(
+    async (row: Promotion, action: TableActionCallbackOptions) => {
+      const { id } = row;
+
+      setSelectPromotion(row);
+
+      if (action === 'delete') {
+        await handleDeleteItem(id);
+      }
+    },
+    [handleDeleteItem],
+  );
+
+  const NEW_PROMOTION_TRIGGER = (
+    <StyledDiv>
+      Criar nova promoção
+      <Plus className="h-4 w-4" />
+    </StyledDiv>
+  );
+
+  const handleCloseNewPromotionModal = useCallback(() => {
+    createPromotionModalRef.current?.close();
+    setSelectPromotion(undefined);
+    router.refresh();
+  }, [router]);
+
+  const handleCloseEditPromotionModal = useCallback(() => {
+    editPromotionModalRef.current?.close();
+    setSelectPromotion(undefined);
+    router.refresh();
+  }, [router]);
+
+  if (!rows) {
+    return <TableSkeleton />;
+  }
 
   return (
     <Table
       tableColumns={tableColumns}
       rows={rows}
-      actionLabel="Ação"
       actionCallback={handleRowClick}
+      newItemDialogContent={
+        <CreatePromotionForm handleCloseModal={handleCloseNewPromotionModal} />
+      }
+      newItemDialogDescription="Criar uma nova promoção no sistema."
+      newItemDialogTitle="Criar nova promoção"
+      newItemTrigger={NEW_PROMOTION_TRIGGER}
+      newItemDialogRef={ref => {
+        createPromotionModalRef.current = ref;
+      }}
+      editItemDialogTitle="Editar promoção"
+      editItemDialogDescription="Editar uma promoção no sistema..."
+      editItemDialogContent={
+        <EditPromotionForm
+          promotion={selectedPromotion}
+          handleCloseModal={handleCloseEditPromotionModal}
+        />
+      }
+      editItemDialogRef={ref => {
+        editPromotionModalRef.current = ref;
+      }}
+      viewItemDialogTitle="Visualizar promoção"
+      viewItemDialogDescription="Visualizar uma promoção no sistema..."
+      viewItemDialogContent={
+        <ViewPromotionForm promotion={selectedPromotion} />
+      }
     />
   );
 };
