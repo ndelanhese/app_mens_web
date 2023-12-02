@@ -1,26 +1,33 @@
+import path from 'path';
+
 import { z } from 'zod';
 
-const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-
-export const editUserFormSchema = z
+export const createUserFormSchema = z
   .object({
-    employee: z.number().min(1, 'O funcionário é obrigatório'),
+    // employee: z.number().min(1, 'O funcionário é obrigatório'),
     email: z.string().email('O e-mail é inválido'),
     user: z.string().min(1, 'O usuário é obrigatório'),
     password: z
       .string()
       .min(1, 'A senha é obrigatória')
-      .regex(new RegExp(passwordStrengthRegex), 'A senha deve ser forte'),
-    confirm_password: z.string().min(1, 'A senha é obrigatória'),
-    status: z.string().min(1, 'O status é obrigatório'),
+      .regex(/.*[A-Z].*/, 'Uma letra maiúscula')
+      .regex(/.*[a-z].*/, 'Uma letra minuscula')
+      .regex(/.*\d.*/, 'Um número')
+      .regex(
+        /.*[`~<>?,./!@#$%^&*()\-_+="'|{}[\];:\\].*/,
+        'Um caractere especial',
+      )
+      .min(8, 'Mais de 8 caracteres'),
+    confirm_password: z.string().min(1, 'A confirmação de senha é obrigatória'),
+    // status: z.string().min(1, 'O status é obrigatório'),
   })
-  .superRefine(({ confirm_password: confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'As senhas devem ser iguais',
-      });
-    }
-  });
+  .refine(
+    ({ password, confirm_password: confirmPassword }) =>
+      password === confirmPassword,
+    {
+      message: 'As senhas devem ser idênticas',
+      path: ['confirm_password'],
+    },
+  );
 
-export type EditUserFormSchema = z.infer<typeof editUserFormSchema>;
+export type CreateUserFormSchema = z.infer<typeof createUserFormSchema>;

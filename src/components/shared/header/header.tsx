@@ -9,7 +9,7 @@ export const Header = () => (
       <SidebarToggle />
       <Breadcrumb />
     </div>
-    <div className="inline-flex items-center space-x-4">
+    <div className=" z-10 inline-flex items-center space-x-4">
       <CommandKeySearchBar />
       <ToggleTheme />
     </div>

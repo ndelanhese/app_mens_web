@@ -48,13 +48,14 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
   };
 
   return (
+    // TODO -> FIX FORM
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
       <ControlledInput
         id="name"
         label="Nome:"
         defaultValue={user?.employee.name}
         register={register}
-        errorMessage={errors.name?.message}
+        // errorMessage={errors.name?.message}
         readOnly
       />
       <ControlledInput
@@ -62,7 +63,7 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
         label="CPF:"
         defaultValue={user?.employee.cpf}
         register={register}
-        errorMessage={errors.cpf?.message}
+        // errorMessage={errors.cpf?.message}
       />
       <ControlledInput
         id="email"
@@ -83,11 +84,11 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
         label="Status:"
         defaultValue={convertStatus(user?.status)}
         register={register}
-        errorMessage={errors.status?.message}
+        // errorMessage={errors.status?.message}
         readOnly
       />
 
-      {/* Add roles and permissions with the logged user is admin */}
+      {/* TODO -> Add roles and permissions with the logged user is admin */}
 
       <Button disabled={isSubmitting} type="submit" className="h-min self-end">
         Salvar

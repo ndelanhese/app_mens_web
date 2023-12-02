@@ -116,7 +116,7 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
     return selectedBrand;
   }, [selectedBrand]);
 
-  if (rows.length < 1) {
+  if (!rows) {
     return <TableSkeleton />;
   }
 

@@ -14,6 +14,7 @@ const SignIn = () => {
         <NextImage
           src={'/user-icon.png'}
           alt="avatar-image"
+          loading="lazy"
           height={112}
           width={112}
         />

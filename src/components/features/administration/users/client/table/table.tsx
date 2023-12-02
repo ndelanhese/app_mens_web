@@ -39,6 +39,13 @@ export const UserTable = ({ rows }: UserTableProps) => {
     () => [
       {
         header: ({ column }) => (
+          <TableColumnHeader column={column} title="Código" />
+        ),
+        accessorKey: 'id',
+        id: 'Código',
+      },
+      {
+        header: ({ column }) => (
           <TableColumnHeader column={column} title="Nome" />
         ),
         accessorKey: 'employee.name',
@@ -123,7 +130,7 @@ export const UserTable = ({ rows }: UserTableProps) => {
     router.refresh();
   }, [router]);
 
-  if (!rows || rows.length < 1) {
+  if (!rows) {
     return <TableSkeleton />;
   }
 

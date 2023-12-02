@@ -1,4 +1,5 @@
 export type Promotion = {
+  id: number;
   name: string;
   description: string;
   discount: string;

@@ -52,7 +52,7 @@ export const PasswordInput: FC<InputVariants> = ({
 
         <button
           type="button"
-          className="absolute right-6"
+          className="absolute right-6 top-4"
           onClick={() => {
             setIsVisible(prev => !prev);
           }}
