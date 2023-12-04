@@ -1,3 +1,11 @@
+export type Product = {
+  id: number;
+  part_number: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
+
 export type Promotion = {
   id: number;
   name: string;
@@ -7,7 +15,8 @@ export type Promotion = {
   finalDate: string;
   status: string;
   category: string;
-  products: string;
+  products: Product[];
+  productsList: string;
 };
 
 export type PromotionsTableProps = {

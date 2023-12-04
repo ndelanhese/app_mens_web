@@ -32,7 +32,7 @@ export const ControlledInput: FC<InputVariants> = ({
   return (
     <div className={controlledInput({ className })}>
       {label && (
-        <label className="mb-2 text-black-40 dark:text-white-80">
+        <label className="mb-2 text-black-80 dark:text-white-80">
           {label}
           {isRequired && <span className="text-red-700"> *</span>}
         </label>

@@ -27,6 +27,6 @@ export type Promotion = {
   }>;
 };
 
-export type Promotions = {
+export type PromotionsResponse = {
   data: Promotion[];
 };
