@@ -8,7 +8,7 @@ export type SelectOption = {
 export type SelectProps = {
   name: string;
   label: string;
-  options: SelectOption[];
+  options: SelectOption[] | undefined;
   placeHolder?: string;
   searchLabel?: string;
   emptyLabel?: string;
