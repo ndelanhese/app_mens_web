@@ -3,19 +3,12 @@ import { DataTable } from '@components/shared/dataTable';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { TableRow, TableCell } from '@components/ui/shadcn/table';
 
+import { formatMoneyByCurrencySymbol } from '@utils/helpers';
+
 import { PromotionPreviewProps } from './viewPromotionForm.types';
 import { nanoid } from 'nanoid';
 
 export const ViewPromotionForm = ({ promotion }: PromotionPreviewProps) => {
-  // {invoices.map(invoice => (
-  //         <TableRow key={invoice.invoice}>
-  //           <TableCell className="font-medium">{invoice.invoice}</TableCell>
-  //           <TableCell>{invoice.paymentStatus}</TableCell>
-  //           <TableCell>{invoice.paymentMethod}</TableCell>
-  //           <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-  //         </TableRow>
-  //       ))}
-
   const columns = ['Código', 'Nome', 'Part Number', 'Preço', 'Quantidade'];
 
   const products = promotion?.products.map(product => (
@@ -23,8 +16,8 @@ export const ViewPromotionForm = ({ promotion }: PromotionPreviewProps) => {
       <TableCell>{product.id}</TableCell>
       <TableCell>{product.name}</TableCell>
       <TableCell>{product.part_number}</TableCell>
-      <TableCell>{product.price}</TableCell>
-      <TableCell>{product.quantity}</TableCell>
+      <TableCell>{formatMoneyByCurrencySymbol(product.price)}</TableCell>
+      <TableCell>{product.quantity} Und.</TableCell>
     </TableRow>
   ));
 

@@ -19,7 +19,15 @@ const iterateResponse = (promotions?: PromotionsResponse) => {
     status: promotion?.status,
     category: promotion?.category?.name,
     products: promotion?.products,
-    productsList: promotion?.products?.map(product => product?.name).join(', '),
+    productsList: promotion?.products?.map(product => product?.name).join(', ')
+      ? promotion?.products?.map(product => product?.name).join(', ').length >
+        25
+        ? promotion?.products
+            ?.map(product => product?.name)
+            .join(', ')
+            .substring(0, 25) + '...'
+        : promotion?.products?.map(product => product?.name).join(', ')
+      : '',
   }));
 };
 
