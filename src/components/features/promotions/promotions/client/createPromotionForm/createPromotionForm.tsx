@@ -3,6 +3,8 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { api } from '@axios';
+import { DataTable } from '@/components/shared/dataTable';
+import { TableCell, TableRow } from '@/components/ui/shadcn/table';
 
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
@@ -17,6 +19,7 @@ import {
   promotionFormSchema,
 } from './createPromotionForm.schema';
 import {
+  Product,
   PromotionCategory,
   PromotionFormProps,
 } from './createPromotionForm.types';
@@ -27,6 +30,7 @@ import {
   DiscountTypeEnum,
   Status,
 } from '../../api/apiData.types';
+import { nanoid } from 'nanoid';
 
 const CreatePromotionFormComponent = ({
   handleCloseModal,
@@ -45,6 +49,17 @@ const CreatePromotionFormComponent = ({
   const [discountTypeSelected, setDiscountTypeSelected] = useState<
     DiscountTypeEnum | undefined
   >('percentage');
+  const [products, setProducts] = useState<Product[] | undefined>(undefined);
+
+  const columns = ['Código', 'Nome', 'Part Number'];
+
+  const productsData = products?.map(product => (
+    <TableRow key={nanoid()}>
+      <TableCell>{product.id}</TableCell>
+      <TableCell>{product.name}</TableCell>
+      <TableCell>{product.part_number}</TableCell>
+    </TableRow>
+  ));
 
   const {
     register,
@@ -195,7 +210,18 @@ const CreatePromotionFormComponent = ({
         mask={discountTypeSelected === 'percentage' ? '99%' : '999.999,99'}
       />
 
-      {/* TODO -> add products */}
+      <h1 className="text-black-80 dark:text-white-80 ">Produtos</h1>
+      <div className="col-start-1 col-end-3 h-px bg-neutral-600 dark:bg-black-80" />
+
+      <div className="col-start-1 col-end-3">
+        <DataTable
+          columns={columns}
+          emptyMessage="Nenhum produto para essa promoção."
+        >
+          {productsData}
+        </DataTable>
+      </div>
+      {/* TODO -> add products find */}
       <Button
         disabled={isSubmitting}
         type="submit"

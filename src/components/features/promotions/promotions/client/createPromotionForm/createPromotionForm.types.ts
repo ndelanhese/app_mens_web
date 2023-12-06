@@ -15,3 +15,9 @@ export type PromotionCategory = {
 export type CategoriesResponse = {
   data: PromotionCategory[];
 };
+
+export type Product = {
+  id: number;
+  part_number: string;
+  name: string;
+};

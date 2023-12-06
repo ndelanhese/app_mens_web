@@ -61,9 +61,12 @@ export const DataTable = ({
   children,
   emptyMessage,
 }: DataTableProps) => {
+  const message = emptyMessage ?? 'Nenhum dado encontrado.';
   return (
     <Table>
-      {caption && <TableCaption>{caption}</TableCaption>}
+      {(caption || !children) && (
+        <TableCaption>{!children ? message : caption ?? message}</TableCaption>
+      )}
       {columns && (
         <TableHeader>
           <TableRow>
@@ -74,9 +77,7 @@ export const DataTable = ({
         </TableHeader>
       )}
       {/* TODO -> make a generic body */}
-      <TableBody>
-        {children ?? <p>{emptyMessage ?? 'Nenhum dado encontrado.'}</p>}
-      </TableBody>
+      {children && <TableBody>{children}</TableBody>}
     </Table>
   );
 };
