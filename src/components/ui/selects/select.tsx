@@ -30,15 +30,17 @@ export const Combobox = ({
   onChange,
 }: SelectProps) => {
   const [open, setOpen] = useState(false);
-  const [key, setValue] = useState(defaultValue ?? '');
+  const [key, setValue] = useState<string | undefined>(
+    defaultValue ?? undefined,
+  );
 
   const handleValueChange = (currentValue: string) => {
     const selectedValue =
       options?.find(
         option =>
           option.value.toLocaleLowerCase() === currentValue.toLocaleLowerCase(),
-      )?.key ?? '';
-    setValue(selectedValue === key ? '' : selectedValue);
+      )?.key ?? undefined;
+    setValue(selectedValue === key ? undefined : selectedValue);
     setOpen(false);
 
     if (onChange) {

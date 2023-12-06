@@ -21,7 +21,12 @@ import {
   PromotionFormProps,
 } from './createPromotionForm.types';
 import { parseCookies } from 'nookies';
-import { getCategories } from '../../api/apiData';
+import { getCategories, getDiscountType, getStatus } from '../../api/apiData';
+import {
+  DiscountType,
+  DiscountTypeEnum,
+  Status,
+} from '../../api/apiData.types';
 
 const CreatePromotionFormComponent = ({
   handleCloseModal,
@@ -33,24 +38,49 @@ const CreatePromotionFormComponent = ({
   const [categories, setCategories] = useState<PromotionCategory[] | undefined>(
     undefined,
   );
+  const [status, setStatus] = useState<Status[] | undefined>(undefined);
+  const [discountType, setDiscountType] = useState<DiscountType[] | undefined>(
+    undefined,
+  );
+  const [discountTypeSelected, setDiscountTypeSelected] = useState<
+    DiscountTypeEnum | undefined
+  >('percentage');
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     control,
+    watch,
   } = useForm<PromotionFormSchema>({
     resolver: zodResolver(promotionFormSchema),
   });
 
-  const categoriesResponse = useCallback(async () => {
+  useEffect(() => {
+    console.log(watch('discount_type'));
+    setDiscountTypeSelected(watch('discount_type') as DiscountTypeEnum);
+  }, [watch('discount_type')]);
+
+  const getCategoriesData = useCallback(async () => {
     const response = await getCategories();
     setCategories(response);
   }, []);
 
+  const getStatusData = useCallback(async () => {
+    const response = await getStatus();
+    setStatus(response);
+  }, []);
+
+  const getDiscountTypeData = useCallback(async () => {
+    const response = await getDiscountType();
+    setDiscountType(response);
+  }, []);
+
   useEffect(() => {
-    categoriesResponse();
-  }, [categoriesResponse]);
+    getCategoriesData();
+    getStatusData();
+    getDiscountTypeData();
+  }, [getCategoriesData, getDiscountTypeData, getStatusData]);
 
   const onSubmit: SubmitHandler<PromotionFormSchema> = async data => {
     try {
@@ -102,7 +132,7 @@ const CreatePromotionFormComponent = ({
         label="Descrição"
         placeholder="Ex. Promoção de calçados de..."
         register={register}
-        errorMessage={errors.name?.message}
+        errorMessage={errors.description?.message}
         isRequired
       />
       <ControlledSelect
@@ -110,7 +140,7 @@ const CreatePromotionFormComponent = ({
         name="category"
         control={control}
         isRequired
-        // errorMessage={errors.address?.state?.message}
+        errorMessage={errors.category?.message}
         options={memoizedCategories}
         placeHolder="Selecione uma categoria"
         searchLabel="Pesquisar categoria"
@@ -120,7 +150,7 @@ const CreatePromotionFormComponent = ({
         id="initial_date"
         label="Data inicial"
         control={control}
-        // errorMessage={errors.rg?.message}
+        errorMessage={errors.initial_date?.message}
         placeholder="Ex. 10/01/2019"
         mask="99/99/9999"
       />
@@ -128,7 +158,7 @@ const CreatePromotionFormComponent = ({
         id="final_date"
         label="Data final"
         control={control}
-        // errorMessage={errors.rg?.message}
+        errorMessage={errors.final_date?.message}
         placeholder="Ex. 11/01/2019"
         mask="99/99/9999"
       />
@@ -136,32 +166,33 @@ const CreatePromotionFormComponent = ({
         label="Status"
         name="status"
         control={control}
-        // errorMessage={errors.address?.state?.message}
-        // TODO -> add status request
-        options={memoizedCategories}
+        errorMessage={errors.status?.message}
+        options={status}
         placeHolder="Selecione um status"
         searchLabel="Pesquisar status"
         emptyLabel="Sem status cadastrados"
-      />
-      <MaskedInput
-        id="discount_amount"
-        label="Valor do desconto"
-        control={control}
-        // errorMessage={errors.rg?.message}
-        placeholder="Ex. 10"
-        // TODO -> add validation to percentage and amount
-        mask="999.999,99"
       />
       <ControlledSelect
         label="Tipo de desconto"
         name="discount_type"
         control={control}
-        // errorMessage={errors.address?.state?.message}
-        // TODO -> add status request
-        options={memoizedCategories}
+        errorMessage={errors.discount_type?.message}
+        options={discountType}
+        defaultValue="percentage"
         placeHolder="Selecione o tipo de desconto"
         searchLabel="Pesquisar tipo de desconto"
         emptyLabel="Sem resultados"
+      />
+      <MaskedInput
+        id="discount_amount"
+        label="Valor do desconto"
+        control={control}
+        errorMessage={errors.discount_amount?.message}
+        placeholder={
+          discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
+        }
+        disabled={!discountTypeSelected}
+        mask={discountTypeSelected === 'percentage' ? '99%' : '999.999,99'}
       />
 
       {/* TODO -> add products */}

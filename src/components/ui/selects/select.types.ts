@@ -9,5 +9,5 @@ export type SelectProps = {
   searchLabel?: string;
   emptyLabel?: string;
   defaultValue?: string;
-  onChange?: (currentValue: string) => void;
+  onChange?: (currentValue: string | undefined) => void;
 };
