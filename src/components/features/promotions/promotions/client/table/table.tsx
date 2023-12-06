@@ -92,7 +92,7 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
         header: ({ column }) => (
           <TableColumnHeader column={column} title="Produtos" />
         ),
-        accessorKey: 'products',
+        accessorKey: 'productsList',
         id: 'Produtos',
       },
     ],

@@ -5,20 +5,29 @@ import { Metadata } from 'next';
 import { api } from '@axios';
 import { PromotionsTable } from '@features-components/promotions/promotions/client/table/table';
 
-import { Promotions } from './page.types';
+import { PromotionsResponse } from './page.types';
 
-const iterateResponse = (promotions?: Promotions) => {
+const iterateResponse = (promotions?: PromotionsResponse) => {
   if (!promotions) return [];
   return promotions?.data?.map(promotion => ({
     id: promotion?.id,
     name: promotion?.name,
     description: promotion?.description,
-    discount: String(promotion?.discount_amount),
+    discount: promotion?.formatted_discount,
     initialDate: promotion?.initial_date,
     finalDate: promotion?.final_date,
     status: promotion?.status,
     category: promotion?.category?.name,
-    products: promotion?.products?.map(product => product?.name).join(', '),
+    products: promotion?.products,
+    productsList: promotion?.products?.map(product => product?.name).join(', ')
+      ? promotion?.products?.map(product => product?.name).join(', ').length >
+        25
+        ? promotion?.products
+            ?.map(product => product?.name)
+            .join(', ')
+            .substring(0, 25) + '...'
+        : promotion?.products?.map(product => product?.name).join(', ')
+      : '',
   }));
 };
 
@@ -26,7 +35,7 @@ const getPromotions = cache(async () => {
   try {
     const cookiesStore = cookies();
     const token = cookiesStore.get('token')?.value;
-    const { data } = await api.get<Promotions>('/promotions', {
+    const { data } = await api.get<PromotionsResponse>('/promotions', {
       headers: {
         Authorization: `Bearer ${token}`,
       },

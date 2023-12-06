@@ -30,15 +30,17 @@ export const Combobox = ({
   onChange,
 }: SelectProps) => {
   const [open, setOpen] = useState(false);
-  const [key, setValue] = useState(defaultValue ?? '');
+  const [key, setValue] = useState<string | undefined>(
+    defaultValue ?? undefined,
+  );
 
   const handleValueChange = (currentValue: string) => {
     const selectedValue =
-      options.find(
+      options?.find(
         option =>
           option.value.toLocaleLowerCase() === currentValue.toLocaleLowerCase(),
-      )?.key ?? '';
-    setValue(selectedValue === key ? '' : selectedValue);
+      )?.key ?? undefined;
+    setValue(selectedValue === key ? undefined : selectedValue);
     setOpen(false);
 
     if (onChange) {
@@ -56,7 +58,7 @@ export const Combobox = ({
           className="w-full justify-between rounded-lg py-6 text-md font-re"
         >
           {key ? (
-            options.find(option => option.key === key)?.value
+            options?.find(option => option.key === key)?.value
           ) : (
             <span className="text-zinc-700">{placeHolder}</span>
           )}
@@ -68,7 +70,7 @@ export const Combobox = ({
           <CommandInput placeholder={searchLabel ?? 'Pesquisar...'} />
           <CommandEmpty>{emptyLabel ?? 'Sem resultados'}</CommandEmpty>
           <CommandGroup className="max-h-80">
-            {options.map(option => (
+            {options?.map(option => (
               <CommandItem key={option.key} onSelect={handleValueChange}>
                 <Check
                   className={cn(
