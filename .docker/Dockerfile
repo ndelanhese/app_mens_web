@@ -12,6 +12,7 @@ RUN apk add --no-cache g++ make py3-pip libc6-compat
 # fetch is a pnpm command that downloads all dependencies to the local store
 # You could remove or skip this step if using npm or yarn (but make sure to copy your lock file)
 FROM pnpm_base as fetched_deps
+
 WORKDIR /app
 # setting production env usually speeds up install for your package manager
 ENV NODE_ENV production
@@ -58,8 +59,8 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
 COPY --from=builder /app/pruned .
+COPY --from=builder /app/public ./public
 
 # Create output directory and set permissions
 RUN mkdir .next && chown nextjs:nodejs .next
