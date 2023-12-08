@@ -63,4 +63,5 @@ export type tableDialogProps = {
   actionCallback?: (row: any, action: TableActionCallbackOptions) => void;
   row?: any;
   type?: TableActionCallbackOptions;
+  className?: string;
 };

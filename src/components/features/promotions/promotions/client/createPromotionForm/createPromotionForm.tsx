@@ -5,6 +5,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { api } from '@axios';
 import { DataTable } from '@/components/shared/dataTable';
 import { TableCell, TableRow } from '@/components/ui/shadcn/table';
+import { StyledDiv } from '@/components/ui/styledDiv/styledDiv';
 
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
@@ -31,6 +32,8 @@ import {
   Status,
 } from '../../api/apiData.types';
 import { nanoid } from 'nanoid';
+import { Plus } from 'lucide-react';
+import { SearchProductModal } from '../searchProductModal/searchProductModal';
 
 const CreatePromotionFormComponent = ({
   handleCloseModal,
@@ -210,7 +213,10 @@ const CreatePromotionFormComponent = ({
         mask={discountTypeSelected === 'percentage' ? '99%' : '999.999,99'}
       />
 
-      <h1 className="text-black-80 dark:text-white-80 ">Produtos</h1>
+      <div className="col-start-1 col-end-3 flex flex-col items-center justify-between sm:flex-row">
+        <h1 className="text-black-80 dark:text-white-80">Produtos</h1>
+        <SearchProductModal />
+      </div>
       <div className="col-start-1 col-end-3 h-px bg-neutral-600 dark:bg-black-80" />
 
       <div className="col-start-1 col-end-3">

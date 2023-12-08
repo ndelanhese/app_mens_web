@@ -5,8 +5,6 @@ export type PromotionCategory = {
   name: string;
 };
 
-// export type PromotionProducts = {};
-
 export type Promotion = {
   id: number;
   name: string;
