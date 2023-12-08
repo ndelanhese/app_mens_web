@@ -1,9 +1,12 @@
+import { cache } from 'react';
+
 import { api } from '@axios';
 
 import { toast } from '@components/ui/shadcn/toast/use-toast';
 
 import { parseCookies } from 'nookies';
 import {
+  Products,
   PromotionDiscountTypeResponse,
   PromotionStatusResponse,
   PromotionsCategoriesResponse,
@@ -11,7 +14,7 @@ import {
 
 const { token } = parseCookies();
 
-export const getCategories = async () => {
+export const getCategories = cache(async () => {
   try {
     const { data } = await api.get<PromotionsCategoriesResponse>(
       '/promotions-categories',
@@ -28,9 +31,9 @@ export const getCategories = async () => {
       variant: 'destructive',
     });
   }
-};
+});
 
-export const getStatus = async () => {
+export const getStatus = cache(async () => {
   try {
     const { data } = await api.get<PromotionStatusResponse>(
       '/promotions/status',
@@ -47,9 +50,9 @@ export const getStatus = async () => {
       variant: 'destructive',
     });
   }
-};
+});
 
-export const getDiscountType = async () => {
+export const getDiscountType = cache(async () => {
   try {
     const { data } = await api.get<PromotionDiscountTypeResponse>(
       '/promotions/discount-types',
@@ -66,4 +69,17 @@ export const getDiscountType = async () => {
       variant: 'destructive',
     });
   }
-};
+});
+
+export const getProducts = cache(async () => {
+  try {
+    const { data } = await api.get<Products>('/products', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error: Error | any) {
+    console.log(error?.response?.data?.message);
+  }
+});

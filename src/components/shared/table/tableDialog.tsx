@@ -10,6 +10,7 @@ import {
 } from '@components/ui/shadcn/dialog';
 
 import { RefModalProps, tableDialogProps } from './table.types';
+import { twMerge } from 'tailwind-merge';
 
 const TableDialogComponent = ({
   content,
@@ -20,6 +21,7 @@ const TableDialogComponent = ({
   actionCallback,
   row,
   type,
+  className,
 }: tableDialogProps) => {
   const [open, setOpen] = useState(false);
 
@@ -47,7 +49,12 @@ const TableDialogComponent = ({
       }}
     >
       <DialogTrigger>{trigger ?? 'Abrir Modal'}</DialogTrigger>
-      <DialogContent className="flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto sm:min-w-[60rem]">
+      <DialogContent
+        className={twMerge(
+          'flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto sm:min-w-[60rem]',
+          className,
+        )}
+      >
         <DialogHeader>
           <DialogTitle>{title ?? 'Titulo'}</DialogTitle>
           <DialogDescription>{description ?? 'Descrição'}</DialogDescription>

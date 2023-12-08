@@ -1,0 +1,38 @@
+import { ReactNode } from 'react';
+
+import { RefModalProps } from '@/components/shared/table/table.types';
+
+export type SearchProductModalProps = {
+  triggerText?: string;
+  triggerIcon?: ReactNode;
+  modalRef?: (ref: RefModalProps) => void | undefined;
+  title?: string;
+  description?: string;
+};
+
+type Category = {
+  id: number;
+  name: string;
+};
+type Brand = {
+  id: number;
+  name: string;
+};
+type Supplier = {
+  id: number;
+  corporate_name: string;
+};
+
+export type Product = {
+  id: number;
+  name: string;
+  partNumber: string;
+  description: string;
+  price: number;
+  size: string;
+  color: string;
+  quantity: number;
+  category: Category;
+  brand: Brand;
+  supplier: Supplier;
+};

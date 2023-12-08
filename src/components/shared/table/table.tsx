@@ -178,39 +178,49 @@ export function Table<T>({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
-                <TableCell className="ml-8 flex items-end justify-end gap-1 sm:ml-0">
-                  <TableDialog
-                    dialogRef={viewItemDialogRef}
-                    trigger={VIEW_ITEM_TRIGGER}
-                    content={viewItemDialogContent}
-                    description={viewItemDialogDescription}
-                    title={viewItemDialogTitle}
-                    actionCallback={actionCallback}
-                    row={row.original}
-                    type="view"
-                  />
-                  <TableDialog
-                    dialogRef={editItemDialogRef}
-                    trigger={EDIT_ITEM_TRIGGER}
-                    content={editItemDialogContent}
-                    description={editItemDialogDescription}
-                    title={editItemDialogTitle}
-                    actionCallback={actionCallback}
-                    row={row.original}
-                    type="edit"
-                  />
-                  <AlertDialog
-                    actionLabel="Confirmar"
-                    cancelLabel="Cancelar"
-                    description={
-                      deleteItemDescription ??
-                      'Você tem certeza que deseja excluir este item?'
-                    }
-                    onAction={() => actionCallback(row.original, 'delete')}
-                    title={deleteItemTitle ?? 'Excluir'}
-                    trigger={DELETE_ITEM_TRIGGER}
-                  />
-                </TableCell>
+                {(viewItemDialogContent ||
+                  editItemDialogContent ||
+                  deleteItemTitle) && (
+                  <TableCell className="ml-8 flex items-end justify-end gap-1 sm:ml-0">
+                    {viewItemDialogContent && (
+                      <TableDialog
+                        dialogRef={viewItemDialogRef}
+                        trigger={VIEW_ITEM_TRIGGER}
+                        content={viewItemDialogContent}
+                        description={viewItemDialogDescription}
+                        title={viewItemDialogTitle}
+                        actionCallback={actionCallback}
+                        row={row.original}
+                        type="view"
+                      />
+                    )}
+                    {editItemDialogContent && (
+                      <TableDialog
+                        dialogRef={editItemDialogRef}
+                        trigger={EDIT_ITEM_TRIGGER}
+                        content={editItemDialogContent}
+                        description={editItemDialogDescription}
+                        title={editItemDialogTitle}
+                        actionCallback={actionCallback}
+                        row={row.original}
+                        type="edit"
+                      />
+                    )}
+                    {deleteItemTitle && (
+                      <AlertDialog
+                        actionLabel="Confirmar"
+                        cancelLabel="Cancelar"
+                        description={
+                          deleteItemDescription ??
+                          'Você tem certeza que deseja excluir este item?'
+                        }
+                        onAction={() => actionCallback(row.original, 'delete')}
+                        title={deleteItemTitle ?? 'Excluir'}
+                        trigger={DELETE_ITEM_TRIGGER}
+                      />
+                    )}
+                  </TableCell>
+                )}
               </TableRow>
             ))
           ) : (
