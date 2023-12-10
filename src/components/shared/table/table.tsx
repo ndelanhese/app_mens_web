@@ -37,6 +37,7 @@ import {
 import { Eye, Pencil, Search, Trash } from 'lucide-react';
 import { UserTableProps } from './table.types';
 import { TableDialog } from './tableDialog';
+import { twJoin } from 'tailwind-merge';
 
 export function Table<T>({
   rows,
@@ -57,6 +58,8 @@ export function Table<T>({
   viewItemDialogRef,
   deleteItemDescription,
   deleteItemTitle,
+  rowIsClickable,
+  handleRowClick,
 }: UserTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -112,14 +115,21 @@ export function Table<T>({
             onChange={({ target }) => setGlobalFilter(String(target.value))}
           />
         </div>
-        <div className="mt-2 flex flex-row items-center justify-between gap-2 sm:mt-0">
-          <TableDialog
-            dialogRef={newItemDialogRef}
-            trigger={newItemTrigger}
-            content={newItemDialogContent}
-            description={newItemDialogDescription}
-            title={newItemDialogTitle}
-          />
+        <div
+          className={twJoin(
+            'mt-2 flex flex-row items-center gap-2 sm:mt-0',
+            newItemDialogContent ? 'justify-between' : 'justify-end',
+          )}
+        >
+          {newItemDialogContent && (
+            <TableDialog
+              dialogRef={newItemDialogRef}
+              trigger={newItemTrigger}
+              content={newItemDialogContent}
+              description={newItemDialogDescription}
+              title={newItemDialogTitle}
+            />
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">Colunas</Button>
@@ -162,7 +172,11 @@ export function Table<T>({
                   </TableHead>
                 );
               })}
-              <TableHead className="text-right"></TableHead>
+              {(viewItemDialogContent ||
+                editItemDialogContent ||
+                deleteItemTitle) && (
+                <TableHead className="text-right"></TableHead>
+              )}
             </TableRow>
           ))}
         </TableHeader>
@@ -172,6 +186,16 @@ export function Table<T>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
+                className={rowIsClickable ? 'cursor-pointer' : ''}
+                {...(rowIsClickable
+                  ? {
+                      onClick: () => {
+                        if (handleRowClick) {
+                          handleRowClick(row.original);
+                        }
+                      },
+                    }
+                  : {})}
               >
                 {row.getVisibleCells().map(cell => (
                   <TableCell key={cell.id}>
@@ -236,16 +260,19 @@ export function Table<T>({
         </TableBody>
       </TableComponent>
 
-      <TablePagination
-        previous={{
-          onClick: () => table.previousPage(),
-          disabled: !table.getCanPreviousPage(),
-        }}
-        next={{
-          onClick: () => table.nextPage(),
-          disabled: !table.getCanNextPage(),
-        }}
-      />
+      {table.getCanPreviousPage() ||
+        (table.getCanNextPage() && (
+          <TablePagination
+            previous={{
+              onClick: () => table.previousPage(),
+              disabled: !table.getCanPreviousPage(),
+            }}
+            next={{
+              onClick: () => table.nextPage(),
+              disabled: !table.getCanNextPage(),
+            }}
+          />
+        ))}
     </div>
   );
 }

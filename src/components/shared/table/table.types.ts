@@ -32,27 +32,53 @@ export interface RefModalProps {
   close: () => void;
 }
 
-export type UserTableProps<T> = {
-  rows: Array<T>;
-  tableColumns: Array<TableColumn<T>>;
-  actionLabel?: string;
-  actionCallback: (row: T, action: TableActionCallbackOptions) => void;
-  newItemTrigger?: ReactNode;
-  newItemDialogTitle?: string;
-  newItemDialogDescription?: string;
-  newItemDialogContent?: ReactNode;
-  newItemDialogRef?: (ref: RefModalProps) => void | undefined;
-  editItemDialogTitle?: string;
-  editItemDialogDescription?: string;
-  editItemDialogContent?: ReactNode;
-  editItemDialogRef?: (ref: RefModalProps) => void | undefined;
-  viewItemDialogTitle?: string;
-  viewItemDialogDescription?: string;
-  viewItemDialogContent?: ReactNode;
-  viewItemDialogRef?: (ref: RefModalProps) => void | undefined;
-  deleteItemTitle?: string;
-  deleteItemDescription?: string;
-};
+export type UserTableProps<T> =
+  | {
+      rows: Array<T>;
+      tableColumns: Array<TableColumn<T>>;
+      actionLabel?: string;
+      actionCallback: (row: T, action: TableActionCallbackOptions) => void;
+      newItemTrigger?: ReactNode;
+      newItemDialogTitle?: string;
+      newItemDialogDescription?: string;
+      newItemDialogContent?: ReactNode;
+      newItemDialogRef?: (ref: RefModalProps) => void | undefined;
+      editItemDialogTitle?: string;
+      editItemDialogDescription?: string;
+      editItemDialogContent?: ReactNode;
+      editItemDialogRef?: (ref: RefModalProps) => void | undefined;
+      viewItemDialogTitle?: string;
+      viewItemDialogDescription?: string;
+      viewItemDialogContent?: ReactNode;
+      viewItemDialogRef?: (ref: RefModalProps) => void | undefined;
+      deleteItemTitle?: string;
+      deleteItemDescription?: string;
+      rowIsClickable?: true;
+      handleRowClick: (row: T) => void;
+    }
+  | {
+      rows: Array<T>;
+      tableColumns: Array<TableColumn<T>>;
+      actionLabel?: string;
+      actionCallback: (row: T, action: TableActionCallbackOptions) => void;
+      newItemTrigger?: ReactNode;
+      newItemDialogTitle?: string;
+      newItemDialogDescription?: string;
+      newItemDialogContent?: ReactNode;
+      newItemDialogRef?: (ref: RefModalProps) => void | undefined;
+      editItemDialogTitle?: string;
+      editItemDialogDescription?: string;
+      editItemDialogContent?: ReactNode;
+      editItemDialogRef?: (ref: RefModalProps) => void | undefined;
+      viewItemDialogTitle?: string;
+      viewItemDialogDescription?: string;
+      viewItemDialogContent?: ReactNode;
+      viewItemDialogRef?: (ref: RefModalProps) => void | undefined;
+      deleteItemTitle?: string;
+      deleteItemDescription?: string;
+      rowIsClickable?: false;
+      handleRowClick?: () => void;
+    };
 
 export type tableDialogProps = {
   title?: string;

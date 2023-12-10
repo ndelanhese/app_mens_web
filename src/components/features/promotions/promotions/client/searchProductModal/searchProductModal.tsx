@@ -3,15 +3,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Table } from '@/components/shared/table/table';
-import { TableDialog } from '@/components/shared/table/tableDialog';
-import { StyledDiv } from '@/components/ui/styledDiv/styledDiv';
 import { TableColumn } from '@/components/shared/table/table.types';
 import { TableColumnHeader } from '@/components/shared/table/tableColumnHeader';
+import { TableDialog } from '@/components/shared/table/tableDialog';
+import { StyledDiv } from '@/components/ui/styledDiv/styledDiv';
 
 import { Plus } from 'lucide-react';
-import { Products } from '../../api/apiData.types';
-import { SearchProductModalProps, Product } from './searchProductModal.types';
 import { getProducts } from '../../api/apiData';
+import { Products } from '../../api/apiData.types';
+import { Product, SearchProductModalProps } from './searchProductModal.types';
 
 export const SearchProductModal = ({
   triggerIcon,
@@ -19,6 +19,8 @@ export const SearchProductModal = ({
   modalRef,
   description,
   title,
+  handleRowClick: rowClick,
+  handleCloseModal,
 }: SearchProductModalProps) => {
   const [products, setProducts] = useState<Product[] | []>([]);
 
@@ -131,23 +133,32 @@ export const SearchProductModal = ({
     getProductsData();
   }, [getProductsData]);
 
+  const handleRowClick = useCallback(
+    (row: Product) => {
+      rowClick(row);
+      handleCloseModal && handleCloseModal();
+    },
+    [handleCloseModal, rowClick],
+  );
+
   return (
     <TableDialog
       dialogRef={modalRef}
       trigger={TRIGGER}
       content={
         <Table
-          // TODO -> fix table layout to reusable style
           actionCallback={() => {
             console.log('ops');
           }}
           tableColumns={tableColumns}
           rows={products}
+          rowIsClickable
+          handleRowClick={handleRowClick}
         />
       }
       description={description ?? 'Encontre um produto já cadastrado'}
       title={title ?? 'Selecionar produto'}
-      className="w-[10rem] sm:min-w-0"
+      className="w-screen sm:min-w-fit"
     />
   );
 };

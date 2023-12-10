@@ -1,39 +1,40 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { api } from '@axios';
 import { DataTable } from '@/components/shared/dataTable';
 import { TableCell, TableRow } from '@/components/ui/shadcn/table';
-import { StyledDiv } from '@/components/ui/styledDiv/styledDiv';
+import { api } from '@axios';
+import { RefModalProps } from '@/components/shared/table/table.types';
 
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
-import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
+import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { NumberInput } from '@components/ui/inputs/numberInput';
 
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  PromotionFormSchema,
-  promotionFormSchema,
-} from './createPromotionForm.schema';
-import {
-  Product,
-  PromotionCategory,
-  PromotionFormProps,
-} from './createPromotionForm.types';
+import { nanoid } from 'nanoid';
 import { parseCookies } from 'nookies';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { getCategories, getDiscountType, getStatus } from '../../api/apiData';
 import {
   DiscountType,
   DiscountTypeEnum,
   Status,
 } from '../../api/apiData.types';
-import { nanoid } from 'nanoid';
-import { Plus } from 'lucide-react';
 import { SearchProductModal } from '../searchProductModal/searchProductModal';
+import {
+  PromotionFormSchema,
+  promotionFormSchema,
+} from './createPromotionForm.schema';
+import {
+  Product,
+  ProductTable,
+  PromotionCategory,
+  PromotionFormProps,
+} from './createPromotionForm.types';
 
 const CreatePromotionFormComponent = ({
   handleCloseModal,
@@ -41,6 +42,8 @@ const CreatePromotionFormComponent = ({
   const { toast } = useToast();
 
   const { token } = parseCookies();
+
+  const selectProductModalRef = useRef<RefModalProps | null>(null);
 
   const [categories, setCategories] = useState<PromotionCategory[] | undefined>(
     undefined,
@@ -75,7 +78,6 @@ const CreatePromotionFormComponent = ({
   });
 
   useEffect(() => {
-    console.log(watch('discount_type'));
     setDiscountTypeSelected(watch('discount_type') as DiscountTypeEnum);
   }, [watch('discount_type')]);
 
@@ -102,9 +104,19 @@ const CreatePromotionFormComponent = ({
 
   const onSubmit: SubmitHandler<PromotionFormSchema> = async data => {
     try {
+      if (!products || (products && products?.length < 1)) {
+        toast({
+          title: 'Erro ao criar promoção',
+          description: 'Adicione ao menos um produto.',
+          variant: 'destructive',
+        });
+        selectProductModalRef.current?.open();
+        return;
+      }
+      const selectedProducts = products.map(product => ({ id: product.id }));
       await api.post(
         '/promotions',
-        { ...data },
+        { ...data, products: selectedProducts },
         { headers: { Authorization: `Bearer ${token}` } },
       );
       handleCloseModal();
@@ -132,6 +144,28 @@ const CreatePromotionFormComponent = ({
     [categories],
   );
 
+  const handleCloseSelectProductModal = useCallback(() => {
+    selectProductModalRef.current?.close();
+  }, []);
+
+  const handleRowClick = useCallback((row: ProductTable) => {
+    setProducts(prev => {
+      const newProduct: Product = {
+        id: row.id,
+        name: row.name,
+        part_number: row.partNumber,
+      };
+
+      const existingIds = new Set(prev?.map(product => product.id));
+
+      if (existingIds.has(newProduct.id)) {
+        return prev;
+      }
+
+      return prev ? [...prev, newProduct] : [newProduct];
+    });
+  }, []);
+
   return (
     <form
       className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
@@ -155,10 +189,10 @@ const CreatePromotionFormComponent = ({
       />
       <ControlledSelect
         label="Categoria"
-        name="category"
+        name="promotion_category_id"
         control={control}
         isRequired
-        errorMessage={errors.category?.message}
+        errorMessage={errors.promotion_category_id?.message}
         options={memoizedCategories}
         placeHolder="Selecione uma categoria"
         searchLabel="Pesquisar categoria"
@@ -200,8 +234,9 @@ const CreatePromotionFormComponent = ({
         placeHolder="Selecione o tipo de desconto"
         searchLabel="Pesquisar tipo de desconto"
         emptyLabel="Sem resultados"
+        isRequired
       />
-      <MaskedInput
+      <NumberInput
         id="discount_amount"
         label="Valor do desconto"
         control={control}
@@ -210,16 +245,26 @@ const CreatePromotionFormComponent = ({
           discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
         }
         disabled={!discountTypeSelected}
-        mask={discountTypeSelected === 'percentage' ? '99%' : '999.999,99'}
+        mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
+        prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
+        isRequired
       />
 
-      <div className="col-start-1 col-end-3 flex flex-col items-center justify-between sm:flex-row">
-        <h1 className="text-black-80 dark:text-white-80">Produtos</h1>
-        <SearchProductModal />
+      <div className="col-start-1 col-end-2 flex flex-col items-center justify-between sm:col-end-3 sm:flex-row">
+        <h1 className="mb-2 text-black-80 dark:text-white-80 sm:mb-0">
+          Produtos
+        </h1>
+        <SearchProductModal
+          handleRowClick={handleRowClick}
+          handleCloseModal={handleCloseSelectProductModal}
+          modalRef={ref => {
+            selectProductModalRef.current = ref;
+          }}
+        />
       </div>
-      <div className="col-start-1 col-end-3 h-px bg-neutral-600 dark:bg-black-80" />
+      <div className="col-start-1 col-end-2 h-px bg-neutral-600 dark:bg-black-80 sm:col-end-3" />
 
-      <div className="col-start-1 col-end-3">
+      <div className="col-start-1 col-end-2 sm:col-end-3">
         <DataTable
           columns={columns}
           emptyMessage="Nenhum produto para essa promoção."
@@ -227,7 +272,6 @@ const CreatePromotionFormComponent = ({
           {productsData}
         </DataTable>
       </div>
-      {/* TODO -> add products find */}
       <Button
         disabled={isSubmitting}
         type="submit"
