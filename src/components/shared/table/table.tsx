@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 
-import { Button } from '@components/ui/shadcn/button';
-import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { TablePagination } from '@components/shared/table/tablePagination';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
+import { Button } from '@components/ui/shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -21,10 +20,10 @@ import {
   TableHeader,
   TableRow,
 } from '@components/ui/shadcn/table';
+import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 
 /* eslint-disable import/named */
 import {
-  ColumnFiltersState,
   SortingState,
   VisibilityState,
   flexRender,
@@ -35,9 +34,9 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Eye, Pencil, Search, Trash } from 'lucide-react';
+import { twJoin } from 'tailwind-merge';
 import { UserTableProps } from './table.types';
 import { TableDialog } from './tableDialog';
-import { twJoin } from 'tailwind-merge';
 
 export function Table<T>({
   rows,

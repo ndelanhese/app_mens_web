@@ -3,16 +3,19 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { DataTable } from '@/components/shared/dataTable';
-import { TableCell, TableRow } from '@/components/ui/shadcn/table';
-import { api } from '@axios';
 import { RefModalProps } from '@/components/shared/table/table.types';
+import { TableCell, TableRow } from '@/components/ui/shadcn/table';
+import { currentDateString, getNextDay } from '@/utils/helpers/date';
+import { api } from '@axios';
 
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
+import { NumberInput } from '@components/ui/inputs/numberInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
-import { NumberInput } from '@components/ui/inputs/numberInput';
+import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
+import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { nanoid } from 'nanoid';
@@ -35,6 +38,7 @@ import {
   PromotionCategory,
   PromotionFormProps,
 } from './createPromotionForm.types';
+import { Trash } from 'lucide-react';
 
 const CreatePromotionFormComponent = ({
   handleCloseModal,
@@ -57,13 +61,43 @@ const CreatePromotionFormComponent = ({
   >('percentage');
   const [products, setProducts] = useState<Product[] | undefined>(undefined);
 
-  const columns = ['Código', 'Nome', 'Part Number'];
+  const columns = ['Código', 'Nome', 'Part Number', ''];
+
+  const DELETE_ITEM_TRIGGER = (
+    <StyledDiv>
+      <Trash className="h-4 w-4" />
+    </StyledDiv>
+  );
+
+  const handleRemoveItemFromProducts = useCallback(
+    (idToRemove: number) => {
+      if (products) {
+        const updatedProducts = products.filter(
+          product => product.id !== idToRemove,
+        );
+        setProducts(updatedProducts);
+      }
+    },
+    [products],
+  );
 
   const productsData = products?.map(product => (
     <TableRow key={nanoid()}>
       <TableCell>{product.id}</TableCell>
       <TableCell>{product.name}</TableCell>
       <TableCell>{product.part_number}</TableCell>
+      <TableCell>
+        <AlertDialog
+          actionLabel="Confirmar"
+          cancelLabel="Cancelar"
+          description={'Você tem certeza que deseja remover este produto?'}
+          onAction={() => {
+            handleRemoveItemFromProducts(product.id);
+          }}
+          title={'Excluir'}
+          trigger={DELETE_ITEM_TRIGGER}
+        />
+      </TableCell>
     </TableRow>
   ));
 
@@ -75,6 +109,10 @@ const CreatePromotionFormComponent = ({
     watch,
   } = useForm<PromotionFormSchema>({
     resolver: zodResolver(promotionFormSchema),
+    defaultValues: {
+      initial_date: currentDateString(),
+      final_date: getNextDay(),
+    },
   });
 
   useEffect(() => {
@@ -205,6 +243,7 @@ const CreatePromotionFormComponent = ({
         errorMessage={errors.initial_date?.message}
         placeholder="Ex. 10/01/2019"
         mask="99/99/9999"
+        isRequired
       />
       <MaskedInput
         id="final_date"
@@ -213,6 +252,7 @@ const CreatePromotionFormComponent = ({
         errorMessage={errors.final_date?.message}
         placeholder="Ex. 11/01/2019"
         mask="99/99/9999"
+        isRequired
       />
       <ControlledSelect
         label="Status"

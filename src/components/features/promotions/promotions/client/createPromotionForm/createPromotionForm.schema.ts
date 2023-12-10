@@ -25,11 +25,12 @@ export const promotionFormSchema = z
     initial_date: z.string().transform(value => value || currentDateString()),
     final_date: z.string().transform(value => value || getNextDay()),
     status: z.string().transform(value => value || 'pending'),
-    discount_amount: z.enum(['fixed', 'percentage']).transform(value => {
+    discount_amount: z.string().transform(value => {
       const replacedValue = value
         .replaceAll(',', '.')
         .replaceAll('.', '')
-        .replaceAll('%', '');
+        .replaceAll('%', '')
+        .replaceAll('R$ ', '');
       return value ? Number(replacedValue) : undefined;
     }),
     discount_type: z.string(),
