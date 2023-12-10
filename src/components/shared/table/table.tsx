@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 
-import { Button } from '@components/ui/shadcn/button';
-import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { TablePagination } from '@components/shared/table/tablePagination';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
+import { Button } from '@components/ui/shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -21,10 +20,10 @@ import {
   TableHeader,
   TableRow,
 } from '@components/ui/shadcn/table';
+import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 
 /* eslint-disable import/named */
 import {
-  ColumnFiltersState,
   SortingState,
   VisibilityState,
   flexRender,
@@ -35,6 +34,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Eye, Pencil, Search, Trash } from 'lucide-react';
+import { twJoin } from 'tailwind-merge';
 import { UserTableProps } from './table.types';
 import { TableDialog } from './tableDialog';
 
@@ -57,6 +57,8 @@ export function Table<T>({
   viewItemDialogRef,
   deleteItemDescription,
   deleteItemTitle,
+  rowIsClickable,
+  handleRowClick,
 }: UserTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -112,14 +114,21 @@ export function Table<T>({
             onChange={({ target }) => setGlobalFilter(String(target.value))}
           />
         </div>
-        <div className="mt-2 flex flex-row items-center justify-between gap-2 sm:mt-0">
-          <TableDialog
-            dialogRef={newItemDialogRef}
-            trigger={newItemTrigger}
-            content={newItemDialogContent}
-            description={newItemDialogDescription}
-            title={newItemDialogTitle}
-          />
+        <div
+          className={twJoin(
+            'mt-2 flex flex-row items-center gap-2 sm:mt-0',
+            newItemDialogContent ? 'justify-between' : 'justify-end',
+          )}
+        >
+          {newItemDialogContent && (
+            <TableDialog
+              dialogRef={newItemDialogRef}
+              trigger={newItemTrigger}
+              content={newItemDialogContent}
+              description={newItemDialogDescription}
+              title={newItemDialogTitle}
+            />
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">Colunas</Button>
@@ -162,7 +171,11 @@ export function Table<T>({
                   </TableHead>
                 );
               })}
-              <TableHead className="text-right"></TableHead>
+              {(viewItemDialogContent ||
+                editItemDialogContent ||
+                deleteItemTitle) && (
+                <TableHead className="text-right"></TableHead>
+              )}
             </TableRow>
           ))}
         </TableHeader>
@@ -172,6 +185,16 @@ export function Table<T>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
+                className={rowIsClickable ? 'cursor-pointer' : ''}
+                {...(rowIsClickable
+                  ? {
+                      onClick: () => {
+                        if (handleRowClick) {
+                          handleRowClick(row.original);
+                        }
+                      },
+                    }
+                  : {})}
               >
                 {row.getVisibleCells().map(cell => (
                   <TableCell key={cell.id}>
@@ -236,16 +259,19 @@ export function Table<T>({
         </TableBody>
       </TableComponent>
 
-      <TablePagination
-        previous={{
-          onClick: () => table.previousPage(),
-          disabled: !table.getCanPreviousPage(),
-        }}
-        next={{
-          onClick: () => table.nextPage(),
-          disabled: !table.getCanNextPage(),
-        }}
-      />
+      {table.getCanPreviousPage() ||
+        (table.getCanNextPage() && (
+          <TablePagination
+            previous={{
+              onClick: () => table.previousPage(),
+              disabled: !table.getCanPreviousPage(),
+            }}
+            next={{
+              onClick: () => table.nextPage(),
+              disabled: !table.getCanNextPage(),
+            }}
+          />
+        ))}
     </div>
   );
 }

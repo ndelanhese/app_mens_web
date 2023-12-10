@@ -2,14 +2,6 @@ import { ReactNode } from 'react';
 
 import { RefModalProps } from '@/components/shared/table/table.types';
 
-export type SearchProductModalProps = {
-  triggerText?: string;
-  triggerIcon?: ReactNode;
-  modalRef?: (ref: RefModalProps) => void | undefined;
-  title?: string;
-  description?: string;
-};
-
 type Category = {
   id: number;
   name: string;
@@ -35,4 +27,14 @@ export type Product = {
   category: Category;
   brand: Brand;
   supplier: Supplier;
+};
+
+export type SearchProductModalProps = {
+  triggerText?: string;
+  triggerIcon?: ReactNode;
+  modalRef?: (ref: RefModalProps) => void | undefined;
+  title?: string;
+  description?: string;
+  handleRowClick: (row: Product) => void;
+  handleCloseModal?: () => void;
 };
