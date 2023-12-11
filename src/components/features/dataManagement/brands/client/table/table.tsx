@@ -148,6 +148,8 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
       viewItemDialogTitle="Visualizar marca"
       viewItemDialogDescription="Visualizar uma marca no sistema..."
       viewItemDialogContent={<ViewBrandForm brand={selectedBrand} />}
+      deleteItemTitle="Excluir Marca"
+      deleteItemDescription="Você tem certeza que deseja excluir esta marca?"
     />
   );
 };
