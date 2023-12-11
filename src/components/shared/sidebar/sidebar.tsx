@@ -92,7 +92,7 @@ export const Sidebar = () => {
                     Dashboard
                   </nav>
                 </Link>
-                <Accordion type="multiple">
+                <Accordion type="single" collapsible>
                   <AccordionItem value="item-1">
                     <AccordionTrigger>Administração</AccordionTrigger>
                     <AccordionContent>
