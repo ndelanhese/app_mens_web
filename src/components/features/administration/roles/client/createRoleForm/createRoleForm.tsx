@@ -1,6 +1,10 @@
 'use client';
 
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { api } from '@axios';
+import { CheckboxTree } from '@/components/shared/checkboxTree';
+import { generateRandomNumber } from '@/utils/helpers';
 
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
@@ -17,11 +21,26 @@ import {
   createRoleFormSchema,
 } from './createRoleForm.schema';
 import { CreateRoleFormProps } from './createRoleForm.types';
+import { PermissionGroup } from '../../api/apiData.types';
+import { getPermissions } from '../../api';
 
 export const CreateRoleForm = ({ handleCloseModal }: CreateRoleFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
+  const [permissions, setPermissions] = useState<PermissionGroup[] | undefined>(
+    undefined,
+  );
+  const [selectedPermissions, setSelectedPermissions] = useState<object>({});
+
+  const permissionsResponse = useCallback(async () => {
+    const response = await getPermissions();
+    setPermissions(response);
+  }, []);
+
+  useEffect(() => {
+    permissionsResponse();
+  }, [permissionsResponse]);
 
   const {
     register,
@@ -56,6 +75,16 @@ export const CreateRoleForm = ({ handleCloseModal }: CreateRoleFormProps) => {
     }
   };
 
+  const handleChangePermissions = useCallback(
+    (value: Array<number>, title: string) => {
+      setSelectedPermissions(prev => ({
+        ...prev,
+        [title]: value,
+      }));
+    },
+    [],
+  );
+
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
       <ControlledInput
@@ -66,7 +95,32 @@ export const CreateRoleForm = ({ handleCloseModal }: CreateRoleFormProps) => {
         errorMessage={errors.description?.message}
         isRequired
       />
-      {/* TODO -> Add permissions */}
+      <div></div>
+      {permissions &&
+        permissions.map(permissionsGroup => {
+          const permissionsChildren = permissionsGroup.permissions.map(
+            permission => ({
+              id: permission.id,
+              label: permission.description,
+            }),
+          );
+
+          const treeChildren = permissionsChildren.map(child => child.label);
+          const treeChildrenIds = permissionsChildren.map(child => child.id);
+
+          return (
+            <div key={permissionsGroup.group_name}>
+              <CheckboxTree
+                title={permissionsGroup.group_name}
+                id={generateRandomNumber(200, 1000)}
+                treeChildren={treeChildren}
+                treeChildrenIds={treeChildrenIds}
+                handleChange={handleChangePermissions}
+              />
+            </div>
+          );
+        })}
+
       <Button
         disabled={isSubmitting}
         type="submit"

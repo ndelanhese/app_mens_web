@@ -4,5 +4,5 @@ export type CheckboxTreeProps = {
   description?: string;
   treeChildren: Array<string>;
   treeChildrenIds: Array<number>;
-  handleChange?: (checkedIds: Array<number>) => void;
+  handleChange?: (checkedIds: Array<number>, title: string) => void;
 };

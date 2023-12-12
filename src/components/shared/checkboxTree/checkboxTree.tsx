@@ -51,8 +51,8 @@ export const CheckboxTree = ({
   }, []);
 
   useEffect(() => {
-    handleChange?.(childrenChecked);
-  }, [childrenChecked, handleChange]);
+    handleChange?.(childrenChecked, title);
+  }, [childrenChecked, handleChange, title]);
 
   return (
     <div className="flex flex-col gap-4">
