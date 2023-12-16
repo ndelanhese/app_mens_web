@@ -1,10 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { api } from '@axios';
 import { CheckboxTree } from '@/components/shared/checkboxTree';
 import { generateRandomNumber } from '@/utils/helpers';
+import { api } from '@axios';
 
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
@@ -16,13 +16,13 @@ import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { getPermissions } from '../../api';
+import { PermissionGroup } from '../../api/apiData.types';
 import {
   CreateRoleFormSchema,
   createRoleFormSchema,
 } from './createRoleForm.schema';
 import { CreateRoleFormProps } from './createRoleForm.types';
-import { PermissionGroup } from '../../api/apiData.types';
-import { getPermissions } from '../../api';
 
 export const CreateRoleForm = ({ handleCloseModal }: CreateRoleFormProps) => {
   const { toast } = useToast();
@@ -31,7 +31,9 @@ export const CreateRoleForm = ({ handleCloseModal }: CreateRoleFormProps) => {
   const [permissions, setPermissions] = useState<PermissionGroup[] | undefined>(
     undefined,
   );
-  const [selectedPermissions, setSelectedPermissions] = useState<object>({});
+  const [selectedPermissions, setSelectedPermissions] = useState<{
+    [key: string]: number[];
+  }>({});
 
   const permissionsResponse = useCallback(async () => {
     const response = await getPermissions();
@@ -50,13 +52,29 @@ export const CreateRoleForm = ({ handleCloseModal }: CreateRoleFormProps) => {
     resolver: zodResolver(createRoleFormSchema),
   });
 
+  const getPermissionsIds = useCallback(
+    (permissions: { [key: string]: number[] }) => {
+      const ids: number[] = [];
+
+      for (const key of Object.keys(permissions)) {
+        for (const item of permissions[key]) {
+          ids.push(item);
+        }
+      }
+
+      return ids;
+    },
+    [],
+  );
+
   const onSubmit: SubmitHandler<CreateRoleFormSchema> = async data => {
     try {
       const { description } = data;
       const name = convertStringToSlug(description);
+      const permissionsIds = getPermissionsIds(selectedPermissions);
       await api.post(
         '/acl/roles',
-        { name, description },
+        { name, description, permissions: permissionsIds },
         { headers: { Authorization: `Bearer ${token}` } },
       );
       handleCloseModal();
@@ -85,6 +103,8 @@ export const CreateRoleForm = ({ handleCloseModal }: CreateRoleFormProps) => {
     [],
   );
 
+  // TODO -> add skeleton
+
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
       <ControlledInput
@@ -95,7 +115,7 @@ export const CreateRoleForm = ({ handleCloseModal }: CreateRoleFormProps) => {
         errorMessage={errors.description?.message}
         isRequired
       />
-      <div></div>
+      <div />
       {permissions &&
         permissions.map(permissionsGroup => {
           const permissionsChildren = permissionsGroup.permissions.map(
@@ -109,7 +129,10 @@ export const CreateRoleForm = ({ handleCloseModal }: CreateRoleFormProps) => {
           const treeChildrenIds = permissionsChildren.map(child => child.id);
 
           return (
-            <div key={permissionsGroup.group_name}>
+            <div
+              key={permissionsGroup.group_name}
+              className="my-2 flex items-start justify-start sm:my-0"
+            >
               <CheckboxTree
                 title={permissionsGroup.group_name}
                 id={generateRandomNumber(200, 1000)}
