@@ -15,3 +15,12 @@ export type PermissionGroup = {
 export type PermissionsResponse = {
   data: PermissionGroup[];
 };
+
+export type Role = {
+  id: number;
+  name: string;
+  description: string;
+  permissions: number[];
+};
+
+export type RolesResponse = Role;
