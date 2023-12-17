@@ -22,20 +22,6 @@ export const CheckboxTree = ({
     defaultChecked ?? [],
   );
 
-  const hasValueInArray = useCallback(
-    (value: number) => {
-      return defaultChecked?.includes(value);
-    },
-    [defaultChecked],
-  );
-
-  useEffect(() => {
-    const hasOverlap = treeChildrenIds.every(hasValueInArray);
-    if (hasOverlap) {
-      setGroupIsChecked(true);
-    }
-  }, [hasValueInArray, treeChildrenIds]);
-
   const handleCheckGroup = useCallback(
     (value: boolean | string) => {
       setGroupIsChecked(value as boolean);

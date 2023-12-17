@@ -55,6 +55,10 @@ export const ViewRoleForm = ({ role }: RoleData) => {
 
           const treeChildren = permissionsChildren.map(child => child.label);
           const treeChildrenIds = permissionsChildren.map(child => child.id);
+          const intersection =
+            treeChildrenIds?.filter(
+              value => roleData?.permissions?.includes(value),
+            ) || [];
 
           return (
             <div
@@ -66,7 +70,7 @@ export const ViewRoleForm = ({ role }: RoleData) => {
                 id={generateRandomNumber(200, 1000)}
                 treeChildren={treeChildren}
                 treeChildrenIds={treeChildrenIds}
-                defaultChecked={roleData?.permissions}
+                defaultChecked={intersection}
                 disabled
               />
             </div>
