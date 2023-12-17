@@ -200,6 +200,8 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
       viewItemDialogTitle="Visualizar produto"
       viewItemDialogDescription="Visualizar um produto no sistema..."
       viewItemDialogContent={<ViewProductForm product={selectedProduct} />}
+      deleteItemTitle="Excluir Produto"
+      deleteItemDescription="Você tem certeza que deseja excluir este produto?"
     />
   );
 };

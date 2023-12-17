@@ -18,7 +18,7 @@ import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 
 import { Plus } from 'lucide-react';
 import { parseCookies } from 'nookies';
-import { ViewRoleForm } from '../../server/viewRoleForm/viewRoleForm';
+import { ViewRoleForm } from '../viewRoleForm/viewRoleForm';
 import { CreateRoleForm } from '../createRoleForm/createRoleForm';
 import { EditRoleForm } from '../editRoleForm/editRoleForm';
 import { Role, RolesTableProps } from './table.types';
@@ -100,14 +100,14 @@ export const RolesTable = ({ rows }: RolesTableProps) => {
 
   const handleCloseNewRolesModal = useCallback(() => {
     createRolesModalRef.current?.close();
-    setSelectRoles(undefined);
     router.refresh();
+    setSelectRoles(undefined);
   }, [router]);
 
   const handleCloseEditRolesModal = useCallback(() => {
     editRolesModalRef.current?.close();
-    setSelectRoles(undefined);
     router.refresh();
+    setSelectRoles(undefined);
   }, [router]);
 
   if (!rows) {

@@ -144,6 +144,8 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
       viewItemDialogTitle="Visualizar categoria"
       viewItemDialogDescription="Visualizar uma categoria no sistema..."
       viewItemDialogContent={<ViewCategoryForm category={selectedCategory} />}
+      deleteItemTitle="Excluir Categoria"
+      deleteItemDescription="Você tem certeza que deseja excluir esta categoria?"
     />
   );
 };

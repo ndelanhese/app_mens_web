@@ -188,8 +188,8 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
       viewItemDialogContent={
         <ViewPromotionForm promotion={selectedPromotion} />
       }
-      // TODO -> add delete title in all tables
-      deleteItemTitle="Você realmente deseja excluir essa promoção?"
+      deleteItemTitle="Excluir Promoção"
+      deleteItemDescription="Você tem certeza que deseja excluir esta promoção?"
     />
   );
 };
