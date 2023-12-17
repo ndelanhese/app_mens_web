@@ -14,9 +14,27 @@ export const CheckboxTree = ({
   treeChildren,
   treeChildrenIds,
   handleChange,
+  defaultChecked,
+  disabled = false,
 }: CheckboxTreeProps) => {
   const [groupIsChecked, setGroupIsChecked] = useState<boolean>(false);
-  const [childrenChecked, setChildrenChecked] = useState<Array<number>>([]);
+  const [childrenChecked, setChildrenChecked] = useState<Array<number>>(
+    defaultChecked ?? [],
+  );
+
+  const hasValueInArray = useCallback(
+    (value: number) => {
+      return defaultChecked?.includes(value);
+    },
+    [defaultChecked],
+  );
+
+  useEffect(() => {
+    const hasOverlap = treeChildrenIds.every(hasValueInArray);
+    if (hasOverlap) {
+      setGroupIsChecked(true);
+    }
+  }, [hasValueInArray, treeChildrenIds]);
 
   const handleCheckGroup = useCallback(
     (value: boolean | string) => {
@@ -55,7 +73,10 @@ export const CheckboxTree = ({
   }, [childrenChecked, handleChange, title]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      className="flex flex-col gap-4 data-[disabled=true]:pointer-events-none"
+      data-disabled={disabled}
+    >
       <CheckboxItem
         title={title}
         description={description}

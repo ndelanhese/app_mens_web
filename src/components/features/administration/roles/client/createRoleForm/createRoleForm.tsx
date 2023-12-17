@@ -116,6 +116,7 @@ export const CreateRoleForm = ({ handleCloseModal }: CreateRoleFormProps) => {
         isRequired
       />
       <div />
+
       {permissions &&
         permissions.map(permissionsGroup => {
           const permissionsChildren = permissionsGroup.permissions.map(
