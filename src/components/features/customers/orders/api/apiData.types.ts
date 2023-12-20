@@ -1,27 +1,12 @@
-export type PromotionCategory = {
+export type Customer = {
   id: number;
   name: string;
+  cpf: string;
 };
 
-export type PromotionsCategoriesResponse = {
-  data: PromotionCategory[];
+export type CustomersResponse = {
+  data: Customer[];
 };
-
-export type Status = {
-  key: string;
-  value: string;
-};
-
-export type DiscountTypeEnum = 'percentage' | 'fixed';
-
-export type DiscountType = {
-  key: string;
-  value: string;
-};
-
-export type PromotionStatusResponse = Status[];
-
-export type PromotionDiscountTypeResponse = DiscountType[];
 
 export type Product = {
   id: number;
@@ -49,3 +34,10 @@ export type Product = {
 export type Products = {
   data: Product[];
 };
+
+export type Status = {
+  key: string;
+  value: string;
+};
+
+export type OrdersStatusResponse = Status[];
