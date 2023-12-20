@@ -14,6 +14,9 @@ import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 
 import { Plus } from 'lucide-react';
 import { OrdersTableProps, Order } from './table.types';
+import { CreateOrderForm } from '../createOrderForm/createOrderForm';
+import { EditOrderForm } from '../editOrderForm/editOrderForm';
+import { ViewOrderForm } from '../viewOrderForm/viewOrderForm';
 
 const OrdersTableComponent = ({ rows }: OrdersTableProps) => {
   const router = useRouter();
@@ -43,10 +46,10 @@ const OrdersTableComponent = ({ rows }: OrdersTableProps) => {
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="Descrição" />
+          <TableColumnHeader column={column} title="Observação" />
         ),
-        accessorKey: 'description',
-        id: 'Descrição',
+        accessorKey: 'observation',
+        id: 'Observação',
       },
       {
         header: ({ column }) => (
@@ -119,9 +122,9 @@ const OrdersTableComponent = ({ rows }: OrdersTableProps) => {
       tableColumns={tableColumns}
       rows={rows}
       actionCallback={handleRowClick}
-      // newItemDialogContent={
-      //   <CreateOrderForm handleCloseModal={handleCloseNewOrderModal} />
-      // }
+      newItemDialogContent={
+        <CreateOrderForm handleCloseModal={handleCloseNewOrderModal} />
+      }
       newItemDialogDescription="Criar um novo pedido no sistema."
       newItemDialogTitle="Criar novo pedido"
       newItemTrigger={NEW_PROMOTION_TRIGGER}
@@ -130,20 +133,18 @@ const OrdersTableComponent = ({ rows }: OrdersTableProps) => {
       }}
       editItemDialogTitle="Editar pedido"
       editItemDialogDescription="Editar um pedido no sistema..."
-      // editItemDialogContent={
-      //   <EditOrderForm
-      //     promotion={selectedOrder}
-      //     handleCloseModal={handleCloseEditOrderModal}
-      //   />
-      // }
+      editItemDialogContent={
+        <EditOrderForm
+          order={selectedOrder}
+          handleCloseModal={handleCloseEditOrderModal}
+        />
+      }
       editItemDialogRef={ref => {
         editOrderModalRef.current = ref;
       }}
       viewItemDialogTitle="Visualizar pedido"
       viewItemDialogDescription="Visualizar um pedido no sistema..."
-      // viewItemDialogContent={<ViewOrderForm promotion={selectedOrder} />}
-      deleteItemTitle="Excluir Promoção"
-      deleteItemDescription="Você tem certeza que deseja excluir este pedido?"
+      viewItemDialogContent={<ViewOrderForm order={selectedOrder} />}
     />
   );
 };

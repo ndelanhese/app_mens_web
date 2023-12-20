@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 
 import { api } from '@axios';
 
-import { PromotionsTable } from '@components/features/customers/sales/client/table/table';
+import { PromotionsTable } from '@components/features/promotions/promotions/client/table/table';
 
 import { PromotionsResponse } from './page.types';
 
