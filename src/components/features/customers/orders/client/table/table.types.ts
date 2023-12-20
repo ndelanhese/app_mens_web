@@ -1,3 +1,16 @@
+type Employee = {
+  id: number;
+  name: string;
+  cpf: string;
+};
+
+type Customer = {
+  id: number;
+  name: string;
+  cpf: string;
+  rg: string | null;
+};
+
 type OrderProduct = {
   id: number;
   part_number: string;
@@ -18,19 +31,6 @@ type OrderProduct = {
   price_formatted: string;
 };
 
-type Employee = {
-  id: number;
-  name: string;
-  cpf: string;
-};
-
-type Customer = {
-  id: number;
-  name: string;
-  cpf: string;
-  rg: string | null;
-};
-
 export type Order = {
   id: number;
   date: string;
@@ -40,8 +40,9 @@ export type Order = {
   customer: Customer;
   employee: Employee;
   orders_products: OrderProduct[];
+  productsList?: string;
 };
 
-export type Orders = {
-  data: Order[];
+export type OrdersTableProps = {
+  rows: Array<Order> | [];
 };
