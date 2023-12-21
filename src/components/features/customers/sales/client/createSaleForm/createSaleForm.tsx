@@ -13,10 +13,10 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
-import { Button as ShadCnButton } from '@components/ui/shadcn/button';
 import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
+import { Button as ShadCnButton } from '@components/ui/shadcn/button';
 
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 
@@ -26,20 +26,17 @@ import { nanoid } from 'nanoid';
 import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { getCustomers, getStatus, getUsers } from '../../api/apiData';
-import { OrderFormSchema, orderFormSchema } from './editOrderForm.schema';
+import { SaleFormSchema, saleFormSchema } from './createSaleForm.schema';
 import {
   Customer,
-  OrderFormProps,
+  SaleFormProps,
   Product,
   ProductTable,
   Status,
   User,
-} from './editOrderForm.types';
+} from './createSaleForm.types';
 
-const EditOrderFormComponent = ({
-  handleCloseModal,
-  order,
-}: OrderFormProps) => {
+const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
@@ -50,15 +47,6 @@ const EditOrderFormComponent = ({
   const [users, setUsers] = useState<User[] | undefined>(undefined);
   const [status, setStatus] = useState<Status[] | undefined>(undefined);
   const [products, setProducts] = useState<Product[] | undefined>(undefined);
-  const [statusSelected, setStatusSelected] = useState<string | undefined>(
-    undefined,
-  );
-  const [customerSelected, setCustomerSelected] = useState<string | undefined>(
-    undefined,
-  );
-  const [employeeSelected, setEmployeeSelected] = useState<string | undefined>(
-    undefined,
-  );
 
   const columns = ['Código', 'Nome', 'Part Number', 'Qtd.', ''];
 
@@ -93,18 +81,6 @@ const EditOrderFormComponent = ({
     },
     [],
   );
-
-  useEffect(() => {
-    const orderProducts: Product[] | undefined = order?.products?.map(
-      orderProduct => ({
-        id: orderProduct.id,
-        name: orderProduct.name,
-        part_number: orderProduct.part_number,
-        qty: orderProduct.quantity,
-      }),
-    );
-    setProducts(orderProducts);
-  }, [order?.products]);
 
   const productsData =
     products && products.length > 0
@@ -158,14 +134,14 @@ const EditOrderFormComponent = ({
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<OrderFormSchema>({
-    resolver: zodResolver(orderFormSchema),
+  } = useForm<SaleFormSchema>({
+    resolver: zodResolver(saleFormSchema),
     defaultValues: {
       date: currentDateString(),
     },
   });
 
-  const onSubmit: SubmitHandler<OrderFormSchema> = async data => {
+  const onSubmit: SubmitHandler<SaleFormSchema> = async data => {
     try {
       if (!products || (products && products?.length < 1)) {
         toast({
@@ -182,7 +158,7 @@ const EditOrderFormComponent = ({
       }));
       const { customer, user, date, ...rest } = data;
       await api.post(
-        '/orders',
+        '/sales',
         {
           ...rest,
           date: convertDateFormat(date),
@@ -196,14 +172,14 @@ const EditOrderFormComponent = ({
       );
       handleCloseModal();
       toast({
-        title: 'Pedido atualizado com sucesso',
+        title: 'Pedido criado com sucesso',
         variant: 'default',
       });
     } catch (error: Error | any) {
       const errorMessage =
         error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
-        title: 'Erro ao atualizar a pedido',
+        title: 'Erro ao criar a pedido',
         description: errorMessage,
         variant: 'destructive',
       });
@@ -274,51 +250,19 @@ const EditOrderFormComponent = ({
     });
   }, []);
 
-  useEffect(() => {
-    if (memorizedCustomersOptions) {
-      setCustomerSelected(order?.customer.id.toString());
-    }
-  }, [memorizedCustomersOptions, order?.customer.id]);
-
-  useEffect(() => {
-    if (status) {
-      const orderStatus = status.find(
-        oneStratus => oneStratus?.value === order?.status.toString(),
-      )?.key;
-      setStatusSelected(orderStatus);
-    }
-  }, [order?.status, status]);
-
-  useEffect(() => {
-    if (memorizedUsersOptions && memorizedUsersOptions.length > 0) {
-      setEmployeeSelected(order?.employee.id.toString());
-    }
-  }, [order?.employee, memorizedUsersOptions]);
-
-  const isLoading =
-    !memorizedCustomersOptions || !memorizedUsersOptions || !status;
-
-  if (isLoading) {
-    // TODO -> add skeleton
-    return <h1>loading...</h1>;
-  }
-
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
-      {memorizedCustomersOptions && customerSelected && (
-        <ControlledSelect
-          label="Cliente"
-          name="customer"
-          control={control}
-          errorMessage={errors.customer?.message}
-          options={memorizedCustomersOptions}
-          placeHolder="Selecione um cliente"
-          searchLabel="Pesquisar cliente"
-          emptyLabel="Sem clientes cadastrados"
-          defaultValue={customerSelected}
-          isRequired
-        />
-      )}
+      <ControlledSelect
+        label="Cliente"
+        name="customer"
+        control={control}
+        errorMessage={errors.customer?.message}
+        options={memorizedCustomersOptions}
+        placeHolder="Selecione um cliente"
+        searchLabel="Pesquisar cliente"
+        emptyLabel="Sem clientes cadastrados"
+        isRequired
+      />
 
       <ControlledInput
         id="description"
@@ -326,7 +270,6 @@ const EditOrderFormComponent = ({
         placeholder="Ex. Pedido de calças para..."
         register={register}
         errorMessage={errors.description?.message}
-        defaultValue={order?.description}
         isRequired
       />
 
@@ -336,7 +279,6 @@ const EditOrderFormComponent = ({
         placeholder="Ex. A calça tem um bolso..."
         register={register}
         errorMessage={errors.observation?.message}
-        defaultValue={order?.observation}
         isRequired
       />
 
@@ -347,39 +289,32 @@ const EditOrderFormComponent = ({
         errorMessage={errors.date?.message}
         placeholder="Ex. 10/01/2019"
         mask="99/99/9999"
-        defaultValue={order?.date}
         isRequired
       />
 
-      {status && statusSelected && (
-        <ControlledSelect
-          label="Status"
-          name="status"
-          control={control}
-          errorMessage={errors.status?.message}
-          options={status}
-          placeHolder="Selecione um status"
-          searchLabel="Pesquisar status"
-          emptyLabel="Sem status cadastrados"
-          defaultValue={statusSelected}
-          isRequired
-        />
-      )}
+      <ControlledSelect
+        label="Status"
+        name="status"
+        control={control}
+        errorMessage={errors.status?.message}
+        options={status}
+        placeHolder="Selecione um status"
+        searchLabel="Pesquisar status"
+        emptyLabel="Sem status cadastrados"
+        isRequired
+      />
 
-      {memorizedUsersOptions && employeeSelected && (
-        <ControlledSelect
-          label="Funcionário"
-          name="user"
-          control={control}
-          errorMessage={errors.user?.message}
-          options={memorizedUsersOptions}
-          placeHolder="Selecione um Funcionário"
-          searchLabel="Pesquisar funcionário"
-          emptyLabel="Sem funcionários cadastrados"
-          defaultValue={employeeSelected}
-          isRequired
-        />
-      )}
+      <ControlledSelect
+        label="Funcionário"
+        name="user"
+        control={control}
+        errorMessage={errors.user?.message}
+        options={memorizedUsersOptions}
+        placeHolder="Selecione um Funcionário"
+        searchLabel="Pesquisar funcionário"
+        emptyLabel="Sem funcionários cadastrados"
+        isRequired
+      />
 
       <div className="col-start-1 col-end-2 flex flex-col items-center justify-between sm:col-end-3 sm:flex-row">
         <h1 className="mb-2 text-black-80 dark:text-white-80 sm:mb-0">
@@ -409,10 +344,10 @@ const EditOrderFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Atualizar pedido
+        Criar pedido
       </Button>
     </FormGrid>
   );
 };
 
-export const EditOrderForm = memo(EditOrderFormComponent);
+export const CreateSaleForm = memo(CreateSaleFormComponent);

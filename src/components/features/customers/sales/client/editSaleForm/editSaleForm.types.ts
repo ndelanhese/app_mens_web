@@ -1,25 +1,26 @@
-export type Promotion = {
-  id: number;
-  name: string;
-};
+import { Sale } from '../table/table.types';
 
-export type PromotionFormProps = {
+export type SaleFormProps = {
   handleCloseModal: () => void;
+  sale: Sale | undefined;
 };
 
-export type PromotionCategory = {
+export type Customer = {
   id: number;
   name: string;
+  cpf: string;
 };
 
-export type CategoriesResponse = {
-  data: PromotionCategory[];
+export type Status = {
+  key: string;
+  value: string;
 };
 
 export type Product = {
   id: number;
   part_number: string;
   name: string;
+  qty: number;
 };
 
 type Category = {
@@ -39,12 +40,18 @@ export type ProductTable = {
   id: number;
   name: string;
   partNumber: string;
-  description: string;
-  price: number;
-  size: string;
-  color: string;
   quantity: number;
   category: Category;
   brand: Brand;
   supplier: Supplier;
+};
+
+export type Employee = {
+  name: string;
+  cpf: string;
+};
+
+export type User = {
+  id: number;
+  employee: Employee;
 };

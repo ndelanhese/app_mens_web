@@ -33,7 +33,10 @@ type Customer = {
 type MethodOfPayment = {
   id: number;
   installment: number;
-  name: string;
+  method: {
+    id: number;
+    name: string;
+  };
 };
 
 export type DiscountType = 'percentage' | 'fixed';
@@ -53,9 +56,8 @@ export type Sale = {
   methods_of_payments: MethodOfPayment[];
   discount_amount: number;
   discount_type: DiscountType;
-  productsList: string;
-  methodsList: string;
 };
-export type SalesTableProps = {
-  rows: Array<Sale> | [];
+
+export type Sales = {
+  data: Sale[];
 };

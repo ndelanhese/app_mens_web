@@ -1,43 +1,32 @@
 'use client';
 
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
 
-import { api } from '@axios';
-
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
-import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,
-  TableActionCallbackOptions,
   TableColumn,
 } from '@components/shared/table/table.types';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
+import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 
-import { Promotion, PromotionsTableProps } from './table.types';
-import { parseCookies } from 'nookies';
 import { Plus } from 'lucide-react';
-import { ViewPromotionForm } from '../viewPromotionForm/viewPromotionForm';
-import { CreatePromotionForm } from '../createPromotionForm/createPromotionForm';
-import { EditPromotionForm } from '../editPromotionForm/editPromotionForm';
+import { SalesTableProps, Sale } from './table.types';
+import { CreateSaleForm } from '../createSaleForm/createSaleForm';
+import { EditSaleForm } from '../editSaleForm/editSaleForm';
+import { ViewSaleForm } from '../viewSaleForm/viewSaleForm';
 
-const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
+const SalesTableComponent = ({ rows }: SalesTableProps) => {
   const router = useRouter();
 
-  const { toast } = useToast();
+  const createSaleModalRef = useRef<RefModalProps | null>(null);
+  const editSaleModalRef = useRef<RefModalProps | null>(null);
 
-  const { token } = parseCookies();
+  const [selectedSale, setSelectSale] = useState<Sale | undefined>(undefined);
 
-  const createPromotionModalRef = useRef<RefModalProps | null>(null);
-  const editPromotionModalRef = useRef<RefModalProps | null>(null);
-
-  const [selectedPromotion, setSelectPromotion] = useState<
-    Promotion | undefined
-  >(undefined);
-
-  const tableColumns: Array<TableColumn<Promotion>> = useMemo(
+  const tableColumns: Array<TableColumn<Sale>> = useMemo(
     () => [
       {
         header: ({ column }) => (
@@ -48,38 +37,24 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="Nome" />
+          <TableColumnHeader column={column} title="Data" />
         ),
-        accessorKey: 'name',
-        id: 'Nome',
+        accessorKey: 'date',
+        id: 'Data',
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="Descrição" />
+          <TableColumnHeader column={column} title="Cliente" />
         ),
-        accessorKey: 'description',
-        id: 'Descrição',
+        accessorKey: 'customer.name',
+        id: 'Cliente',
       },
       {
         header: ({ column }) => (
-          <TableColumnHeader column={column} title="Desconto" />
+          <TableColumnHeader column={column} title="Funcionário" />
         ),
-        accessorKey: 'discount',
-        id: 'Desconto',
-      },
-      {
-        header: ({ column }) => (
-          <TableColumnHeader column={column} title="Data inicial" />
-        ),
-        accessorKey: 'initialDate',
-        id: 'Data inicial',
-      },
-      {
-        header: ({ column }) => (
-          <TableColumnHeader column={column} title="Data final" />
-        ),
-        accessorKey: 'finalDate',
-        id: 'Data final',
+        accessorKey: 'employee.name',
+        id: 'Funcionário',
       },
       {
         header: ({ column }) => (
@@ -87,6 +62,13 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
         ),
         accessorKey: 'status',
         id: 'Status',
+      },
+      {
+        header: ({ column }) => (
+          <TableColumnHeader column={column} title="Métodos de pgto" />
+        ),
+        accessorKey: 'methodsList',
+        id: 'Métodos de pgto',
       },
       {
         header: ({ column }) => (
@@ -99,58 +81,26 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
     [],
   );
 
-  const handleDeleteItem = useCallback(
-    async (id: number) => {
-      try {
-        await api.delete(`/promotions/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        router.refresh();
-        toast({
-          title: 'Promoção deletada com sucesso',
-        });
-      } catch (error: Error | any) {
-        const message =
-          error?.response?.data?.message ?? 'Erro ao deletar o item';
-        toast({
-          title: 'Erro ao deletar',
-          description: message,
-          variant: 'destructive',
-        });
-      }
-    },
-    [router, toast, token],
-  );
+  const handleRowClick = useCallback(async (row: Sale) => {
+    setSelectSale(row);
+  }, []);
 
-  const handleRowClick = useCallback(
-    async (row: Promotion, action: TableActionCallbackOptions) => {
-      const { id } = row;
-
-      setSelectPromotion(row);
-
-      if (action === 'delete') {
-        await handleDeleteItem(id);
-      }
-    },
-    [handleDeleteItem],
-  );
-
-  const NEW_PROMOTION_TRIGGER = (
+  const NEW_SALE_TRIGGER = (
     <StyledDiv>
-      Criar nova promoção
+      Criar nova venda
       <Plus className="h-4 w-4" />
     </StyledDiv>
   );
 
-  const handleCloseNewPromotionModal = useCallback(() => {
-    createPromotionModalRef.current?.close();
-    setSelectPromotion(undefined);
+  const handleCloseNewSaleModal = useCallback(() => {
+    createSaleModalRef.current?.close();
+    setSelectSale(undefined);
     router.refresh();
   }, [router]);
 
-  const handleCloseEditPromotionModal = useCallback(() => {
-    editPromotionModalRef.current?.close();
-    setSelectPromotion(undefined);
+  const handleCloseEditSaleModal = useCallback(() => {
+    editSaleModalRef.current?.close();
+    setSelectSale(undefined);
     router.refresh();
   }, [router]);
 
@@ -164,34 +114,30 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
       rows={rows}
       actionCallback={handleRowClick}
       newItemDialogContent={
-        <CreatePromotionForm handleCloseModal={handleCloseNewPromotionModal} />
+        <CreateSaleForm handleCloseModal={handleCloseNewSaleModal} />
       }
-      newItemDialogDescription="Criar uma nova promoção no sistema."
-      newItemDialogTitle="Criar nova promoção"
-      newItemTrigger={NEW_PROMOTION_TRIGGER}
+      newItemDialogDescription="Criar uma nova venda no sistema."
+      newItemDialogTitle="Criar nova venda"
+      newItemTrigger={NEW_SALE_TRIGGER}
       newItemDialogRef={ref => {
-        createPromotionModalRef.current = ref;
+        createSaleModalRef.current = ref;
       }}
-      editItemDialogTitle="Editar promoção"
-      editItemDialogDescription="Editar uma promoção no sistema..."
+      editItemDialogTitle="Editar venda"
+      editItemDialogDescription="Editar uma venda no sistema..."
       editItemDialogContent={
-        <EditPromotionForm
-          promotion={selectedPromotion}
-          handleCloseModal={handleCloseEditPromotionModal}
+        <EditSaleForm
+          sale={selectedSale}
+          handleCloseModal={handleCloseEditSaleModal}
         />
       }
       editItemDialogRef={ref => {
-        editPromotionModalRef.current = ref;
+        editSaleModalRef.current = ref;
       }}
-      viewItemDialogTitle="Visualizar promoção"
-      viewItemDialogDescription="Visualizar uma promoção no sistema..."
-      viewItemDialogContent={
-        <ViewPromotionForm promotion={selectedPromotion} />
-      }
-      deleteItemTitle="Excluir Promoção"
-      deleteItemDescription="Você tem certeza que deseja excluir esta promoção?"
+      viewItemDialogTitle="Visualizar venda"
+      viewItemDialogDescription="Visualizar uma venda no sistema..."
+      viewItemDialogContent={<ViewSaleForm sale={selectedSale} />}
     />
   );
 };
 
-export const PromotionsTable = memo(PromotionsTableComponent);
+export const SalesTable = memo(SalesTableComponent);

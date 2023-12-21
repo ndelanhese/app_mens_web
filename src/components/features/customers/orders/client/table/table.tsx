@@ -94,7 +94,7 @@ const OrdersTableComponent = ({ rows }: OrdersTableProps) => {
     setSelectOrder(row);
   }, []);
 
-  const NEW_PROMOTION_TRIGGER = (
+  const NEW_ORDER_TRIGGER = (
     <StyledDiv>
       Criar novo pedido
       <Plus className="h-4 w-4" />
@@ -127,7 +127,7 @@ const OrdersTableComponent = ({ rows }: OrdersTableProps) => {
       }
       newItemDialogDescription="Criar um novo pedido no sistema."
       newItemDialogTitle="Criar novo pedido"
-      newItemTrigger={NEW_PROMOTION_TRIGGER}
+      newItemTrigger={NEW_ORDER_TRIGGER}
       newItemDialogRef={ref => {
         createOrderModalRef.current = ref;
       }}
@@ -148,6 +148,5 @@ const OrdersTableComponent = ({ rows }: OrdersTableProps) => {
     />
   );
 };
-// TODO -> add functions
 
 export const OrdersTable = memo(OrdersTableComponent);

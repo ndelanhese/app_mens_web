@@ -39,7 +39,7 @@ export type Order = {
   status: string;
   customer: Customer;
   employee: Employee;
-  orders_products: OrderProduct[];
+  products: OrderProduct[];
   productsList?: string;
 };
 

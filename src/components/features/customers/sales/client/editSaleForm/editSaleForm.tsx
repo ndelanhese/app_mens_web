@@ -6,7 +6,6 @@ import { api } from '@axios';
 
 import { DataTable } from '@components/shared/dataTable';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
-import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
 import { RefModalProps } from '@components/shared/table/table.types';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
 import { Button } from '@components/ui/buttons/button';
@@ -17,29 +16,27 @@ import { Button as ShadCnButton } from '@components/ui/shadcn/button';
 import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
+import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
 
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { nanoid } from 'nanoid';
-import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { getCustomers, getStatus, getUsers } from '../../api/apiData';
-import { OrderFormSchema, orderFormSchema } from './editOrderForm.schema';
+import { SaleFormSchema, saleFormSchema } from './editSaleForm.schema';
 import {
   Customer,
-  OrderFormProps,
+  SaleFormProps,
   Product,
   ProductTable,
   Status,
   User,
-} from './editOrderForm.types';
+} from './editSaleForm.types';
+import { parseCookies } from 'nookies';
 
-const EditOrderFormComponent = ({
-  handleCloseModal,
-  order,
-}: OrderFormProps) => {
+const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
@@ -95,16 +92,16 @@ const EditOrderFormComponent = ({
   );
 
   useEffect(() => {
-    const orderProducts: Product[] | undefined = order?.products?.map(
-      orderProduct => ({
-        id: orderProduct.id,
-        name: orderProduct.name,
-        part_number: orderProduct.part_number,
-        qty: orderProduct.quantity,
+    const saleProducts: Product[] | undefined = sale?.products?.map(
+      saleProduct => ({
+        id: saleProduct.id,
+        name: saleProduct.name,
+        part_number: saleProduct.part_number,
+        qty: saleProduct.quantity,
       }),
     );
-    setProducts(orderProducts);
-  }, [order?.products]);
+    setProducts(saleProducts);
+  }, [sale?.products]);
 
   const productsData =
     products && products.length > 0
@@ -158,14 +155,14 @@ const EditOrderFormComponent = ({
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<OrderFormSchema>({
-    resolver: zodResolver(orderFormSchema),
+  } = useForm<SaleFormSchema>({
+    resolver: zodResolver(saleFormSchema),
     defaultValues: {
       date: currentDateString(),
     },
   });
 
-  const onSubmit: SubmitHandler<OrderFormSchema> = async data => {
+  const onSubmit: SubmitHandler<SaleFormSchema> = async data => {
     try {
       if (!products || (products && products?.length < 1)) {
         toast({
@@ -182,7 +179,7 @@ const EditOrderFormComponent = ({
       }));
       const { customer, user, date, ...rest } = data;
       await api.post(
-        '/orders',
+        '/sales',
         {
           ...rest,
           date: convertDateFormat(date),
@@ -276,24 +273,24 @@ const EditOrderFormComponent = ({
 
   useEffect(() => {
     if (memorizedCustomersOptions) {
-      setCustomerSelected(order?.customer.id.toString());
+      setCustomerSelected(sale?.customer.id.toString());
     }
-  }, [memorizedCustomersOptions, order?.customer.id]);
+  }, [memorizedCustomersOptions, sale?.customer.id]);
 
   useEffect(() => {
     if (status) {
-      const orderStatus = status.find(
-        oneStratus => oneStratus?.value === order?.status.toString(),
+      const saleStatus = status.find(
+        oneStratus => oneStratus?.value === sale?.status.toString(),
       )?.key;
-      setStatusSelected(orderStatus);
+      setStatusSelected(saleStatus);
     }
-  }, [order?.status, status]);
+  }, [sale?.status, status]);
 
   useEffect(() => {
     if (memorizedUsersOptions && memorizedUsersOptions.length > 0) {
-      setEmployeeSelected(order?.employee.id.toString());
+      setEmployeeSelected(sale?.employee.id.toString());
     }
-  }, [order?.employee, memorizedUsersOptions]);
+  }, [sale?.employee, memorizedUsersOptions]);
 
   const isLoading =
     !memorizedCustomersOptions || !memorizedUsersOptions || !status;
@@ -326,7 +323,7 @@ const EditOrderFormComponent = ({
         placeholder="Ex. Pedido de calças para..."
         register={register}
         errorMessage={errors.description?.message}
-        defaultValue={order?.description}
+        defaultValue={sale?.description}
         isRequired
       />
 
@@ -336,7 +333,7 @@ const EditOrderFormComponent = ({
         placeholder="Ex. A calça tem um bolso..."
         register={register}
         errorMessage={errors.observation?.message}
-        defaultValue={order?.observation}
+        defaultValue={sale?.observation}
         isRequired
       />
 
@@ -347,7 +344,7 @@ const EditOrderFormComponent = ({
         errorMessage={errors.date?.message}
         placeholder="Ex. 10/01/2019"
         mask="99/99/9999"
-        defaultValue={order?.date}
+        defaultValue={sale?.date}
         isRequired
       />
 
@@ -415,4 +412,4 @@ const EditOrderFormComponent = ({
   );
 };
 
-export const EditOrderForm = memo(EditOrderFormComponent);
+export const EditSaleForm = memo(EditSaleFormComponent);

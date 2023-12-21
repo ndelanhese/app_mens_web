@@ -1,70 +1,73 @@
-import { FormGrid } from '@components/shared/formGrid/formGrid';
+'use client';
+
+import { memo } from 'react';
+
 import { DataTable } from '@components/shared/dataTable';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { TableRow, TableCell } from '@components/ui/shadcn/table';
+import { TableCell, TableRow } from '@components/ui/shadcn/table';
 
-import { formatMoneyByCurrencySymbol } from '@utils/helpers';
-
-import { PromotionPreviewProps } from './viewPromotionForm.types';
 import { nanoid } from 'nanoid';
+import { SaleFormProps } from './viewSaleForm.types';
 
-export const ViewPromotionForm = ({ promotion }: PromotionPreviewProps) => {
-  const columns = ['Código', 'Nome', 'Part Number', 'Preço', 'Quantidade'];
+const ViewSaleFormComponent = ({ sale }: SaleFormProps) => {
+  const columns = ['Código', 'Nome', 'Part Number', 'Quantidade'];
 
-  const products = promotion?.products.map(product => (
+  const products = sale?.products.map(product => (
     <TableRow key={nanoid()}>
       <TableCell>{product.id}</TableCell>
       <TableCell>{product.name}</TableCell>
       <TableCell>{product.part_number}</TableCell>
-      <TableCell>{formatMoneyByCurrencySymbol(product.price)}</TableCell>
+
       <TableCell>{product.quantity} Und.</TableCell>
     </TableRow>
   ));
 
   return (
     <FormGrid>
-      <ControlledInput value={promotion?.id} id="id" label="Código" readOnly />
       <ControlledInput
-        value={promotion?.name}
-        id="name"
-        label="Promoção"
+        id="customer"
+        label="Cliente"
+        name="customer"
         readOnly
+        value={`${sale?.customer.name} - ${sale?.customer.cpf}`}
       />
+
       <ControlledInput
-        value={promotion?.description}
         id="description"
         label="Descrição"
         readOnly
+        value={sale?.description}
       />
+
       <ControlledInput
-        value={promotion?.initialDate}
-        id="initial_date"
-        label="Data inicial"
+        id="observation"
+        label="Observação"
         readOnly
+        value={sale?.observation}
       />
+
       <ControlledInput
-        value={promotion?.finalDate}
-        id="final_date"
-        label="Data final"
+        id="date"
+        label="Data do pedido"
         readOnly
+        value={sale?.date}
       />
+
       <ControlledInput
-        value={promotion?.status}
         id="status"
         label="Status"
+        name="status"
         readOnly
+        value={sale?.status}
       />
+
       <ControlledInput
-        value={promotion?.discount}
-        id="discount"
-        label="Desconto"
+        id="employee"
+        label="Funcionário"
+        name="user"
         readOnly
-      />
-      <ControlledInput
-        value={promotion?.category}
-        id="category"
-        label="Categoria"
-        readOnly
+        value={`${sale?.employee.name} - ${sale?.employee.cpf}`}
       />
       <h1 className="text-black-80 dark:text-white-80 ">Produtos</h1>
       <div className="col-start-1 col-end-3 h-px bg-neutral-600 dark:bg-black-80" />
@@ -79,3 +82,5 @@ export const ViewPromotionForm = ({ promotion }: PromotionPreviewProps) => {
     </FormGrid>
   );
 };
+
+export const ViewSaleForm = memo(ViewSaleFormComponent);
