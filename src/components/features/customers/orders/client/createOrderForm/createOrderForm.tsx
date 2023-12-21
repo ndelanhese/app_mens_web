@@ -146,7 +146,7 @@ const CreateOrderFormComponent = ({ handleCloseModal }: OrderFormProps) => {
       if (!products || (products && products?.length < 1)) {
         toast({
           title: 'Erro ao criar pedido',
-          description: 'Adicione ao menos um pedido.',
+          description: 'Adicione ao menos um produto.',
           variant: 'destructive',
         });
         selectProductModalRef.current?.open();
