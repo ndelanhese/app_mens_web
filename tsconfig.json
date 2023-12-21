@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -32,7 +28,7 @@
       "@components/*": ["./src/components/*"],
       "@utils/*": ["./src/utils/*"],
       "@shadcn-utils": ["./src/lib/utils.ts"],
-      "@features-components/*": ["./src/components/features/*"],
+      "@features-components/*": ["./src/components/features/*"]
     }
   },
   "include": [
@@ -42,7 +38,5 @@
     ".next/types/**/*.ts",
     "env.d.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

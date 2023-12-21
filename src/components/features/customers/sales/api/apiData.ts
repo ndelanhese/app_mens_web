@@ -66,7 +66,7 @@ export const getProducts = cache(async () => {
 
 export const getStatus = cache(async () => {
   try {
-    const { data } = await api.get<OrdersStatusResponse>('/orders/status', {
+    const { data } = await api.get<OrdersStatusResponse>('/sales/status', {
       headers: { Authorization: `Bearer ${token}` },
     });
     return data;

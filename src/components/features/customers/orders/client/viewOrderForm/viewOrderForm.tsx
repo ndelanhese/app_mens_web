@@ -13,7 +13,7 @@ import { OrderFormProps } from './viewOrderForm.types';
 const ViewOrderFormComponent = ({ order }: OrderFormProps) => {
   const columns = ['Código', 'Nome', 'Part Number', 'Quantidade'];
 
-  const products = order?.products.map(product => (
+  const products = order?.orders_products.map(product => (
     <TableRow key={nanoid()}>
       <TableCell>{product.id}</TableCell>
       <TableCell>{product.name}</TableCell>
