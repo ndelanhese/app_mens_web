@@ -9,6 +9,7 @@ import {
   Products,
   CustomersResponse,
   OrdersStatusResponse,
+  UsersResponse,
 } from './apiData.types';
 
 const { token } = parseCookies();
@@ -29,6 +30,22 @@ export const getCustomers = cache(async () => {
   }
 });
 
+export const getUsers = cache(async () => {
+  try {
+    const { data } = await api.get<UsersResponse>('/users', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return data.data;
+  } catch (error: Error | any) {
+    const errorMessage = error?.response?.data?.message ?? 'Erro desconhecido';
+    toast({
+      title: 'Erro ao buscar funcionário',
+      description: errorMessage,
+      variant: 'destructive',
+    });
+  }
+});
+
 export const getProducts = cache(async () => {
   try {
     const { data } = await api.get<Products>('/products', {
@@ -38,7 +55,12 @@ export const getProducts = cache(async () => {
     });
     return data;
   } catch (error: Error | any) {
-    console.log(error?.response?.data?.message);
+    const errorMessage = error?.response?.data?.message ?? 'Erro desconhecido';
+    toast({
+      title: 'Erro ao buscar os produtos',
+      description: errorMessage,
+      variant: 'destructive',
+    });
   }
 });
 

@@ -81,3 +81,19 @@ export const convertStringToDate = (dateString: string): Date | null => {
 
   return parsedDate;
 };
+
+export const convertDateFormat = (inputDate: string): string => {
+  const [day, month, year] = inputDate.split('/');
+
+  const convertedDate = new Date(
+    Date.UTC(Number(year), Number(month) - 1, Number(day), 23, 59),
+  );
+
+  const convertedDay = convertedDate.getUTCDate().toString().padStart(2, '0');
+  const convertedMonth = (convertedDate.getUTCMonth() + 1)
+    .toString()
+    .padStart(2, '0');
+  const convertedYear = convertedDate.getUTCFullYear();
+
+  return `${convertedYear}-${convertedMonth}-${convertedDay}`;
+};

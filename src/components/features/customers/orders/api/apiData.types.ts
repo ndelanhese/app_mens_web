@@ -8,6 +8,20 @@ export type CustomersResponse = {
   data: Customer[];
 };
 
+export type Employee = {
+  name: string;
+  cpf: string;
+};
+
+export type User = {
+  id: number;
+  employee: Employee;
+};
+
+export type UsersResponse = {
+  data: User[];
+};
+
 export type Product = {
   id: number;
   name: string;
