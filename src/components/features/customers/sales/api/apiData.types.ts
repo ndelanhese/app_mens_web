@@ -55,3 +55,10 @@ export type Status = {
 };
 
 export type OrdersStatusResponse = Status[];
+
+export type DiscountType = {
+  key: string;
+  value: string;
+};
+
+export type PromotionDiscountTypeResponse = DiscountType[];

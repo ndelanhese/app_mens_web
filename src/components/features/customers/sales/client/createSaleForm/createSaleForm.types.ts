@@ -18,6 +18,8 @@ export type Product = {
   part_number: string;
   name: string;
   qty: number;
+  value: number;
+  unity_value: number;
 };
 
 type Category = {
@@ -55,4 +57,11 @@ export type Employee = {
 export type User = {
   id: number;
   employee: Employee;
+};
+
+export type DiscountTypeEnum = 'percentage' | 'fixed';
+
+export type DiscountType = {
+  key: string;
+  value: string;
 };

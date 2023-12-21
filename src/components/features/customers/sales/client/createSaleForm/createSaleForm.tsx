@@ -17,15 +17,22 @@ import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { Button as ShadCnButton } from '@components/ui/shadcn/button';
+import { NumberInput } from '@components/ui/inputs/numberInput';
 
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
+import { formatMoneyByCurrencySymbol } from '@utils/helpers';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { getCustomers, getStatus, getUsers } from '../../api/apiData';
+import {
+  getCustomers,
+  getDiscountType,
+  getStatus,
+  getUsers,
+} from '../../api/apiData';
 import { SaleFormSchema, saleFormSchema } from './createSaleForm.schema';
 import {
   Customer,
@@ -34,6 +41,8 @@ import {
   ProductTable,
   Status,
   User,
+  DiscountType,
+  DiscountTypeEnum,
 } from './createSaleForm.types';
 
 const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
@@ -47,8 +56,22 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
   const [users, setUsers] = useState<User[] | undefined>(undefined);
   const [status, setStatus] = useState<Status[] | undefined>(undefined);
   const [products, setProducts] = useState<Product[] | undefined>(undefined);
+  const [discountType, setDiscountType] = useState<DiscountType[] | undefined>(
+    undefined,
+  );
+  const [discountTypeSelected, setDiscountTypeSelected] = useState<
+    DiscountTypeEnum | undefined
+  >('percentage');
 
-  const columns = ['Código', 'Nome', 'Part Number', 'Qtd.', ''];
+  const columns = [
+    'Código',
+    'Nome',
+    'Part Number',
+    'Qtd.',
+    'Valor',
+    'Valor Uni',
+    '',
+  ];
 
   const DELETE_ITEM_TRIGGER = (
     <StyledDiv>
@@ -73,7 +96,11 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       setProducts(prev => {
         return prev?.map(product => {
           if (product.id === id) {
-            return { ...product, qty: currentQty + operator };
+            return {
+              ...product,
+              qty: currentQty + operator,
+              value: product.unity_value * (currentQty + operator),
+            };
           }
           return product;
         });
@@ -90,6 +117,8 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
             <TableCell>{product.name}</TableCell>
             <TableCell>{product.part_number}</TableCell>
             <TableCell>{product.qty}</TableCell>
+            <TableCell>{product.value}</TableCell>
+            <TableCell>{product.unity_value}</TableCell>
             <TableCell className="w-fit space-x-2">
               <ShadCnButton
                 size="icon"
@@ -133,6 +162,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     register,
     handleSubmit,
     control,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<SaleFormSchema>({
     resolver: zodResolver(saleFormSchema),
@@ -186,6 +216,10 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     }
   };
 
+  useEffect(() => {
+    setDiscountTypeSelected(watch('discount_type') as DiscountTypeEnum);
+  }, [watch('discount_type')]);
+
   const getCustomersData = useCallback(async () => {
     const customersResponse = await getCustomers();
     setCustomers(customersResponse);
@@ -201,11 +235,17 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     setStatus(response);
   }, []);
 
+  const getDiscountTypeData = useCallback(async () => {
+    const response = await getDiscountType();
+    setDiscountType(response);
+  }, []);
+
   useEffect(() => {
     getCustomersData();
     getUsersData();
     getStatusData();
-  }, [getCustomersData, getUsersData, getStatusData]);
+    getDiscountTypeData();
+  }, [getCustomersData, getUsersData, getStatusData, getDiscountTypeData]);
 
   const memorizedCustomersOptions = useMemo(() => {
     if (customers) {
@@ -238,6 +278,8 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         name: row.name,
         part_number: row.partNumber,
         qty: 1,
+        unity_value: row.price,
+        value: row.price,
       };
 
       const existingIds = new Set(prev?.map(product => product.id));
@@ -249,6 +291,13 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       return prev ? [...prev, newProduct] : [newProduct];
     });
   }, []);
+
+  const memoizedTotalValue = useMemo(() => {
+    return products?.reduce(
+      (accumulator, current) => accumulator + current.value,
+      0,
+    );
+  }, [products]);
 
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
@@ -265,21 +314,11 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       />
 
       <ControlledInput
-        id="description"
-        label="Descrição"
-        placeholder="Ex. Pedido de calças para..."
-        register={register}
-        errorMessage={errors.description?.message}
-        isRequired
-      />
-
-      <ControlledInput
         id="observation"
         label="Observação"
         placeholder="Ex. A calça tem um bolso..."
         register={register}
         errorMessage={errors.observation?.message}
-        isRequired
       />
 
       <MaskedInput
@@ -338,6 +377,41 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           {productsData}
         </DataTable>
       </div>
+
+      <ControlledSelect
+        label="Tipo de desconto"
+        name="discount_type"
+        control={control}
+        errorMessage={errors.discount_type?.message}
+        options={discountType}
+        defaultValue="percentage"
+        placeHolder="Selecione o tipo de desconto"
+        searchLabel="Pesquisar tipo de desconto"
+        emptyLabel="Sem resultados"
+        isRequired
+      />
+      <NumberInput
+        id="discount_amount"
+        label="Valor do desconto"
+        control={control}
+        errorMessage={errors.discount_amount?.message}
+        placeholder={
+          discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
+        }
+        disabled={!discountTypeSelected}
+        mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
+        prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
+        isRequired
+      />
+
+      <ControlledInput
+        id="total_amount"
+        label="Valor Total"
+        placeholder="Ex. R$ 19,90"
+        register={register}
+        errorMessage={errors.total_amount?.message}
+        defaultValue={formatMoneyByCurrencySymbol(memoizedTotalValue)}
+      />
 
       <Button
         disabled={isSubmitting}

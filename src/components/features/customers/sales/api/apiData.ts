@@ -10,6 +10,7 @@ import {
   CustomersResponse,
   OrdersStatusResponse,
   UsersResponse,
+  PromotionDiscountTypeResponse,
 } from './apiData.types';
 
 const { token } = parseCookies();
@@ -74,6 +75,25 @@ export const getStatus = cache(async () => {
     const errorMessage = error?.response?.data?.message ?? 'Erro desconhecido';
     toast({
       title: 'Erro ao buscar status',
+      description: errorMessage,
+      variant: 'destructive',
+    });
+  }
+});
+
+export const getDiscountType = cache(async () => {
+  try {
+    const { data } = await api.get<PromotionDiscountTypeResponse>(
+      '/promotions/discount-types',
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+    return data;
+  } catch (error: Error | any) {
+    const errorMessage = error?.response?.data?.message ?? 'Erro desconhecido';
+    toast({
+      title: 'Erro ao buscar tipos de desconto',
       description: errorMessage,
       variant: 'destructive',
     });
