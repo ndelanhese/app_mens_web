@@ -60,3 +60,25 @@ export const calculateInstallments = (
 
   return result;
 };
+
+/**
+ *
+ * @param amount amount to calculate installment
+ * @param installment installment
+ * @returns the installments amount
+ */
+export const calculateInstallment = (
+  amount: number | undefined,
+  installment: number | undefined,
+): { installment: number; amount: string } | undefined => {
+  if (!installment || !amount || installment <= 0) {
+    return undefined;
+  }
+
+  const result: { installment: number; amount: string } = {
+    installment,
+    amount: formatMoneyByCurrencySymbol(+(amount / installment).toFixed(2)),
+  };
+
+  return result;
+};

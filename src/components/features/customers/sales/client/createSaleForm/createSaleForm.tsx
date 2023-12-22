@@ -3,7 +3,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
-import { Checkbox } from '@/components/ui/shadcn/checkbox';
 
 import { DataTable } from '@components/shared/dataTable';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
@@ -13,19 +12,19 @@ import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
+import { NumberInput } from '@components/ui/inputs/numberInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { Button as ShadCnButton } from '@components/ui/shadcn/button';
 import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-import { Button as ShadCnButton } from '@components/ui/shadcn/button';
-import { NumberInput } from '@components/ui/inputs/numberInput';
 
-import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 import {
   calculateInstallments,
   convertMoneyStringToNumber,
   formatMoneyByCurrencySymbol,
 } from '@utils/helpers';
+import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Minus, Plus, Trash } from 'lucide-react';
@@ -42,14 +41,14 @@ import {
 import { SaleFormSchema, saleFormSchema } from './createSaleForm.schema';
 import {
   Customer,
-  SaleFormProps,
-  Product,
-  ProductTable,
-  Status,
-  User,
   DiscountType,
   DiscountTypeEnum,
   MethodOfPayment,
+  Product,
+  ProductTable,
+  SaleFormProps,
+  Status,
+  User,
 } from './createSaleForm.types';
 
 const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
@@ -438,7 +437,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
 
       <MaskedInput
         id="date"
-        label="Data do pedido"
+        label="Data da venda"
         control={control}
         errorMessage={errors.date?.message}
         placeholder="Ex. 10/01/2019"
