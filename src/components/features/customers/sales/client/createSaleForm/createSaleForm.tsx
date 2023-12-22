@@ -20,7 +20,11 @@ import { Button as ShadCnButton } from '@components/ui/shadcn/button';
 import { NumberInput } from '@components/ui/inputs/numberInput';
 
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
-import { formatMoneyByCurrencySymbol } from '@utils/helpers';
+import {
+  calculateInstallments,
+  convertMoneyStringToNumber,
+  formatMoneyByCurrencySymbol,
+} from '@utils/helpers';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Minus, Plus, Trash } from 'lucide-react';
@@ -30,6 +34,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   getCustomers,
   getDiscountType,
+  getMethodsOfPayments,
   getStatus,
   getUsers,
 } from '../../api/apiData';
@@ -43,6 +48,7 @@ import {
   User,
   DiscountType,
   DiscountTypeEnum,
+  MethodOfPayment,
 } from './createSaleForm.types';
 
 const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
@@ -59,6 +65,9 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
   const [discountType, setDiscountType] = useState<DiscountType[] | undefined>(
     undefined,
   );
+  const [methodsOfPayments, setMethodsOfPayments] = useState<
+    MethodOfPayment[] | undefined
+  >(undefined);
   const [discountTypeSelected, setDiscountTypeSelected] = useState<
     DiscountTypeEnum | undefined
   >('percentage');
@@ -163,6 +172,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     handleSubmit,
     control,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<SaleFormSchema>({
     resolver: zodResolver(saleFormSchema),
@@ -185,8 +195,30 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       const selectedProducts = products.map(product => ({
         id: product.id,
         quantity: product.qty,
+        discount_amount: null,
+        discount_type: null,
+        final_value: product.value,
       }));
-      const { customer, user, date, ...rest } = data;
+      const {
+        customer,
+        user,
+        date,
+        total_amount: totalAmount,
+        final_amount: finalAmount,
+        method_of_payment: methodOfPayment,
+        installments,
+        ...rest
+      } = data;
+
+      const formattedTotalAmount = convertMoneyStringToNumber(totalAmount);
+      const formattedFinalAmount = convertMoneyStringToNumber(finalAmount);
+
+      const payments = [
+        {
+          type: Number(methodOfPayment),
+          installment: installments ? Number(installments) : 1,
+        },
+      ];
       await api.post(
         '/sales',
         {
@@ -195,6 +227,9 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           products: selectedProducts,
           customer_id: Number(customer),
           user_id: Number(user),
+          payments,
+          total_value: formattedTotalAmount,
+          final_value: formattedFinalAmount,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -240,12 +275,24 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     setDiscountType(response);
   }, []);
 
+  const getMethodsOfPaymentsData = useCallback(async () => {
+    const response = await getMethodsOfPayments();
+    setMethodsOfPayments(response);
+  }, []);
+
   useEffect(() => {
     getCustomersData();
     getUsersData();
     getStatusData();
     getDiscountTypeData();
-  }, [getCustomersData, getUsersData, getStatusData, getDiscountTypeData]);
+    getMethodsOfPaymentsData();
+  }, [
+    getCustomersData,
+    getUsersData,
+    getStatusData,
+    getDiscountTypeData,
+    getMethodsOfPaymentsData,
+  ]);
 
   const memorizedCustomersOptions = useMemo(() => {
     if (customers) {
@@ -266,6 +313,15 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     }
     return [];
   }, [users]);
+
+  const memoizedMethodsOfPaymentsOptions = useMemo(() => {
+    if (methodsOfPayments) {
+      return methodsOfPayments.map(method => ({
+        key: method.id.toString(),
+        value: method.name,
+      }));
+    }
+  }, [methodsOfPayments]);
 
   const handleCloseSelectProductModal = useCallback(() => {
     selectProductModalRef.current?.close();
@@ -300,6 +356,12 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     );
   }, [products]);
 
+  useEffect(() => {
+    if (memoizedTotalValue) {
+      setValue('total_amount', formatMoneyByCurrencySymbol(memoizedTotalValue));
+    }
+  }, [memoizedTotalValue, setValue]);
+
   const memoizedFinalValue = useMemo(() => {
     if (
       discountTypeSelected === 'fixed' &&
@@ -324,6 +386,31 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     return undefined;
   }, [discountTypeSelected, memoizedTotalValue, watch('discount_amount')]);
 
+  useEffect(() => {
+    if (memoizedFinalValue) {
+      setValue('final_amount', formatMoneyByCurrencySymbol(memoizedFinalValue));
+    }
+  }, [memoizedFinalValue, setValue]);
+
+  const memoizedInstallments = useMemo(() => {
+    const inputMethod = watch('method_of_payment');
+    if (!inputMethod) return;
+    const methodName = memoizedMethodsOfPaymentsOptions?.find(
+      method => method.key === inputMethod,
+    )?.value;
+    if (methodName === 'Cartão de Crédito' && memoizedFinalValue) {
+      const installments = calculateInstallments(memoizedFinalValue, 12);
+      return installments.map(installment => ({
+        key: installment.installment.toString(),
+        value: `${installment.installment}x - ${installment.amount}`,
+      }));
+    }
+  }, [
+    memoizedFinalValue,
+    memoizedMethodsOfPaymentsOptions,
+    watch('method_of_payment'),
+  ]);
+
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
       <ControlledSelect
@@ -344,6 +431,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         placeholder="Ex. A calça tem um bolso..."
         register={register}
         errorMessage={errors.observation?.message}
+        isRequired
       />
 
       <MaskedInput
@@ -409,11 +497,9 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         control={control}
         errorMessage={errors.discount_type?.message}
         options={discountType}
-        defaultValue="percentage"
         placeHolder="Selecione o tipo de desconto"
         searchLabel="Pesquisar tipo de desconto"
         emptyLabel="Sem resultados"
-        isRequired
       />
       <NumberInput
         id="discount_amount"
@@ -426,7 +512,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         disabled={!discountTypeSelected}
         mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
         prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
-        isRequired
       />
 
       <ControlledInput
@@ -436,6 +521,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         register={register}
         errorMessage={errors.total_amount?.message}
         defaultValue={formatMoneyByCurrencySymbol(memoizedTotalValue)}
+        readOnly
       />
 
       <ControlledInput
@@ -443,9 +529,40 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         label="Valor Final"
         placeholder="Ex. R$ 19,90"
         register={register}
-        errorMessage={errors.total_amount?.message}
+        errorMessage={errors.final_amount?.message}
         defaultValue={formatMoneyByCurrencySymbol(memoizedFinalValue)}
+        readOnly
       />
+
+      {methodsOfPayments && memoizedMethodsOfPaymentsOptions && (
+        <ControlledSelect
+          label="Método de pagamento"
+          name="method_of_payment"
+          control={control}
+          errorMessage={errors.method_of_payment?.message}
+          options={memoizedMethodsOfPaymentsOptions}
+          defaultValue="1"
+          placeHolder="Selecione o método de pagamento"
+          searchLabel="Pesquisar método de pagamento"
+          emptyLabel="Sem resultados"
+          isRequired
+        />
+      )}
+
+      {memoizedInstallments && (
+        <ControlledSelect
+          label="Parcelas"
+          name="installments"
+          control={control}
+          errorMessage={errors.installments?.message}
+          options={memoizedInstallments}
+          defaultValue="1"
+          placeHolder="Selecione o método de pagamento"
+          searchLabel="Pesquisar método de pagamento"
+          emptyLabel="Sem resultados"
+          isRequired
+        />
+      )}
 
       {/* 
 Neste ponto, será a sessão de pagamento, no pagamento o usuário seleciona o tipo de pagamento usando as opções válidas que são listadas no dropdown, e também é possível clicar num checkbox onde ele habilita multiplos providers de pagamentos, onde então é aberto o sistema de tabela para poder contar os pagamentos, tendo então o gerenciamento de parcelas, valores e etc.

@@ -61,4 +61,11 @@ export type DiscountType = {
   value: string;
 };
 
-export type PromotionDiscountTypeResponse = DiscountType[];
+export type SalesDiscountTypeResponse = DiscountType[];
+
+export type MethodOfPayment = {
+  id: number;
+  name: string;
+};
+
+export type SalesMethodsOfPaymentsResponse = MethodOfPayment[];

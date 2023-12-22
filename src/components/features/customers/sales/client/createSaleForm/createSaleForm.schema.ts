@@ -15,11 +15,19 @@ export const saleFormSchema = z
         .replaceAll('.', '')
         .replaceAll('%', '')
         .replaceAll('R$ ', '');
-      return value ? Number(replacedValue) : undefined;
+      return value ? Number(replacedValue) : null;
     }),
-    discount_type: z.string(),
+    discount_type: z
+      .string()
+      .nullable()
+      .default(null)
+      .transform(value => {
+        return value || null;
+      }),
     total_amount: z.string(),
     final_amount: z.string(),
+    method_of_payment: z.string().min(1, 'O método de pagamento é obrigatório'),
+    installments: z.string().default('1'),
   })
   .superRefine(
     ({ discount_amount: discountAmount, discount_type: discountType }, ctx) => {
@@ -40,6 +48,16 @@ export const saleFormSchema = z
         });
       }
     },
-  );
+  )
+  .superRefine(({ method_of_payment: methodOfPayment, installments }, ctx) => {
+    console.log(methodOfPayment);
+    if (methodOfPayment === '2' && !installments) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Informe também as parcelas',
+        path: ['installments'],
+      });
+    }
+  });
 
 export type SaleFormSchema = z.infer<typeof saleFormSchema>;

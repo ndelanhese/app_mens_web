@@ -10,7 +10,8 @@ import {
   CustomersResponse,
   OrdersStatusResponse,
   UsersResponse,
-  PromotionDiscountTypeResponse,
+  SalesDiscountTypeResponse,
+  SalesMethodsOfPaymentsResponse,
 } from './apiData.types';
 
 const { token } = parseCookies();
@@ -83,8 +84,8 @@ export const getStatus = cache(async () => {
 
 export const getDiscountType = cache(async () => {
   try {
-    const { data } = await api.get<PromotionDiscountTypeResponse>(
-      '/promotions/discount-types',
+    const { data } = await api.get<SalesDiscountTypeResponse>(
+      '/sales/discount-types',
       {
         headers: { Authorization: `Bearer ${token}` },
       },
@@ -94,6 +95,25 @@ export const getDiscountType = cache(async () => {
     const errorMessage = error?.response?.data?.message ?? 'Erro desconhecido';
     toast({
       title: 'Erro ao buscar tipos de desconto',
+      description: errorMessage,
+      variant: 'destructive',
+    });
+  }
+});
+
+export const getMethodsOfPayments = cache(async () => {
+  try {
+    const { data } = await api.get<SalesMethodsOfPaymentsResponse>(
+      '/sales/methods-of-payments',
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+    return data;
+  } catch (error: Error | any) {
+    const errorMessage = error?.response?.data?.message ?? 'Erro desconhecido';
+    toast({
+      title: 'Erro ao buscar métodos de pagamento',
       description: errorMessage,
       variant: 'destructive',
     });

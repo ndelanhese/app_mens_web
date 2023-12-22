@@ -65,3 +65,8 @@ export type DiscountType = {
   key: string;
   value: string;
 };
+
+export type MethodOfPayment = {
+  id: number;
+  name: string;
+};
