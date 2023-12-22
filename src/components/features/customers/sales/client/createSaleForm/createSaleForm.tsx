@@ -3,6 +3,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
+import { Checkbox } from '@/components/ui/shadcn/checkbox';
 
 import { DataTable } from '@components/shared/dataTable';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
@@ -128,7 +129,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
             <TableCell>{product.qty}</TableCell>
             <TableCell>{product.value}</TableCell>
             <TableCell>{product.unity_value}</TableCell>
-            <TableCell className="w-fit space-x-2">
+            <TableCell className="inline-flex w-fit space-x-2">
               <ShadCnButton
                 size="icon"
                 type="button"
@@ -178,6 +179,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     resolver: zodResolver(saleFormSchema),
     defaultValues: {
       date: currentDateString(),
+      status: 'completed',
     },
   });
 
@@ -445,18 +447,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       />
 
       <ControlledSelect
-        label="Status"
-        name="status"
-        control={control}
-        errorMessage={errors.status?.message}
-        options={status}
-        placeHolder="Selecione um status"
-        searchLabel="Pesquisar status"
-        emptyLabel="Sem status cadastrados"
-        isRequired
-      />
-
-      <ControlledSelect
         label="Funcionário"
         name="user"
         control={control}
@@ -468,7 +458,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         isRequired
       />
 
-      <div className="col-start-1 col-end-2 flex flex-col items-center justify-between sm:col-end-3 sm:flex-row">
+      <div className="col-start-1 col-end-2 flex flex-col items-center justify-between pb-2 sm:col-end-3 sm:flex-row">
         <h1 className="mb-2 text-black-80 sm:mb-0 dark:text-white-80">
           Produtos
         </h1>
@@ -563,6 +553,18 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           isRequired
         />
       )}
+
+      {/* <div className="flex flex-1 items-end pb-4">
+        <div className="flex items-center space-x-2">
+          <Checkbox id="terms" />
+          <label
+            htmlFor="terms"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Múltiplos pagamentos
+          </label>
+        </div>
+      </div> */}
 
       {/* 
 Neste ponto, será a sessão de pagamento, no pagamento o usuário seleciona o tipo de pagamento usando as opções válidas que são listadas no dropdown, e também é possível clicar num checkbox onde ele habilita multiplos providers de pagamentos, onde então é aberto o sistema de tabela para poder contar os pagamentos, tendo então o gerenciamento de parcelas, valores e etc.

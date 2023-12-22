@@ -90,7 +90,7 @@ const CreateOrderFormComponent = ({ handleCloseModal }: OrderFormProps) => {
             <TableCell>{product.name}</TableCell>
             <TableCell>{product.part_number}</TableCell>
             <TableCell>{product.qty}</TableCell>
-            <TableCell className="w-fit space-x-2">
+            <TableCell className="inline-flex w-fit space-x-2">
               <ShadCnButton
                 size="icon"
                 type="button"
