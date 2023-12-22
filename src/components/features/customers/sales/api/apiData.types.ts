@@ -64,8 +64,8 @@ export type DiscountType = {
 export type SalesDiscountTypeResponse = DiscountType[];
 
 export type MethodOfPayment = {
-  id: number;
   name: string;
+  id: number;
 };
 
 export type SalesMethodsOfPaymentsResponse = MethodOfPayment[];

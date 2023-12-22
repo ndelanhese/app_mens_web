@@ -18,6 +18,8 @@ import { SaleFormProps } from './viewSaleForm.types';
 const ViewSaleFormComponent = ({ sale }: SaleFormProps) => {
   const columns = ['Código', 'Nome', 'Part Number', 'Quantidade'];
 
+  console.log(sale);
+
   const products = sale?.products.map(product => (
     <TableRow key={nanoid()}>
       <TableCell>{product.id}</TableCell>
@@ -39,6 +41,8 @@ const ViewSaleFormComponent = ({ sale }: SaleFormProps) => {
 
   return (
     <FormGrid>
+      <ControlledInput value={sale?.id} id="id" label="Código" readOnly />
+
       <ControlledInput
         id="customer"
         label="Cliente"

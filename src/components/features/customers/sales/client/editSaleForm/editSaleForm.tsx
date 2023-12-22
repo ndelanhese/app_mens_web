@@ -17,14 +17,26 @@ import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
+import { NumberInput } from '@components/ui/inputs/numberInput';
 
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
+import {
+  calculateInstallments,
+  convertMoneyStringToNumber,
+  formatMoneyByCurrencySymbol,
+} from '@utils/helpers';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { getCustomers, getStatus, getUsers } from '../../api/apiData';
+import {
+  getCustomers,
+  getDiscountType,
+  getMethodsOfPayments,
+  getStatus,
+  getUsers,
+} from '../../api/apiData';
 import { SaleFormSchema, saleFormSchema } from './editSaleForm.schema';
 import {
   Customer,
@@ -33,6 +45,9 @@ import {
   ProductTable,
   Status,
   User,
+  DiscountType,
+  DiscountTypeEnum,
+  MethodOfPayment,
 } from './editSaleForm.types';
 import { parseCookies } from 'nookies';
 
@@ -47,6 +62,15 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   const [users, setUsers] = useState<User[] | undefined>(undefined);
   const [status, setStatus] = useState<Status[] | undefined>(undefined);
   const [products, setProducts] = useState<Product[] | undefined>(undefined);
+  const [discountType, setDiscountType] = useState<DiscountType[] | undefined>(
+    undefined,
+  );
+  const [methodsOfPayments, setMethodsOfPayments] = useState<
+    MethodOfPayment[] | undefined
+  >(undefined);
+  const [discountTypeSelected, setDiscountTypeSelected] = useState<
+    DiscountTypeEnum | undefined
+  >('percentage');
   const [statusSelected, setStatusSelected] = useState<string | undefined>(
     undefined,
   );
@@ -57,7 +81,15 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     undefined,
   );
 
-  const columns = ['Código', 'Nome', 'Part Number', 'Qtd.', ''];
+  const columns = [
+    'Código',
+    'Nome',
+    'Part Number',
+    'Qtd.',
+    'Valor',
+    'Valor Uni',
+    '',
+  ];
 
   const DELETE_ITEM_TRIGGER = (
     <StyledDiv>
@@ -98,6 +130,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         name: saleProduct.name,
         part_number: saleProduct.part_number,
         qty: saleProduct.quantity,
+        unity_value: saleProduct.price,
+        value: saleProduct.price * saleProduct.quantity,
       }),
     );
     setProducts(saleProducts);
@@ -111,7 +145,9 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
             <TableCell>{product.name}</TableCell>
             <TableCell>{product.part_number}</TableCell>
             <TableCell>{product.qty}</TableCell>
-            <TableCell className="w-fit space-x-2">
+            <TableCell>{product.value}</TableCell>
+            <TableCell>{product.unity_value}</TableCell>
+            <TableCell className="inline-flex w-fit space-x-2">
               <ShadCnButton
                 size="icon"
                 type="button"
@@ -154,6 +190,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     register,
     handleSubmit,
     control,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<SaleFormSchema>({
     resolver: zodResolver(saleFormSchema),
@@ -176,8 +214,29 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
       const selectedProducts = products.map(product => ({
         id: product.id,
         quantity: product.qty,
+        discount_amount: null,
+        discount_type: null,
+        final_value: product.value,
       }));
-      const { customer, user, date, ...rest } = data;
+      const {
+        customer,
+        user,
+        date,
+        total_amount: totalAmount,
+        final_amount: finalAmount,
+        method_of_payment: methodOfPayment,
+        installments,
+        ...rest
+      } = data;
+      const formattedTotalAmount = convertMoneyStringToNumber(totalAmount);
+      const formattedFinalAmount = convertMoneyStringToNumber(finalAmount);
+
+      const payments = [
+        {
+          type: Number(methodOfPayment),
+          installment: installments ? Number(installments) : 1,
+        },
+      ];
       await api.post(
         '/sales',
         {
@@ -186,6 +245,9 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           products: selectedProducts,
           customer_id: Number(customer),
           user_id: Number(user),
+          payments,
+          total_value: formattedTotalAmount,
+          final_value: formattedFinalAmount,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -193,19 +255,23 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
       );
       handleCloseModal();
       toast({
-        title: 'Pedido atualizado com sucesso',
+        title: 'Venda atualizado com sucesso',
         variant: 'default',
       });
     } catch (error: Error | any) {
       const errorMessage =
         error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
-        title: 'Erro ao atualizar a pedido',
+        title: 'Erro ao atualizar a venda',
         description: errorMessage,
         variant: 'destructive',
       });
     }
   };
+
+  useEffect(() => {
+    setDiscountTypeSelected(watch('discount_type') as DiscountTypeEnum);
+  }, [watch('discount_type')]);
 
   const getCustomersData = useCallback(async () => {
     const customersResponse = await getCustomers();
@@ -222,11 +288,29 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     setStatus(response);
   }, []);
 
+  const getDiscountTypeData = useCallback(async () => {
+    const response = await getDiscountType();
+    setDiscountType(response);
+  }, []);
+
+  const getMethodsOfPaymentsData = useCallback(async () => {
+    const response = await getMethodsOfPayments();
+    setMethodsOfPayments(response);
+  }, []);
+
   useEffect(() => {
     getCustomersData();
     getUsersData();
     getStatusData();
-  }, [getCustomersData, getUsersData, getStatusData]);
+    getDiscountTypeData();
+    getMethodsOfPaymentsData();
+  }, [
+    getCustomersData,
+    getUsersData,
+    getStatusData,
+    getDiscountTypeData,
+    getMethodsOfPaymentsData,
+  ]);
 
   const memorizedCustomersOptions = useMemo(() => {
     if (customers) {
@@ -248,6 +332,15 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     return [];
   }, [users]);
 
+  const memoizedMethodsOfPaymentsOptions = useMemo(() => {
+    if (methodsOfPayments) {
+      return methodsOfPayments.map(method => ({
+        key: method.id.toString(),
+        value: method.name,
+      }));
+    }
+  }, [methodsOfPayments]);
+
   const handleCloseSelectProductModal = useCallback(() => {
     selectProductModalRef.current?.close();
   }, []);
@@ -259,6 +352,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         name: row.name,
         part_number: row.partNumber,
         qty: 1,
+        unity_value: row.price,
+        value: row.price,
       };
 
       const existingIds = new Set(prev?.map(product => product.id));
@@ -292,8 +387,73 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     }
   }, [sale?.employee, memorizedUsersOptions]);
 
+  const memoizedTotalValue = useMemo(() => {
+    return products?.reduce(
+      (accumulator, current) => accumulator + current.value,
+      0,
+    );
+  }, [products]);
+
+  useEffect(() => {
+    if (memoizedTotalValue) {
+      setValue('total_amount', formatMoneyByCurrencySymbol(memoizedTotalValue));
+    }
+  }, [memoizedTotalValue, setValue]);
+
+  const memoizedFinalValue = useMemo(() => {
+    if (
+      discountTypeSelected === 'fixed' &&
+      memoizedTotalValue &&
+      watch('discount_amount')
+    ) {
+      return memoizedTotalValue - (watch('discount_amount') ?? 0);
+    }
+    if (
+      discountTypeSelected === 'percentage' &&
+      memoizedTotalValue &&
+      watch('discount_amount')
+    ) {
+      return (
+        memoizedTotalValue -
+        (memoizedTotalValue * (watch('discount_amount') ?? 1)) / 100
+      );
+    }
+    if (memoizedTotalValue) {
+      return memoizedTotalValue;
+    }
+    return undefined;
+  }, [discountTypeSelected, memoizedTotalValue, watch('discount_amount')]);
+
+  useEffect(() => {
+    if (memoizedFinalValue) {
+      setValue('final_amount', formatMoneyByCurrencySymbol(memoizedFinalValue));
+    }
+  }, [memoizedFinalValue, setValue]);
+
+  const memoizedInstallments = useMemo(() => {
+    const inputMethod = watch('method_of_payment');
+    if (!inputMethod) return;
+    const methodName = memoizedMethodsOfPaymentsOptions?.find(
+      method => method.key === inputMethod,
+    )?.value;
+    if (methodName === 'Cartão de Crédito' && memoizedFinalValue) {
+      const installments = calculateInstallments(memoizedFinalValue, 12);
+      return installments.map(installment => ({
+        key: installment.installment.toString(),
+        value: `${installment.installment}x - ${installment.amount}`,
+      }));
+    }
+  }, [
+    memoizedFinalValue,
+    memoizedMethodsOfPaymentsOptions,
+    watch('method_of_payment'),
+  ]);
+
   const isLoading =
-    !memorizedCustomersOptions || !memorizedUsersOptions || !status;
+    !memorizedCustomersOptions ||
+    !memorizedUsersOptions ||
+    !memoizedMethodsOfPaymentsOptions ||
+    !status;
 
   if (isLoading) {
     // TODO -> add skeleton
@@ -302,6 +462,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
 
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
+      <ControlledInput value={sale?.id} id="id" label="Código" readOnly />
+
       {memorizedCustomersOptions && customerSelected && (
         <ControlledSelect
           label="Cliente"
@@ -318,16 +480,6 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
       )}
 
       <ControlledInput
-        id="description"
-        label="Descrição"
-        placeholder="Ex. Pedido de calças para..."
-        register={register}
-        errorMessage={errors.description?.message}
-        defaultValue={sale?.description}
-        isRequired
-      />
-
-      <ControlledInput
         id="observation"
         label="Observação"
         placeholder="Ex. A calça tem um bolso..."
@@ -339,7 +491,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
 
       <MaskedInput
         id="date"
-        label="Data do pedido"
+        label="Data da venda"
         control={control}
         errorMessage={errors.date?.message}
         placeholder="Ex. 10/01/2019"
@@ -347,21 +499,6 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         defaultValue={sale?.date}
         isRequired
       />
-
-      {status && statusSelected && (
-        <ControlledSelect
-          label="Status"
-          name="status"
-          control={control}
-          errorMessage={errors.status?.message}
-          options={status}
-          placeHolder="Selecione um status"
-          searchLabel="Pesquisar status"
-          emptyLabel="Sem status cadastrados"
-          defaultValue={statusSelected}
-          isRequired
-        />
-      )}
 
       {memorizedUsersOptions && employeeSelected && (
         <ControlledSelect
@@ -374,6 +511,21 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           searchLabel="Pesquisar funcionário"
           emptyLabel="Sem funcionários cadastrados"
           defaultValue={employeeSelected}
+          isRequired
+        />
+      )}
+
+      {status && statusSelected && (
+        <ControlledSelect
+          label="Status"
+          name="status"
+          control={control}
+          errorMessage={errors.status?.message}
+          options={status}
+          placeHolder="Selecione um status"
+          searchLabel="Pesquisar status"
+          emptyLabel="Sem status cadastrados"
+          defaultValue={statusSelected}
           isRequired
         />
       )}
@@ -400,6 +552,79 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           {productsData}
         </DataTable>
       </div>
+
+      <ControlledSelect
+        label="Tipo de desconto"
+        name="discount_type"
+        control={control}
+        errorMessage={errors.discount_type?.message}
+        options={discountType}
+        placeHolder="Selecione o tipo de desconto"
+        searchLabel="Pesquisar tipo de desconto"
+        emptyLabel="Sem resultados"
+      />
+      <NumberInput
+        id="discount_amount"
+        label="Valor do desconto"
+        control={control}
+        errorMessage={errors.discount_amount?.message}
+        placeholder={
+          discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
+        }
+        disabled={!discountTypeSelected}
+        mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
+        prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
+      />
+
+      <ControlledInput
+        id="total_amount"
+        label="Valor Total"
+        placeholder="Ex. R$ 19,90"
+        register={register}
+        errorMessage={errors.total_amount?.message}
+        defaultValue={formatMoneyByCurrencySymbol(memoizedTotalValue)}
+        readOnly
+      />
+
+      <ControlledInput
+        id="final_amount"
+        label="Valor Final"
+        placeholder="Ex. R$ 19,90"
+        register={register}
+        errorMessage={errors.final_amount?.message}
+        defaultValue={formatMoneyByCurrencySymbol(memoizedFinalValue)}
+        readOnly
+      />
+
+      {methodsOfPayments && memoizedMethodsOfPaymentsOptions && (
+        <ControlledSelect
+          label="Método de pagamento"
+          name="method_of_payment"
+          control={control}
+          errorMessage={errors.method_of_payment?.message}
+          options={memoizedMethodsOfPaymentsOptions}
+          defaultValue="1"
+          placeHolder="Selecione o método de pagamento"
+          searchLabel="Pesquisar método de pagamento"
+          emptyLabel="Sem resultados"
+          isRequired
+        />
+      )}
+
+      {memoizedInstallments && (
+        <ControlledSelect
+          label="Parcelas"
+          name="installments"
+          control={control}
+          errorMessage={errors.installments?.message}
+          options={memoizedInstallments}
+          defaultValue="1"
+          placeHolder="Selecione o método de pagamento"
+          searchLabel="Pesquisar método de pagamento"
+          emptyLabel="Sem resultados"
+          isRequired
+        />
+      )}
 
       <Button
         disabled={isSubmitting}

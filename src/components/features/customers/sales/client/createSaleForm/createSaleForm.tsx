@@ -60,7 +60,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
 
   const [customers, setCustomers] = useState<Customer[] | undefined>(undefined);
   const [users, setUsers] = useState<User[] | undefined>(undefined);
-  const [status, setStatus] = useState<Status[] | undefined>(undefined);
+  // FIXME -> remove this
   const [products, setProducts] = useState<Product[] | undefined>(undefined);
   const [discountType, setDiscountType] = useState<DiscountType[] | undefined>(
     undefined,
@@ -238,14 +238,14 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       );
       handleCloseModal();
       toast({
-        title: 'Pedido criado com sucesso',
+        title: 'Venda realizada com sucesso',
         variant: 'default',
       });
     } catch (error: Error | any) {
       const errorMessage =
         error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
-        title: 'Erro ao criar a pedido',
+        title: 'Erro ao criar a venda',
         description: errorMessage,
         variant: 'destructive',
       });
@@ -266,11 +266,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     setUsers(usersResponse);
   }, []);
 
-  const getStatusData = useCallback(async () => {
-    const response = await getStatus();
-    setStatus(response);
-  }, []);
-
   const getDiscountTypeData = useCallback(async () => {
     const response = await getDiscountType();
     setDiscountType(response);
@@ -284,13 +279,11 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
   useEffect(() => {
     getCustomersData();
     getUsersData();
-    getStatusData();
     getDiscountTypeData();
     getMethodsOfPaymentsData();
   }, [
     getCustomersData,
     getUsersData,
-    getStatusData,
     getDiscountTypeData,
     getMethodsOfPaymentsData,
   ]);
