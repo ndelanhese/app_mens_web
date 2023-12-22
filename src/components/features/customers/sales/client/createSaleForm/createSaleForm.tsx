@@ -281,6 +281,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         unity_value: row.price,
         value: row.price,
       };
+      // TODO -> add probability to use discount in product
 
       const existingIds = new Set(prev?.map(product => product.id));
 
@@ -298,6 +299,30 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       0,
     );
   }, [products]);
+
+  const memoizedFinalValue = useMemo(() => {
+    if (
+      discountTypeSelected === 'fixed' &&
+      memoizedTotalValue &&
+      watch('discount_amount')
+    ) {
+      return memoizedTotalValue - (watch('discount_amount') ?? 0);
+    }
+    if (
+      discountTypeSelected === 'percentage' &&
+      memoizedTotalValue &&
+      watch('discount_amount')
+    ) {
+      return (
+        memoizedTotalValue -
+        (memoizedTotalValue * (watch('discount_amount') ?? 1)) / 100
+      );
+    }
+    if (memoizedTotalValue) {
+      return memoizedTotalValue;
+    }
+    return undefined;
+  }, [discountTypeSelected, memoizedTotalValue, watch('discount_amount')]);
 
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
@@ -412,6 +437,19 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         errorMessage={errors.total_amount?.message}
         defaultValue={formatMoneyByCurrencySymbol(memoizedTotalValue)}
       />
+
+      <ControlledInput
+        id="final_amount"
+        label="Valor Final"
+        placeholder="Ex. R$ 19,90"
+        register={register}
+        errorMessage={errors.total_amount?.message}
+        defaultValue={formatMoneyByCurrencySymbol(memoizedFinalValue)}
+      />
+
+      {/* 
+Neste ponto, será a sessão de pagamento, no pagamento o usuário seleciona o tipo de pagamento usando as opções válidas que são listadas no dropdown, e também é possível clicar num checkbox onde ele habilita multiplos providers de pagamentos, onde então é aberto o sistema de tabela para poder contar os pagamentos, tendo então o gerenciamento de parcelas, valores e etc.
+*/}
 
       <Button
         disabled={isSubmitting}

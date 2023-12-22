@@ -19,6 +19,7 @@ export const saleFormSchema = z
     }),
     discount_type: z.string(),
     total_amount: z.string(),
+    final_amount: z.string(),
   })
   .superRefine(
     ({ discount_amount: discountAmount, discount_type: discountType }, ctx) => {
