@@ -70,7 +70,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   >(undefined);
   const [discountTypeSelected, setDiscountTypeSelected] = useState<
     DiscountTypeEnum | undefined
-  >('percentage');
+  >(sale?.discount_type);
   const [statusSelected, setStatusSelected] = useState<string | undefined>(
     undefined,
   );
@@ -553,28 +553,34 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         </DataTable>
       </div>
 
-      <ControlledSelect
-        label="Tipo de desconto"
-        name="discount_type"
-        control={control}
-        errorMessage={errors.discount_type?.message}
-        options={discountType}
-        placeHolder="Selecione o tipo de desconto"
-        searchLabel="Pesquisar tipo de desconto"
-        emptyLabel="Sem resultados"
-      />
-      <NumberInput
-        id="discount_amount"
-        label="Valor do desconto"
-        control={control}
-        errorMessage={errors.discount_amount?.message}
-        placeholder={
-          discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
-        }
-        disabled={!discountTypeSelected}
-        mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
-        prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
-      />
+      {discountType && (
+        <ControlledSelect
+          label="Tipo de desconto"
+          name="discount_type"
+          control={control}
+          errorMessage={errors.discount_type?.message}
+          options={discountType}
+          placeHolder="Selecione o tipo de desconto"
+          searchLabel="Pesquisar tipo de desconto"
+          emptyLabel="Sem resultados"
+          defaultValue={sale?.discount_type}
+        />
+      )}
+      {discountType && (
+        <NumberInput
+          id="discount_amount"
+          label="Valor do desconto"
+          control={control}
+          errorMessage={errors.discount_amount?.message}
+          placeholder={
+            discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
+          }
+          disabled={!discountTypeSelected}
+          mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
+          prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
+          defaultValue={sale?.formatted_discount}
+        />
+      )}
 
       <ControlledInput
         id="total_amount"
@@ -603,7 +609,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           control={control}
           errorMessage={errors.method_of_payment?.message}
           options={memoizedMethodsOfPaymentsOptions}
-          defaultValue="1"
+          defaultValue={sale?.methods_of_payments[0].method_id.toString()}
           placeHolder="Selecione o método de pagamento"
           searchLabel="Pesquisar método de pagamento"
           emptyLabel="Sem resultados"

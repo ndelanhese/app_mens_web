@@ -56,6 +56,7 @@ export type Sale = {
   methods_of_payments: MethodOfPayment[];
   discount_amount: number;
   discount_type: DiscountType;
+  formatted_discount: string;
 };
 
 export type Sales = {

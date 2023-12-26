@@ -17,6 +17,7 @@ const iterateResponse = (sales: Sales | undefined) => {
       id: method.id,
       installment: method.installment,
       name: method.method.name,
+      method_id: method.method.id,
     }));
 
     const methodsList = methodsOfPayments

@@ -34,6 +34,7 @@ type MethodOfPayment = {
   id: number;
   installment: number;
   name: string;
+  method_id: number;
 };
 
 export type DiscountType = 'percentage' | 'fixed';
@@ -53,6 +54,7 @@ export type Sale = {
   methods_of_payments: MethodOfPayment[];
   discount_amount: number;
   discount_type: DiscountType;
+  formatted_discount: string;
   productsList: string;
   methodsList: string;
 };
