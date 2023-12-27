@@ -1,11 +1,13 @@
 'use client';
 
+import { memo } from 'react';
+
 import { Controller } from 'react-hook-form';
 import { Combobox } from './select';
 import { SelectProps } from './controlledSelect.types';
 import { twMerge } from 'tailwind-merge';
 
-export const ControlledSelect = ({
+const ControlledSelectComponent = ({
   name,
   label,
   options,
@@ -45,3 +47,5 @@ export const ControlledSelect = ({
     />
   );
 };
+
+export const ControlledSelect = memo(ControlledSelectComponent);
