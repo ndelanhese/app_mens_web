@@ -6,8 +6,8 @@ import {
   CardTitle,
 } from '@components/ui/shadcn/card';
 
-import { OverviewChart } from './overviewChart';
-import { RecentSales } from './recentSales';
+import { OverviewChart } from '../overviewChart';
+import { RecentSales } from '../recentSales';
 import { Activity, CreditCard, DollarSign, Users } from 'lucide-react';
 
 export const OverviewTab = () => (

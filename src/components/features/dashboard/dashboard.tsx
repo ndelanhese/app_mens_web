@@ -7,8 +7,11 @@ import {
 } from '@components/ui/shadcn/tabs';
 
 import { CalendarDateRangePicker } from './components/dateRangePicker';
-import { OverviewTab } from './components/overViewTab';
+import { OverviewTab } from './components/tabs/overViewTab';
 import { Download } from 'lucide-react';
+import { AnalyticsTab } from './components/tabs/analyticsTab';
+import { ReportsTab } from './components/tabs/reportsTab';
+import { NotificationsTab } from './components/tabs/notificationsTab';
 
 export const Dashboard = () => {
   return (
@@ -34,6 +37,15 @@ export const Dashboard = () => {
             </TabsList>
             <TabsContent value="overview">
               <OverviewTab />
+            </TabsContent>
+            <TabsContent value="analytics">
+              <AnalyticsTab />
+            </TabsContent>
+            <TabsContent value="reports">
+              <ReportsTab />
+            </TabsContent>
+            <TabsContent value="notifications">
+              <NotificationsTab />
             </TabsContent>
           </Tabs>
         </div>

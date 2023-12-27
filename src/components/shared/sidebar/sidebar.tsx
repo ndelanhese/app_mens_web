@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import { useSidebarDrawer } from '@hooks/useSidebarDrawer/useSidebarDrawer';
 
-import { Button } from '@components/ui/shadcn/button';
+import { Animation } from '@components/shared/animation/animation';
 import {
   Accordion,
   AccordionContent,
@@ -17,16 +17,15 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@components/ui/shadcn/avatar';
-import { Animation } from '@components/shared/animation/animation';
+import { Button } from '@components/ui/shadcn/button';
 
 import { getFirstName } from '@utils/helpers/stringManipulation';
 
+import { AnimatePresence } from 'framer-motion';
 import {
-  LogOut,
-  X,
-  ClipboardList,
   Container,
   Library,
+  LogOut,
   Newspaper,
   PackageOpen,
   Percent,
@@ -36,10 +35,10 @@ import {
   Tags,
   Users,
   WalletCards,
+  X,
 } from 'lucide-react';
-import { SidebarLink } from './sidebarLink';
 import { parseCookies } from 'nookies';
-import { AnimatePresence } from 'framer-motion';
+import { SidebarLink } from './sidebarLink';
 
 export const Sidebar = () => {
   const { open, handleToggleSidebar } = useSidebarDrawer();
@@ -170,19 +169,6 @@ export const Sidebar = () => {
                           href="/employees/suppliers"
                           title="Fornecedores"
                           icon={Container}
-                          onClick={() => isMobile && handleToggleSidebar()}
-                        />
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="item-5">
-                    <AccordionTrigger>Financeiro</AccordionTrigger>
-                    <AccordionContent>
-                      <div className="flex w-full flex-col gap-2">
-                        <SidebarLink
-                          href="/financial/summaries"
-                          title="Relatórios financeiros"
-                          icon={ClipboardList}
                           onClick={() => isMobile && handleToggleSidebar()}
                         />
                       </div>
