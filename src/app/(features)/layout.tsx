@@ -11,7 +11,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         <main className="flex flex-1 flex-col gap-4">
           <Header />
           <section className="flex h-full w-full overflow-y-auto px-5">
-            <div className="h-[calc(100vh-5.5rem)] w-screen overflow-x-auto pr-12 sm:w-full sm:overflow-y-hidden sm:pr-0">
+            <div className="h-[calc(100vh-5.5rem)] w-screen overflow-x-auto overflow-y-auto pr-12 sm:w-full sm:pr-0">
               {children}
             </div>
           </section>
