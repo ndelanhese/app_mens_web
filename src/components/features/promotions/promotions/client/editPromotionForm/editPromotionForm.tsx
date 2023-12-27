@@ -351,7 +351,7 @@ const EditPromotionFormComponent = ({
       />
 
       <div className="col-start-1 col-end-2 flex flex-col items-center justify-between sm:col-end-3 sm:flex-row">
-        <h1 className="mb-2 text-black-80 dark:text-white-80 sm:mb-0">
+        <h1 className="mb-2 text-black-80 sm:mb-0 dark:text-white-80">
           Produtos
         </h1>
         <SearchProductModal
@@ -362,7 +362,7 @@ const EditPromotionFormComponent = ({
           }}
         />
       </div>
-      <div className="col-start-1 col-end-2 h-px bg-neutral-600 dark:bg-black-80 sm:col-end-3" />
+      <div className="col-start-1 col-end-2 h-px bg-neutral-600 sm:col-end-3 dark:bg-black-80" />
 
       <div className="col-start-1 col-end-2 sm:col-end-3">
         <DataTable

@@ -19,7 +19,7 @@ import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 import { Promotion, PromotionsTableProps } from './table.types';
 import { parseCookies } from 'nookies';
 import { Plus } from 'lucide-react';
-import { ViewPromotionForm } from '../../server/viewPromotionForm/viewPromotionForm';
+import { ViewPromotionForm } from '../viewPromotionForm/viewPromotionForm';
 import { CreatePromotionForm } from '../createPromotionForm/createPromotionForm';
 import { EditPromotionForm } from '../editPromotionForm/editPromotionForm';
 

@@ -37,8 +37,7 @@ export const Combobox = ({
   const handleValueChange = (currentValue: string) => {
     const selectedValue =
       options?.find(
-        option =>
-          option.value.toLocaleLowerCase() === currentValue.toLocaleLowerCase(),
+        option => option?.value.toLowerCase() === currentValue?.toLowerCase(),
       )?.key ?? undefined;
     setValue(selectedValue === key ? undefined : selectedValue);
     setOpen(false);
@@ -71,7 +70,7 @@ export const Combobox = ({
           <CommandEmpty>{emptyLabel ?? 'Sem resultados'}</CommandEmpty>
           <CommandGroup className="max-h-80">
             {options?.map(option => (
-              <CommandItem key={option.key} onSelect={handleValueChange}>
+              <CommandItem key={option?.key} onSelect={handleValueChange}>
                 <Check
                   className={cn(
                     'mr-2 h-4 w-4',

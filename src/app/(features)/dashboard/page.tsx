@@ -1,7 +1,5 @@
-const Dashboard = () => (
-  <div className="space-y-8">
-    <h1>hello world!!! - Dashboard</h1>
-  </div>
-);
+import { Dashboard as DashboardComponent } from '@components/features/dashboard';
+
+const Dashboard = () => <DashboardComponent />;
 
 export default Dashboard;

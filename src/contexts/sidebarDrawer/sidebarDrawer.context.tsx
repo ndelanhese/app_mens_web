@@ -23,12 +23,7 @@ export const SidebarDrawerProvider = ({
 }: SidebarDrawerProviderProps) => {
   const { 'mens.sidebar_status': sidebarStatus } = parseCookies();
 
-  const sidebarIsOpenOnCookies = useMemo(
-    () => sidebarStatus !== 'false',
-    [sidebarStatus],
-  );
-
-  const [open, setOpen] = useState<boolean>(sidebarIsOpenOnCookies ?? true);
+  const [open, setOpen] = useState<boolean>(sidebarStatus !== 'false' ?? false);
 
   const handleToggleSidebar = useCallback(() => {
     setOpen(!open);

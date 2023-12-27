@@ -7,9 +7,7 @@
     "plugin:import/warnings",
     "plugin:storybook/recommended"
   ],
-  "ignorePatterns": [
-    "*.d.ts"
-  ],
+  "ignorePatterns": ["*.d.ts"],
   "rules": {
     "prettier/prettier": [
       "error",
@@ -81,14 +79,8 @@
             "position": "after"
           }
         ],
-        "groups": [
-          "builtin",
-          "internal"
-        ],
-        "pathGroupsExcludedImportTypes": [
-          "react",
-          "next"
-        ],
+        "groups": ["builtin", "internal"],
+        "pathGroupsExcludedImportTypes": ["react", "next"],
         "newlines-between": "always"
       }
     ]

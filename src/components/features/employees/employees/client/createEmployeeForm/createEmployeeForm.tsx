@@ -9,6 +9,7 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 
@@ -135,10 +136,7 @@ const CreateEmployeeFormComponent = ({
   };
 
   return (
-    <form
-      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <FormGrid onSubmit={handleSubmit(onSubmit)}>
       <ControlledInput
         id="name"
         label="Nome"
@@ -252,21 +250,27 @@ const CreateEmployeeFormComponent = ({
         searchLabel="Pesquisar estado"
         emptyLabel="Sem estados cadastrados"
       />
-      <ControlledSelect
-        label="Cidade"
-        name="address.city"
-        control={control}
-        isRequired
-        errorMessage={errors.address?.city?.message}
-        options={memorizedCities}
-        placeHolder="Selecione uma cidade"
-        searchLabel="Pesquisar cidade"
-        emptyLabel="Sem cidades cadastrados"
-      />
-      <Button isLoading={isSubmitting} type="submit" className="sm:col-start-2">
+      {memorizedCities && memorizedCities.length > 0 && (
+        <ControlledSelect
+          label="Cidade"
+          name="address.city"
+          control={control}
+          isRequired
+          errorMessage={errors.address?.city?.message}
+          options={memorizedCities}
+          placeHolder="Selecione uma cidade"
+          searchLabel="Pesquisar cidade"
+          emptyLabel="Sem cidades cadastrados"
+        />
+      )}
+      <Button
+        isLoading={isSubmitting}
+        type="submit"
+        className="sm:col-start-2 sm:h-fit sm:self-end"
+      >
         Criar novo funcionário
       </Button>
-    </form>
+    </FormGrid>
   );
 };
 
