@@ -260,8 +260,8 @@ const EditEmployeeFormComponent = ({
             errorMessage={errors.address?.state?.message}
             defaultValue={
               memorizedStates.find(
-                state => state.key === employee?.addresses?.[0]?.state,
-              )?.key
+                state => state.value === employee?.addresses?.[0]?.state,
+              )?.value
             }
             options={memorizedStates}
             placeHolder="Selecione um estado"
@@ -276,8 +276,8 @@ const EditEmployeeFormComponent = ({
             errorMessage={errors.address?.city?.message}
             defaultValue={
               memorizedCities.find(
-                city => city.key === employee?.addresses?.[0]?.city,
-              )?.key
+                city => city.value === employee?.addresses?.[0]?.city,
+              )?.value
             }
             options={memorizedCities}
             placeHolder="Selecione uma cidade"

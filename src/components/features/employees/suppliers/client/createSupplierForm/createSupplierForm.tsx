@@ -100,9 +100,10 @@ const CreateSupplierFormComponent = ({
     try {
       const { address, ...restData } = data;
       const { state, city, ...restAddress } = address;
-      const stateValue = memorizedStates.find(item => item.key === state)
+      const stateValue = memorizedStates.find(item => item.value === state)
         ?.value;
-      const cityValue = memorizedCities.find(item => item.key === city)?.value;
+      const cityValue = memorizedCities.find(item => item.value === city)
+        ?.value;
 
       const newSupplier = {
         ...restData,

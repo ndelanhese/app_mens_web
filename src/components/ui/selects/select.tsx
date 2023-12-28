@@ -38,7 +38,7 @@ export const Combobox = ({
     const selectedValue =
       options?.find(
         option => option?.value.toLowerCase() === currentValue?.toLowerCase(),
-      )?.key ?? undefined;
+      )?.value ?? undefined;
     setValue(selectedValue === key ? undefined : selectedValue);
     setOpen(false);
 
@@ -57,7 +57,7 @@ export const Combobox = ({
           className="w-full justify-between rounded py-6 text-md font-re"
         >
           {key ? (
-            options?.find(option => option.key === key)?.value
+            options?.find(option => option.value === key)?.value
           ) : (
             <span className="text-zinc-700">{placeHolder}</span>
           )}
@@ -70,11 +70,11 @@ export const Combobox = ({
           <CommandEmpty>{emptyLabel ?? 'Sem resultados'}</CommandEmpty>
           <CommandGroup className="max-h-80">
             {options?.map(option => (
-              <CommandItem key={option?.key} onSelect={handleValueChange}>
+              <CommandItem key={option?.value} onSelect={handleValueChange}>
                 <Check
                   className={cn(
                     'mr-2 h-4 w-4',
-                    key === option.key ? 'opacity-100' : 'opacity-0',
+                    key === option.value ? 'opacity-100' : 'opacity-0',
                   )}
                 />
                 {option.value}
