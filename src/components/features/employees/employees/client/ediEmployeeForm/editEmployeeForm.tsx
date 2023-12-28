@@ -59,7 +59,7 @@ const EditEmployeeFormComponent = ({
     if (state) {
       const response = await getCities(state);
       setCities(response);
-      setValue('address.city', '');
+      setValue('address.city', null);
     }
   }, [setValue, watch]);
 
@@ -70,7 +70,7 @@ const EditEmployeeFormComponent = ({
   useEffect(() => {
     if (watch('address.state')) {
       handleSelectState();
-      setValue('address.city', '');
+      setValue('address.city', null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSelectState, watch('address.state')]);
@@ -78,9 +78,9 @@ const EditEmployeeFormComponent = ({
   const convertCitiesToComboboxOptions = (data: CityResponse[]) => {
     return data.map(item => ({
       value: convertStringToSlug(
-        item.isMunicipality ? item.name : item.name_with_municipality,
+        item.is_municipality ? item.name : item.name_with_municipality,
       ),
-      label: item.isMunicipality ? item.name : item.name_with_municipality,
+      label: item.is_municipality ? item.name : item.name_with_municipality,
     }));
   };
 
