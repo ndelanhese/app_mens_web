@@ -13,8 +13,8 @@ export type CitiesResponse = {
 };
 
 export type StateResponse = {
-  key: string;
   value: string;
+  label: string;
 };
 
 export type StatesResponse = {

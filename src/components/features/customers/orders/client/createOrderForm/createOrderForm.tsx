@@ -210,8 +210,8 @@ const CreateOrderFormComponent = ({ handleCloseModal }: OrderFormProps) => {
   const memorizedCustomersOptions = useMemo(() => {
     if (customers) {
       return customers.map(customer => ({
-        key: customer.id.toString(),
-        value: `${customer.name.trim()} - ${customer.cpf}`,
+        value: customer.id.toString(),
+        label: `${customer.name.trim()} - ${customer.cpf}`,
       }));
     }
     return [];
@@ -220,8 +220,8 @@ const CreateOrderFormComponent = ({ handleCloseModal }: OrderFormProps) => {
   const memorizedUsersOptions = useMemo(() => {
     if (users) {
       return users.map(user => ({
-        key: user.id.toString(),
-        value: `${user.employee.name.trim()} - ${user.employee.cpf}`,
+        value: user.id.toString(),
+        label: `${user.employee.name.trim()} - ${user.employee.cpf}`,
       }));
     }
     return [];

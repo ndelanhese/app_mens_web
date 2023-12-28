@@ -50,15 +50,15 @@ export type Products = {
 };
 
 export type Status = {
-  key: string;
   value: string;
+  label: string;
 };
 
 export type OrdersStatusResponse = Status[];
 
 export type DiscountType = {
-  key: string;
   value: string;
+  label: string;
 };
 
 export type SalesDiscountTypeResponse = DiscountType[];

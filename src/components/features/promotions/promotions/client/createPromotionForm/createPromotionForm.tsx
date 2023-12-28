@@ -176,8 +176,8 @@ const CreatePromotionFormComponent = ({
   const memoizedCategories = useMemo(
     () =>
       categories?.map(category => ({
-        key: category.id.toString(),
-        value: category.name,
+        value: category.id.toString(),
+        label: category.name,
       })),
     [categories],
   );

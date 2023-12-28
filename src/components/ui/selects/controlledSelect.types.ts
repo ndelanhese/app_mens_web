@@ -1,8 +1,8 @@
 import { Control, FieldValue, FieldValues } from 'react-hook-form';
 
 export type SelectOption = {
-  key: string;
   value: string;
+  label: string;
 };
 
 export type SelectProps = {
@@ -15,6 +15,11 @@ export type SelectProps = {
   defaultValue?: string;
   className?: string;
   errorMessage?: string;
-  control: Control<FieldValue<FieldValues>>;
+  control?: Control<FieldValue<FieldValues>>;
   isRequired?: boolean;
+  disabled?: boolean;
+  isLoading?: boolean;
+  isSearchable?: boolean;
+  isClearable?: boolean;
+  menuPosition?: 'top' | 'bottom';
 };

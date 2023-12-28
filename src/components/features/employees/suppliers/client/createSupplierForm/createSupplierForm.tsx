@@ -75,10 +75,10 @@ const CreateSupplierFormComponent = ({
 
   const convertCitiesToComboboxOptions = (data: CityResponse[]) => {
     return data.map(item => ({
-      key: convertStringToSlug(
+      value: convertStringToSlug(
         item.isMunicipality ? item.name : item.name_with_municipality,
       ),
-      value: item.isMunicipality ? item.name : item.name_with_municipality,
+      label: item.isMunicipality ? item.name : item.name_with_municipality,
     }));
   };
 
@@ -100,9 +100,10 @@ const CreateSupplierFormComponent = ({
     try {
       const { address, ...restData } = data;
       const { state, city, ...restAddress } = address;
-      const stateValue = memorizedStates.find(item => item.key === state)
+      const stateValue = memorizedStates.find(item => item.value === state)
         ?.value;
-      const cityValue = memorizedCities.find(item => item.key === city)?.value;
+      const cityValue = memorizedCities.find(item => item.value === city)
+        ?.value;
 
       const newSupplier = {
         ...restData,

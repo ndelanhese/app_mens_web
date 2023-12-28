@@ -76,10 +76,10 @@ const EditSupplierFormComponent = ({
 
   const convertCitiesToComboboxOptions = (data: CityResponse[]) => {
     return data.map(item => ({
-      key: convertStringToSlug(
+      value: convertStringToSlug(
         item.isMunicipality ? item.name : item.name_with_municipality,
       ),
-      value: item.isMunicipality ? item.name : item.name_with_municipality,
+      label: item.isMunicipality ? item.name : item.name_with_municipality,
     }));
   };
 
@@ -212,8 +212,8 @@ const EditSupplierFormComponent = ({
             errorMessage={errors.address?.state?.message}
             defaultValue={
               memorizedStates.find(
-                state => state.key === supplier?.addresses?.[0]?.state,
-              )?.key
+                state => state.value === supplier?.addresses?.[0]?.state,
+              )?.value
             }
             options={memorizedStates}
             placeHolder="Selecione um estado"
@@ -228,8 +228,8 @@ const EditSupplierFormComponent = ({
             errorMessage={errors.address?.city?.message}
             defaultValue={
               memorizedCities.find(
-                city => city.key === supplier?.addresses?.[0]?.city,
-              )?.key
+                city => city.value === supplier?.addresses?.[0]?.city,
+              )?.value
             }
             options={memorizedCities}
             placeHolder="Selecione uma cidade"

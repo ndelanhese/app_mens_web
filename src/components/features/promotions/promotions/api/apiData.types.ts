@@ -8,15 +8,15 @@ export type PromotionsCategoriesResponse = {
 };
 
 export type Status = {
-  key: string;
   value: string;
+  label: string;
 };
 
 export type DiscountTypeEnum = 'percentage' | 'fixed';
 
 export type DiscountType = {
-  key: string;
   value: string;
+  label: string;
 };
 
 export type PromotionStatusResponse = Status[];

@@ -8,7 +8,7 @@ import { useTheme } from 'next-themes';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const button = tv({
-  base: 'rounded-lg font-re inline-flex items-center justify-center transition-colors',
+  base: 'rounded font-re inline-flex items-center justify-center transition-colors',
   variants: {
     color: {
       primary:
@@ -21,7 +21,7 @@ const button = tv({
     size: {
       sm: 'text-md px-2 py-1 gap-1',
       md: 'px-4 py-3 gap-2',
-      lg: 'px-6 py-3 gap-2 rounded-lg font-sb',
+      lg: 'px-6 py-3 gap-2 rounded font-sb',
     },
     disabled: {
       true: 'bg-opacity-5 text-opacity-10 cursor-not-allowed text-zinc-950',
