@@ -315,8 +315,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   const memorizedCustomersOptions = useMemo(() => {
     if (customers) {
       return customers.map(customer => ({
-        key: customer.id.toString(),
-        value: `${customer.name.trim()} - ${customer.cpf}`,
+        value: customer.id.toString(),
+        label: `${customer.name.trim()} - ${customer.cpf}`,
       }));
     }
     return [];
@@ -325,8 +325,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   const memorizedUsersOptions = useMemo(() => {
     if (users) {
       return users.map(user => ({
-        key: user.id.toString(),
-        value: `${user.employee.name.trim()} - ${user.employee.cpf}`,
+        value: user.id.toString(),
+        label: `${user.employee.name.trim()} - ${user.employee.cpf}`,
       }));
     }
     return [];
@@ -335,8 +335,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   const memoizedMethodsOfPaymentsOptions = useMemo(() => {
     if (methodsOfPayments) {
       return methodsOfPayments.map(method => ({
-        key: method.id.toString(),
-        value: method.name,
+        value: method.id.toString(),
+        label: method.name,
       }));
     }
   }, [methodsOfPayments]);
@@ -376,7 +376,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     if (status) {
       const saleStatus = status.find(
         oneStratus => oneStratus?.value === sale?.status.toString(),
-      )?.key;
+      )?.value;
       setStatusSelected(saleStatus);
     }
   }, [sale?.status, status]);
@@ -434,13 +434,13 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     const inputMethod = watch('method_of_payment');
     if (!inputMethod) return;
     const methodName = memoizedMethodsOfPaymentsOptions?.find(
-      method => method.key === inputMethod,
+      method => method.value === inputMethod,
     )?.value;
     if (methodName === 'Cartão de Crédito' && memoizedFinalValue) {
       const installments = calculateInstallments(memoizedFinalValue, 12);
       return installments.map(installment => ({
-        key: installment.installment.toString(),
-        value: `${installment.installment}x - ${installment.amount}`,
+        value: installment.installment.toString(),
+        label: `${installment.installment}x - ${installment.amount}`,
       }));
     }
   }, [

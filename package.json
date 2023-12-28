@@ -48,6 +48,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "7.49.2",
     "react-input-mask": "2.0.4",
+    "react-select": "5.8.0",
     "recharts": "2.10.3",
     "tailwind-merge": "2.2.0",
     "tailwind-variants": "0.1.19",

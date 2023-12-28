@@ -154,8 +154,8 @@ const EditPromotionFormComponent = ({
   const memoizedCategories = useMemo(
     () =>
       categories?.map(category => ({
-        key: category.id.toString(),
-        value: category.name,
+        value: category.id.toString(),
+        label: category.name,
       })),
     [categories],
   );
@@ -164,11 +164,11 @@ const EditPromotionFormComponent = ({
     if (memoizedCategories && status && discountType) {
       const promotionCategory = memoizedCategories.find(
         category => category?.value === promotion?.category,
-      )?.key;
+      )?.value;
       setCategorySelected(promotionCategory);
       const promotionStatus = status.find(
         oneStatus => oneStatus.value === promotion?.status,
-      )?.key;
+      )?.value;
       setStatusSelected(promotionStatus);
       const promotionDiscountType = promotion?.discount.startsWith('R$')
         ? 'fixed'

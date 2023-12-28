@@ -75,10 +75,10 @@ const CreateSupplierFormComponent = ({
 
   const convertCitiesToComboboxOptions = (data: CityResponse[]) => {
     return data.map(item => ({
-      key: convertStringToSlug(
+      value: convertStringToSlug(
         item.isMunicipality ? item.name : item.name_with_municipality,
       ),
-      value: item.isMunicipality ? item.name : item.name_with_municipality,
+      label: item.isMunicipality ? item.name : item.name_with_municipality,
     }));
   };
 

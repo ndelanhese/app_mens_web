@@ -9,8 +9,8 @@ export type Customer = {
 };
 
 export type Status = {
-  key: string;
   value: string;
+  label: string;
 };
 
 export type Product = {

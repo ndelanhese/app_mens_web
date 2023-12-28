@@ -1,6 +1,6 @@
 export type SelectOption = {
-  key: string;
   value: string;
+  label: string;
 };
 
 export type SelectProps = {

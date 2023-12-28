@@ -54,7 +54,7 @@ export const Combobox = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between rounded-lg py-6 text-md font-re"
+          className="w-full justify-between rounded py-6 text-md font-re"
         >
           {key ? (
             options?.find(option => option.key === key)?.value

@@ -234,8 +234,8 @@ const EditOrderFormComponent = ({
   const memorizedCustomersOptions = useMemo(() => {
     if (customers) {
       return customers.map(customer => ({
-        key: customer.id.toString(),
-        value: `${customer.name.trim()} - ${customer.cpf}`,
+        value: customer.id.toString(),
+        label: `${customer.name.trim()} - ${customer.cpf}`,
       }));
     }
     return [];
@@ -244,8 +244,8 @@ const EditOrderFormComponent = ({
   const memorizedUsersOptions = useMemo(() => {
     if (users) {
       return users.map(user => ({
-        key: user.id.toString(),
-        value: `${user.employee.name.trim()} - ${user.employee.cpf}`,
+        value: user.id.toString(),
+        label: `${user.employee.name.trim()} - ${user.employee.cpf}`,
       }));
     }
     return [];
@@ -283,8 +283,8 @@ const EditOrderFormComponent = ({
   useEffect(() => {
     if (status) {
       const orderStatus = status.find(
-        oneStratus => oneStratus?.value === order?.status.toString(),
-      )?.key;
+        oneStratus => oneStratus?.label === order?.status.toString(),
+      )?.value;
       setStatusSelected(orderStatus);
     }
   }, [order?.status, status]);

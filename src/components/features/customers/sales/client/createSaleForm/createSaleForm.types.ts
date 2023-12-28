@@ -9,8 +9,8 @@ export type Customer = {
 };
 
 export type Status = {
-  key: string;
   value: string;
+  label: string;
 };
 
 export type Product = {
@@ -62,8 +62,8 @@ export type User = {
 export type DiscountTypeEnum = 'percentage' | 'fixed';
 
 export type DiscountType = {
-  key: string;
   value: string;
+  label: string;
 };
 
 export type MethodOfPayment = {

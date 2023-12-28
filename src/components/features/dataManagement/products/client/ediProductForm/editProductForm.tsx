@@ -105,8 +105,8 @@ const EditProductFormComponent = ({
     labelKey: keyof T,
   ): ComboboxOption[] {
     return data.map(item => ({
-      key: String(item[idKey]),
-      value: String(item[labelKey]),
+      value: String(item[idKey]),
+      label: String(item[labelKey]),
     }));
   }
   const memorizedBrandsOptions = useMemo(() => {
