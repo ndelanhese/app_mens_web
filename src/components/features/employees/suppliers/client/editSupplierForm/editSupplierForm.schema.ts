@@ -19,19 +19,16 @@ export const supplierFormSchema = z.object({
           invalid_type_error: 'A cidade é obrigatória',
         },
       )
-      .nullable()
-      .transform(value => value?.value || null),
-    state: z
-      .object(
-        {
-          value: z.string().min(1, 'O estado é obrigatório'),
-          label: z.string().min(1, 'O estado é obrigatório'),
-        },
-        {
-          invalid_type_error: 'O estado é obrigatório',
-        },
-      )
-      .transform(({ value }) => value),
+      .nullable(),
+    state: z.object(
+      {
+        value: z.string().min(1, 'O estado é obrigatório'),
+        label: z.string().min(1, 'O estado é obrigatório'),
+      },
+      {
+        invalid_type_error: 'O estado é obrigatório',
+      },
+    ),
   }),
 });
 

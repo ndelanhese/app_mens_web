@@ -56,7 +56,7 @@ const CreateEmployeeFormComponent = ({
   const handleSelectState = useCallback(async () => {
     const state = watch('address.state');
     if (state) {
-      const response = await getCities(state);
+      const response = await getCities(state.value);
       setCities(response);
       setValue('address.city', null);
     }
@@ -103,9 +103,10 @@ const CreateEmployeeFormComponent = ({
     try {
       const { address, ...restData } = data;
       const { state, city, ...restAddress } = address;
-      const stateValue = memorizedStates.find(item => item.label === state)
-        ?.value;
-      const cityValue = memorizedCities.find(item => item.label === city)
+      const stateValue = memorizedStates.find(
+        item => item.label === state.label,
+      )?.value;
+      const cityValue = memorizedCities.find(item => item.label === city?.label)
         ?.value;
 
       const newEmployee = {

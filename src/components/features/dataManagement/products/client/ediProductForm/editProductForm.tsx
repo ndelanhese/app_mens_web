@@ -9,6 +9,9 @@ import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { NumberInput } from '@components/ui/inputs/numberInput';
+
+import { formatMoneyByCurrencySymbol } from '@utils/helpers';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -206,14 +209,20 @@ const EditProductFormComponent = ({
         errorMessage={errors.description?.message}
         isRequired
       />
-      <ControlledInput
-        defaultValue={product?.price}
+
+      <NumberInput
         id="price"
         label="Preço"
-        register={register}
+        control={control}
         errorMessage={errors.price?.message}
+        placeholder="Preço do produto"
+        mask={'money'}
+        prefix="R$"
+        inputMode="decimal"
         type="number"
+        defaultValue={formatMoneyByCurrencySymbol(product?.price)}
       />
+
       <ControlledInput
         defaultValue={product?.size}
         id="size"
@@ -235,6 +244,7 @@ const EditProductFormComponent = ({
         register={register}
         errorMessage={errors.quantity?.message}
         type="number"
+        min={0}
       />
       <ControlledSelect
         label="Categoria"
