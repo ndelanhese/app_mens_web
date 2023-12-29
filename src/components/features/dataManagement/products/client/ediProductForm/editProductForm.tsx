@@ -179,7 +179,8 @@ const EditProductFormComponent = ({
   if (
     !product ||
     memorizedBrandsOptions.length < 1 ||
-    memorizedCategoriesOptions.length < 1
+    memorizedCategoriesOptions.length < 1 ||
+    memorizedSuppliersOptions.length < 1
   ) {
     // TODO -> Add skeleton
     return <h1>Carregando...</h1>;

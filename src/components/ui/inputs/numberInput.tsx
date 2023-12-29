@@ -74,7 +74,7 @@ export const NumberInput: FC<InputVariants> = ({
       defaultValue={defaultValue ?? ''}
       render={({ field: { onChange, value } }) => (
         <div className={controlledInput({ className })}>
-          <label className="mb-2 text-black-40 dark:text-white-80">
+          <label className="mb-2 text-zinc-900 dark:text-white-80">
             {label}
             {isRequired && <span className="text-red-700"> *</span>}
           </label>

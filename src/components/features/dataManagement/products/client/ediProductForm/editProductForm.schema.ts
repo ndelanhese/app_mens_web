@@ -1,10 +1,15 @@
+import { convertMoneyStringToNumber } from '@utils/helpers';
+
 import { z } from 'zod';
 
 export const productFormSchema = z.object({
   name: z.string().min(1, 'O nome é obrigatário'),
   description: z.string().min(1, 'A descrição é obrigatária'),
   purchase_price: z.string(),
-  price: z.string().min(1, 'O preço deve ser maior que zero'),
+  price: z
+    .string()
+    .min(1, 'O preço deve ser maior que zero')
+    .transform(value => (value ? convertMoneyStringToNumber(value) : value)),
   size: z.string(),
   color: z.string(),
   quantity: z.string().min(1, 'A quantidade deve ser maior que zero'),
