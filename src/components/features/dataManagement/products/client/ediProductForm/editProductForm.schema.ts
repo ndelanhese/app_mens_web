@@ -5,7 +5,6 @@ import { z } from 'zod';
 export const productFormSchema = z.object({
   name: z.string().min(1, 'O nome é obrigatário'),
   description: z.string().min(1, 'A descrição é obrigatária'),
-  purchase_price: z.string(),
   price: z
     .string()
     .min(1, 'O preço deve ser maior que zero')
