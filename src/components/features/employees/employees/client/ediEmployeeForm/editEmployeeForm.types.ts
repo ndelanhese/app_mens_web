@@ -41,7 +41,7 @@ export type EmployeeFormProps = {
 
 export type CityResponse = {
   name: string;
-  isMunicipality: boolean;
+  is_municipality: boolean;
   name_with_municipality: string;
 };
 

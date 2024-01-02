@@ -9,8 +9,26 @@ export const supplierFormSchema = z.object({
     number: z.string().nonempty('O número é obrigatório'),
     district: z.string().nonempty('O bairro é obrigatório'),
     postal_code: z.string().nonempty('O CEP é obrigatório'),
-    city: z.string().nonempty('A cidade é obrigatória'),
-    state: z.string().nonempty('O estado é obrigatório'),
+    city: z
+      .object(
+        {
+          value: z.string().min(1, 'A cidade é obrigatória'),
+          label: z.string().min(1, 'A cidade é obrigatória'),
+        },
+        {
+          invalid_type_error: 'A cidade é obrigatória',
+        },
+      )
+      .nullable(),
+    state: z.object(
+      {
+        value: z.string().min(1, 'O estado é obrigatório'),
+        label: z.string().min(1, 'O estado é obrigatório'),
+      },
+      {
+        invalid_type_error: 'O estado é obrigatório',
+      },
+    ),
   }),
 });
 

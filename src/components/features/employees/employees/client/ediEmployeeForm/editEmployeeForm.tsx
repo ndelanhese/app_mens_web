@@ -55,11 +55,11 @@ const EditEmployeeFormComponent = ({
   }, []);
 
   const handleSelectState = useCallback(async () => {
-    const state = watch('address.state');
+    const state = watch('address.state').value;
     if (state) {
       const response = await getCities(state);
       setCities(response);
-      setValue('address.city', '');
+      setValue('address.city', null);
     }
   }, [setValue, watch]);
 
@@ -68,9 +68,9 @@ const EditEmployeeFormComponent = ({
   }, [stateResponse]);
 
   useEffect(() => {
-    if (watch('address.state')) {
+    if (watch('address.state')?.value) {
       handleSelectState();
-      setValue('address.city', '');
+      setValue('address.city', null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSelectState, watch('address.state')]);
@@ -78,9 +78,9 @@ const EditEmployeeFormComponent = ({
   const convertCitiesToComboboxOptions = (data: CityResponse[]) => {
     return data.map(item => ({
       value: convertStringToSlug(
-        item.isMunicipality ? item.name : item.name_with_municipality,
+        item.is_municipality ? item.name : item.name_with_municipality,
       ),
-      label: item.isMunicipality ? item.name : item.name_with_municipality,
+      label: item.is_municipality ? item.name : item.name_with_municipality,
     }));
   };
 
@@ -252,38 +252,34 @@ const EditEmployeeFormComponent = ({
             placeholder="Ex. 12345-678"
             mask="99999-999"
           />
-          <ControlledSelect
-            label="Estado"
-            name="address.state"
-            control={control}
-            isRequired
-            errorMessage={errors.address?.state?.message}
-            defaultValue={
-              memorizedStates.find(
-                state => state.value === employee?.addresses?.[0]?.state,
-              )?.value
-            }
-            options={memorizedStates}
-            placeHolder="Selecione um estado"
-            searchLabel="Pesquisar estado"
-            emptyLabel="Sem estados cadastrados"
-          />
-          <ControlledSelect
-            label="Cidade"
-            name="address.city"
-            control={control}
-            isRequired
-            errorMessage={errors.address?.city?.message}
-            defaultValue={
-              memorizedCities.find(
-                city => city.value === employee?.addresses?.[0]?.city,
-              )?.value
-            }
-            options={memorizedCities}
-            placeHolder="Selecione uma cidade"
-            searchLabel="Pesquisar cidade"
-            emptyLabel="Sem cidades cadastrados"
-          />
+          {memorizedStates && (
+            <ControlledSelect
+              label="Estado"
+              name="address.state"
+              control={control}
+              isRequired
+              errorMessage={errors.address?.state?.message}
+              defaultValue={employee?.addresses?.[0]?.state}
+              options={memorizedStates}
+              placeHolder="Selecione um estado"
+              searchLabel="Pesquisar estado"
+              emptyLabel="Sem estados cadastrados"
+            />
+          )}
+          {memorizedStates && memorizedCities && (
+            <ControlledSelect
+              label="Cidade"
+              name="address.city"
+              control={control}
+              isRequired
+              errorMessage={errors.address?.city?.message}
+              defaultValue={employee?.addresses?.[0]?.city}
+              options={memorizedCities}
+              placeHolder="Selecione uma cidade"
+              searchLabel="Pesquisar cidade"
+              emptyLabel="Sem cidades cadastrados"
+            />
+          )}
         </>
       )}
       <Button

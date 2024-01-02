@@ -35,7 +35,6 @@ import {
   getCustomers,
   getDiscountType,
   getMethodsOfPayments,
-  getStatus,
   getUsers,
 } from '../../api/apiData';
 import { SaleFormSchema, saleFormSchema } from './createSaleForm.schema';
@@ -47,7 +46,6 @@ import {
   Product,
   ProductTable,
   SaleFormProps,
-  Status,
   User,
 } from './createSaleForm.types';
 

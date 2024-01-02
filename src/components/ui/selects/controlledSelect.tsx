@@ -1,6 +1,6 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 
 import { Controller } from 'react-hook-form';
 import type { StylesConfig } from 'react-select';
@@ -130,20 +130,29 @@ const ControlledSelectComponent = ({
     }),
   };
 
+  const memoizedDefaultValue = useMemo(
+    () =>
+      options?.find(
+        option =>
+          option?.label === defaultValue || option?.value === defaultValue,
+      ),
+    [defaultValue, options],
+  );
+
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={defaultValue ?? ''}
+      defaultValue={memoizedDefaultValue ?? ''}
       render={({ field: { onChange, value } }) => (
         <div className={twMerge('flex flex-col transition-colors', className)}>
-          <label className="mb-2 text-black-40 dark:text-white-80">
+          <label className="mb-2 text-zinc-900 dark:text-white-80">
             {label} {isRequired && <span className="text-red-700"> *</span>}
           </label>
           <Select
             options={options}
             onChange={onChange}
-            defaultValue={defaultValue}
+            defaultValue={memoizedDefaultValue}
             value={value}
             isLoading={isLoading}
             isDisabled={disabled}

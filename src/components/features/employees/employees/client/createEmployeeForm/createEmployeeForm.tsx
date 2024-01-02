@@ -56,9 +56,9 @@ const CreateEmployeeFormComponent = ({
   const handleSelectState = useCallback(async () => {
     const state = watch('address.state');
     if (state) {
-      const response = await getCities(state);
+      const response = await getCities(state.value);
       setCities(response);
-      setValue('address.city', '');
+      setValue('address.city', null);
     }
   }, [setValue, watch]);
 
@@ -69,18 +69,20 @@ const CreateEmployeeFormComponent = ({
   useEffect(() => {
     if (watch('address.state')) {
       handleSelectState();
-      setValue('address.city', '');
+      setValue('address.city', null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSelectState, watch('address.state')]);
 
   const convertCitiesToComboboxOptions = (data: CityResponse[]) => {
-    return data.map(item => ({
+    const test = data.map(item => ({
       value: convertStringToSlug(
-        item.isMunicipality ? item.name : item.name_with_municipality,
+        item.is_municipality ? item.name : item.name_with_municipality,
       ),
-      label: item.isMunicipality ? item.name : item.name_with_municipality,
+      label: item.is_municipality ? item.name : item.name_with_municipality,
     }));
+
+    return test;
   };
 
   const memorizedStates = useMemo(() => {
@@ -101,9 +103,10 @@ const CreateEmployeeFormComponent = ({
     try {
       const { address, ...restData } = data;
       const { state, city, ...restAddress } = address;
-      const stateValue = memorizedStates.find(item => item.value === state)
-        ?.value;
-      const cityValue = memorizedCities.find(item => item.value === city)
+      const stateValue = memorizedStates.find(
+        item => item.label === state.label,
+      )?.value;
+      const cityValue = memorizedCities.find(item => item.label === city?.label)
         ?.value;
 
       const newEmployee = {

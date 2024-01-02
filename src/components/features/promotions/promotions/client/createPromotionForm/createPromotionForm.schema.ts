@@ -19,12 +19,34 @@ export const promotionFormSchema = z
   .object({
     name: z.string().min(1, 'O nome é obrigatário'),
     description: z.string().min(1, 'A descrição é obrigatória'),
-    promotion_category_id: z.coerce
-      .number()
-      .min(1, 'A categoria é obrigatória'),
+    promotion_category_id: z
+      .object(
+        {
+          value: z.string().min(1, 'A categoria é obrigatória'),
+          label: z.string().min(1, 'A categoria é obrigatória'),
+        },
+        {
+          invalid_type_error: 'A categoria é obrigatória',
+        },
+      )
+      .transform(({ value }) => value),
     initial_date: z.string().transform(value => value || currentDateString()),
     final_date: z.string().transform(value => value || getNextDay()),
-    status: z.string().transform(value => value || 'pending'),
+    status: z
+      .object(
+        {
+          value: z.string().min(1, 'O status é obrigatório'),
+          label: z.string().min(1, 'O status é obrigatório'),
+        },
+        {
+          invalid_type_error: 'O status é obrigatório',
+        },
+      )
+      .default({
+        value: 'pending',
+        label: 'Pendente',
+      })
+      .transform(({ value }) => value),
     discount_amount: z.string().transform(value => {
       const replacedValue = value
         .replaceAll(',', '.')
@@ -33,7 +55,17 @@ export const promotionFormSchema = z
         .replaceAll('R$ ', '');
       return value ? Number(replacedValue) : undefined;
     }),
-    discount_type: z.string(),
+    discount_type: z
+      .object(
+        {
+          value: z.string().min(1, 'O tipo do desconto é obrigatório'),
+          label: z.string().min(1, 'O tipo do desconto é obrigatório'),
+        },
+        {
+          invalid_type_error: 'O tipo do desconto é obrigatório',
+        },
+      )
+      .transform(({ value }) => value),
   })
   .superRefine(({ initial_date: initialDate, final_date: finalDate }, ctx) => {
     if (!initialDate && finalDate) {

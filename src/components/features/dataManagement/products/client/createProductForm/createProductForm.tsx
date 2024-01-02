@@ -9,6 +9,7 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { NumberInput } from '@components/ui/inputs/numberInput';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -188,25 +189,32 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         placeholder="Descrição do produto"
         isRequired
       />
-      <ControlledInput
+      {/* TODO -> add masked input */}
+
+      <NumberInput
         id="purchase_price"
         label="Preço de compra"
-        register={register}
-        errorMessage={errors.price?.message}
+        control={control}
+        errorMessage={errors.purchase_price?.message}
         placeholder="Preço de compra produto"
-        type="number"
+        mask={'money'}
+        prefix="R$"
         inputMode="decimal"
+        type="number"
       />
-      <ControlledInput
+
+      <NumberInput
         id="price"
         label="Preço"
-        register={register}
+        control={control}
         errorMessage={errors.price?.message}
         placeholder="Preço do produto"
-        type="number"
+        mask={'money'}
+        prefix="R$"
         inputMode="decimal"
-        isRequired
+        type="number"
       />
+
       <ControlledInput
         id="size"
         label="Tamanho"
@@ -230,6 +238,7 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         type="number"
         inputMode="numeric"
         isRequired
+        min={0}
       />
       <ControlledSelect
         label="Categoria"
