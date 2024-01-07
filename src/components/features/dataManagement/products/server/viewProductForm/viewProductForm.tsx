@@ -21,7 +21,7 @@ export const ViewProductForm = ({ product }: ProductPreviewProps) => {
         readOnly
       />
       <ControlledInput
-        value={product?.price}
+        value={product?.price_formatted}
         id="price"
         label="Preço"
         readOnly

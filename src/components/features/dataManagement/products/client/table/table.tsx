@@ -71,7 +71,7 @@ const ProductsTableComponent = ({ rows }: ProductsTableProps) => {
         header: ({ column }) => (
           <TableColumnHeader column={column} title="Preço" />
         ),
-        accessorKey: 'price',
+        accessorKey: 'price_formatted',
         id: 'Preço',
       },
       {

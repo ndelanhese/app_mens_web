@@ -15,6 +15,7 @@ const iterateResponse = (products?: Products) => {
     partNumber: product?.part_number,
     description: product?.description,
     price: product?.price,
+    price_formatted: product.price_formatted,
     size: product?.size,
     color: product?.color,
     quantity: product?.quantity,
