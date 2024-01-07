@@ -1,3 +1,5 @@
+import { formatMoneyByCurrencySymbol } from '@/utils/helpers';
+
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 
@@ -21,11 +23,19 @@ export const ViewProductForm = ({ product }: ProductPreviewProps) => {
         readOnly
       />
       <ControlledInput
-        value={product?.price_formatted}
+        value={formatMoneyByCurrencySymbol(product?.price)}
         id="price"
         label="Preço"
         readOnly
       />
+      {product?.final_price && (
+        <ControlledInput
+          value={product?.final_price}
+          id="final_price"
+          label="Preço com desconto"
+          readOnly
+        />
+      )}
       <ControlledInput
         value={product?.size}
         id="size"

@@ -19,8 +19,9 @@ export type Product = {
   partNumber: string;
   description: string;
   price: number;
-  price_formatted: string;
   size: string;
+  final_price?: string;
+  price_formatted: string;
   color: string;
   quantity: number;
   category: Category;
