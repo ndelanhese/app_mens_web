@@ -17,6 +17,7 @@ const iterateResponse = (suppliers?: Suppliers) => {
     cnpj: supplier?.cnpj,
     status: supplier?.status,
     addresses: supplier?.addresses?.map(address => ({
+      id: address.id,
       address: address.address,
       number: address.number,
       district: address.district,

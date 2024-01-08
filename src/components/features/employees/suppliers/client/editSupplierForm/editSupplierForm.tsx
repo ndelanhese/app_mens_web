@@ -99,8 +99,24 @@ const EditSupplierFormComponent = ({
 
   const onSubmit: SubmitHandler<SupplierFormSchema> = async data => {
     try {
-      // TODO -> add address id
-      await api.put(`/suppliers/${supplier?.id}`, data, {
+      const { address, ...restData } = data;
+      const { state, city, ...restAddress } = address;
+      const stateValue = memorizedStates.find(
+        item => item.label === state.label,
+      )?.label;
+      const cityValue = memorizedCities.find(item => item.label === city?.label)
+        ?.label;
+
+      const newSupplier = {
+        ...restData,
+        address: {
+          id: supplier?.addresses[0].id,
+          ...restAddress,
+          state: stateValue,
+          city: cityValue,
+        },
+      };
+      await api.put(`/suppliers/${supplier?.id}`, newSupplier, {
         headers: { Authorization: `Bearer ${token}` },
       });
       handleCloseModal();
@@ -218,7 +234,7 @@ const EditSupplierFormComponent = ({
               emptyLabel="Sem estados cadastrados"
             />
           )}
-          {memorizedStates && memorizedCities && watch('address.state') && (
+          {memorizedStates && memorizedCities && (
             <ControlledSelect
               label="Cidade"
               name="address.city"

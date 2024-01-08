@@ -55,7 +55,7 @@ const CreateSupplierFormComponent = ({
   const handleSelectState = useCallback(async () => {
     const state = watch('address.state');
     if (state) {
-      const response = await getCities(state);
+      const response = await getCities(state.value);
       setCities(response);
       setValue('address.city', null);
     }
@@ -100,10 +100,11 @@ const CreateSupplierFormComponent = ({
     try {
       const { address, ...restData } = data;
       const { state, city, ...restAddress } = address;
-      const stateValue = memorizedStates.find(item => item.value === state)
-        ?.value;
-      const cityValue = memorizedCities.find(item => item.value === city)
-        ?.value;
+      const stateValue = memorizedStates.find(
+        item => item.label === state.label,
+      )?.label;
+      const cityValue = memorizedCities.find(item => item.label === city?.label)
+        ?.label;
 
       const newSupplier = {
         ...restData,

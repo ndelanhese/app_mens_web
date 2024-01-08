@@ -2,6 +2,8 @@
 
 import { memo, useMemo } from 'react';
 
+import { convertStringToSlug } from '@utils/helpers/stringManipulation';
+
 import { Controller } from 'react-hook-form';
 import type { StylesConfig } from 'react-select';
 import Select from 'react-select';
@@ -134,11 +136,13 @@ const ControlledSelectComponent = ({
     () =>
       options?.find(
         option =>
-          option?.label === defaultValue || option?.value === defaultValue,
+          option?.label === defaultValue ||
+          option?.value === defaultValue ||
+          option?.value === convertStringToSlug(defaultValue ?? '') ||
+          option?.label === convertStringToSlug(defaultValue ?? ''),
       ),
     [defaultValue, options],
   );
-
   return (
     <Controller
       name={name}
