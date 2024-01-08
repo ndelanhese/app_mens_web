@@ -1,19 +1,19 @@
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 
 import { convertStatus } from '@utils/status';
-import { convertDateToString } from '@utils/helpers/date';
 
 import { EmployeePreviewProps } from './viewEmployeeForm.types';
 
 export const ViewEmployeeForm = ({ employee }: EmployeePreviewProps) => {
   return (
-    <div className="grid grid-cols-1 gap-4 overflow-y-auto sm:grid-cols-2">
+    <FormGrid>
       <ControlledInput value={employee?.id} id="id" label="Código" readOnly />
       <ControlledInput value={employee?.name} id="name" label="Nome" readOnly />
       <ControlledInput value={employee?.cpf} id="cpf" label="CPF" readOnly />
       <ControlledInput value={employee?.rg} id="rg" label="RG" readOnly />
       <ControlledInput
-        value={convertDateToString(employee?.birthDate)}
+        value={employee?.birthDate}
         id="birthDate"
         label="Data de nascimento"
         readOnly
@@ -90,6 +90,6 @@ export const ViewEmployeeForm = ({ employee }: EmployeePreviewProps) => {
           />
         </>
       ))}
-    </div>
+    </FormGrid>
   );
 };
