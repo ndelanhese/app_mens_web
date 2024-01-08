@@ -108,7 +108,7 @@ export const SearchProductModal = ({
       name: product?.name,
       partNumber: product?.part_number,
       description: product?.description,
-      price: product?.price,
+      price: product?.final_price ?? product.price_formatted,
       size: product?.size,
       color: product?.color,
       quantity: product?.quantity,
