@@ -37,6 +37,7 @@ const EditEmployeeFormComponent = ({
 
   const [states, setStates] = useState<StateResponse[] | undefined>(undefined);
   const [cities, setCities] = useState<CityResponse[] | undefined>(undefined);
+  const [selectedState, setSelectedState] = useState<boolean>(false);
 
   const {
     register,
@@ -69,6 +70,7 @@ const EditEmployeeFormComponent = ({
 
   useEffect(() => {
     if (watch('address.state')?.value) {
+      setSelectedState(true);
       handleSelectState();
       setValue('address.city', null);
     }
@@ -100,9 +102,20 @@ const EditEmployeeFormComponent = ({
 
   const onSubmit: SubmitHandler<EmployeeFormSchema> = async data => {
     try {
-      await api.put(`/employees/${employee?.id}`, data, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { address, ...restData } = data;
+      await api.put(
+        `/employees/${employee?.id}`,
+        {
+          ...restData,
+          address: {
+            id: employee?.addresses[0].id,
+            ...address,
+          },
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       handleCloseModal();
       toast({
         title: 'Funcionário atualizado com sucesso',
@@ -266,7 +279,7 @@ const EditEmployeeFormComponent = ({
               emptyLabel="Sem estados cadastrados"
             />
           )}
-          {memorizedStates && memorizedCities && (
+          {memorizedStates && memorizedCities && selectedState && (
             <ControlledSelect
               label="Cidade"
               name="address.city"
