@@ -12,6 +12,7 @@ import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
+import { convertDateFormat } from '@utils/helpers/date';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -102,14 +103,34 @@ const EditEmployeeFormComponent = ({
 
   const onSubmit: SubmitHandler<EmployeeFormSchema> = async data => {
     try {
-      const { address, ...restData } = data;
+      const {
+        address,
+        admission_date: admissionDate,
+        birth_date: birthDate,
+        resignation_date: resignationDate,
+        ...restData
+      } = data;
+      const { city, state, ...restAddress } = address;
+      const stateValue = memorizedStates.find(
+        item => item.label === state.label,
+      )?.label;
+      const cityValue = memorizedCities.find(item => item.label === city?.label)
+        ?.label;
+
       await api.put(
         `/employees/${employee?.id}`,
         {
           ...restData,
+          admission_date: convertDateFormat(admissionDate),
+          birth_date: convertDateFormat(birthDate),
+          ...(resignationDate
+            ? { resignation_date: convertDateFormat(resignationDate) }
+            : {}),
           address: {
             id: employee?.addresses[0].id,
-            ...address,
+            city: stateValue,
+            state: cityValue,
+            ...restAddress,
           },
         },
         {

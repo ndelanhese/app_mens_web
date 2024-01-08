@@ -11,7 +11,9 @@ export const ViewEmployeeForm = ({ employee }: EmployeePreviewProps) => {
       <ControlledInput value={employee?.id} id="id" label="Código" readOnly />
       <ControlledInput value={employee?.name} id="name" label="Nome" readOnly />
       <ControlledInput value={employee?.cpf} id="cpf" label="CPF" readOnly />
-      <ControlledInput value={employee?.rg} id="rg" label="RG" readOnly />
+      {employee?.rg && (
+        <ControlledInput value={employee?.rg} id="rg" label="RG" readOnly />
+      )}
       <ControlledInput
         value={employee?.birthDate}
         id="birthDate"

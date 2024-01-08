@@ -4,18 +4,20 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { api } from '@axios';
 
-import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
-import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
+import { convertDateFormat } from '@utils/helpers/date';
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { getCities, getStates } from '../../api/apiData';
 import {
   EmployeeFormSchema,
   employeeFormSchema,
@@ -25,7 +27,6 @@ import {
   EmployeeFormProps,
   StateResponse,
 } from './createEmployeeForm.types';
-import { getCities, getStates } from '../../api/apiData';
 
 const CreateEmployeeFormComponent = ({
   handleCloseModal,
@@ -101,16 +102,27 @@ const CreateEmployeeFormComponent = ({
 
   const onSubmit: SubmitHandler<EmployeeFormSchema> = async data => {
     try {
-      const { address, ...restData } = data;
+      const {
+        address,
+        admission_date: admissionDate,
+        birth_date: birthDate,
+        resignation_date: resignationDate,
+        ...restData
+      } = data;
       const { state, city, ...restAddress } = address;
       const stateValue = memorizedStates.find(
         item => item.label === state.label,
-      )?.value;
+      )?.label;
       const cityValue = memorizedCities.find(item => item.label === city?.label)
-        ?.value;
+        ?.label;
 
       const newEmployee = {
         ...restData,
+        admission_date: convertDateFormat(admissionDate),
+        birth_date: convertDateFormat(birthDate),
+        ...(resignationDate
+          ? { resignation_date: convertDateFormat(resignationDate) }
+          : {}),
         address: {
           ...restAddress,
           state: stateValue,
