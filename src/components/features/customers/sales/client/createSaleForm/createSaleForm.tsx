@@ -58,7 +58,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
 
   const [customers, setCustomers] = useState<Customer[] | undefined>(undefined);
   const [users, setUsers] = useState<User[] | undefined>(undefined);
-  // FIXME -> remove this
   const [products, setProducts] = useState<Product[] | undefined>(undefined);
   const [discountType, setDiscountType] = useState<DiscountType[] | undefined>(
     undefined,
@@ -68,7 +67,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
   >(undefined);
   const [discountTypeSelected, setDiscountTypeSelected] = useState<
     DiscountTypeEnum | undefined
-  >('percentage');
+  >(undefined);
 
   const columns = [
     'Código',
@@ -177,6 +176,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     defaultValues: {
       date: currentDateString(),
       status: 'completed',
+      discount_type: null,
     },
   });
 
@@ -414,6 +414,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         searchLabel="Pesquisar cliente"
         emptyLabel="Sem clientes cadastrados"
         isRequired
+        menuPosition="bottom"
       />
 
       <ControlledInput
@@ -445,6 +446,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         searchLabel="Pesquisar funcionário"
         emptyLabel="Sem funcionários cadastrados"
         isRequired
+        menuPosition="bottom"
       />
 
       <div className="col-start-1 col-end-2 flex flex-col items-center justify-between pb-2 sm:col-end-3 sm:flex-row">
@@ -480,18 +482,20 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         searchLabel="Pesquisar tipo de desconto"
         emptyLabel="Sem resultados"
       />
-      <NumberInput
-        id="discount_amount"
-        label="Valor do desconto"
-        control={control}
-        errorMessage={errors.discount_amount?.message}
-        placeholder={
-          discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
-        }
-        disabled={!discountTypeSelected}
-        mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
-        prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
-      />
+      {discountTypeSelected && (
+        <NumberInput
+          id="discount_amount"
+          label="Valor do desconto"
+          control={control}
+          errorMessage={errors.discount_amount?.message}
+          placeholder={
+            discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
+          }
+          disabled={!discountTypeSelected}
+          mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
+          prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
+        />
+      )}
 
       <ControlledInput
         id="total_amount"
@@ -525,6 +529,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           searchLabel="Pesquisar método de pagamento"
           emptyLabel="Sem resultados"
           isRequired
+          isClearable={false}
         />
       )}
 
