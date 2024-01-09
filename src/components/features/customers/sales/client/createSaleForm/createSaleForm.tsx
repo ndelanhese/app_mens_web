@@ -194,9 +194,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       const selectedProducts = products.map(product => ({
         id: product.id,
         quantity: product.qty,
-        discount_amount: null,
-        discount_type: null,
-        final_value: product.value,
       }));
       const {
         customer,
