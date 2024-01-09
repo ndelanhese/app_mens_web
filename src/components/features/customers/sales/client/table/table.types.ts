@@ -15,6 +15,7 @@ type SaleProduct = {
   purchase_price_formatted: string;
   price: number;
   price_formatted: string;
+  sold_product_qty: number;
 };
 
 type Employee = {

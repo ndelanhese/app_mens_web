@@ -29,14 +29,18 @@ export const saleFormSchema = z
         },
       )
       .transform(({ value }) => value),
-    discount_amount: z.string().transform(value => {
-      const replacedValue = value
-        .replaceAll(',', '.')
-        .replaceAll('.', '')
-        .replaceAll('%', '')
-        .replaceAll('R$ ', '');
-      return value ? Number(replacedValue) : null;
-    }),
+    discount_amount: z
+      .string()
+      .nullable()
+      .default(null)
+      .transform(value => {
+        const replacedValue = value
+          ?.replaceAll(',', '.')
+          ?.replaceAll('.', '')
+          ?.replaceAll('%', '')
+          ?.replaceAll('R$ ', '');
+        return value ? Number(replacedValue) : null;
+      }),
     discount_type: z
       .object({
         value: z.string().min(1, 'O tipo do desconto é obrigatório'),

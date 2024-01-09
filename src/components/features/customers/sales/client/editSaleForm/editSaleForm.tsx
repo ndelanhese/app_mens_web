@@ -70,7 +70,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   >(undefined);
   const [discountTypeSelected, setDiscountTypeSelected] = useState<
     DiscountTypeEnum | undefined
-  >(sale?.discount_type);
+  >(sale?.discount_type ?? undefined);
   const [statusSelected, setStatusSelected] = useState<string | undefined>(
     undefined,
   );
@@ -129,9 +129,9 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         id: saleProduct.id,
         name: saleProduct.name,
         part_number: saleProduct.part_number,
-        qty: saleProduct.quantity,
+        qty: saleProduct.sold_product_qty,
         unity_value: saleProduct.price,
-        value: saleProduct.price * saleProduct.quantity,
+        value: saleProduct.price * saleProduct.sold_product_qty,
       }),
     );
     setProducts(saleProducts);
@@ -197,6 +197,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     resolver: zodResolver(saleFormSchema),
     defaultValues: {
       date: currentDateString(),
+      discount_type: null,
     },
   });
 
@@ -214,9 +215,6 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
       const selectedProducts = products.map(product => ({
         id: product.id,
         quantity: product.qty,
-        discount_amount: null,
-        discount_type: null,
-        final_value: product.value,
       }));
       const {
         customer,
@@ -460,6 +458,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     return <h1>loading...</h1>;
   }
 
+  console.log(errors);
+
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
       <ControlledInput value={sale?.id} id="id" label="Código" readOnly />
@@ -566,7 +566,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           defaultValue={sale?.discount_type}
         />
       )}
-      {discountType && (
+      {discountType && discountTypeSelected && (
         <NumberInput
           id="discount_amount"
           label="Valor do desconto"

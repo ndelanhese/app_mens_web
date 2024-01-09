@@ -26,7 +26,7 @@ const ViewSaleFormComponent = ({ sale }: SaleFormProps) => {
       <TableCell>{product.name}</TableCell>
       <TableCell>{product.part_number}</TableCell>
 
-      <TableCell>{product.quantity} Und.</TableCell>
+      <TableCell>{product.sold_product_qty} Und.</TableCell>
     </TableRow>
   ));
 
