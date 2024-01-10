@@ -73,9 +73,9 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     'Código',
     'Nome',
     'Part Number',
-    'Qtd.',
-    'Valor',
     'Valor Uni',
+    'Qtd.',
+    'Valor Total',
     '',
   ];
 
@@ -122,9 +122,9 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
             <TableCell>{product.id}</TableCell>
             <TableCell>{product.name}</TableCell>
             <TableCell>{product.part_number}</TableCell>
-            <TableCell>{product.qty}</TableCell>
-            <TableCell>{product.value}</TableCell>
             <TableCell>{product.unity_value}</TableCell>
+            <TableCell>{product.qty} Und.</TableCell>
+            <TableCell>{product.value}</TableCell>
             <TableCell className="inline-flex w-fit space-x-2">
               <ShadCnButton
                 size="icon"
@@ -177,6 +177,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       date: currentDateString(),
       status: 'completed',
       discount_type: null,
+      installments: null,
     },
   });
 
@@ -211,8 +212,8 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
 
       const payments = [
         {
-          type: Number(methodOfPayment),
-          installment: installments ? Number(installments) : 1,
+          type: Number(methodOfPayment.value),
+          installment: installments ? Number(installments.value) : 1,
         },
       ];
       await api.post(
@@ -384,8 +385,8 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     const inputMethod = watch('method_of_payment');
     if (!inputMethod) return;
     const methodName = memoizedMethodsOfPaymentsOptions?.find(
-      method => method.value === inputMethod,
-    )?.value;
+      method => method.value === inputMethod.value,
+    )?.label;
     if (methodName === 'Cartão de Crédito' && memoizedFinalValue) {
       const installments = calculateInstallments(memoizedFinalValue, 12);
       return installments.map(installment => ({
@@ -420,7 +421,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         placeholder="Ex. A calça tem um bolso..."
         register={register}
         errorMessage={errors.observation?.message}
-        isRequired
       />
 
       <MaskedInput

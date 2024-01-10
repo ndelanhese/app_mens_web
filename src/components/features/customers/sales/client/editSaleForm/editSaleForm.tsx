@@ -85,9 +85,9 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     'Código',
     'Nome',
     'Part Number',
-    'Qtd.',
-    'Valor',
     'Valor Uni',
+    'Qtd.',
+    'Valor Total',
     '',
   ];
 
@@ -108,6 +108,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     resolver: zodResolver(saleFormSchema),
     defaultValues: {
       date: currentDateString(),
+      status: 'completed',
       discount_type: null,
     },
   });
@@ -173,9 +174,9 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
             <TableCell>{product.id}</TableCell>
             <TableCell>{product.name}</TableCell>
             <TableCell>{product.part_number}</TableCell>
-            <TableCell>{product.qty}</TableCell>
-            <TableCell>{product.value_formatted}</TableCell>
             <TableCell>{product.unity_value_formatted}</TableCell>
+            <TableCell>{product.qty} Und.</TableCell>
+            <TableCell>{product.value_formatted}</TableCell>
             <TableCell className="inline-flex w-fit space-x-2">
               <ShadCnButton
                 size="icon"
@@ -245,8 +246,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
 
       const payments = [
         {
-          type: Number(methodOfPayment),
-          installment: installments ? Number(installments) : 1,
+          type: Number(methodOfPayment.value),
+          installment: installments ? Number(installments.value) : 1,
         },
       ];
       await api.post(
@@ -448,8 +449,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     const inputMethod = watch('method_of_payment');
     if (!inputMethod) return;
     const methodName = memoizedMethodsOfPaymentsOptions?.find(
-      method => method.value === inputMethod,
-    )?.value;
+      method => method.value === inputMethod.value,
+    )?.label;
     if (methodName === 'Cartão de Crédito' && memoizedFinalValue) {
       const installments = calculateInstallments(memoizedFinalValue, 12);
       return installments.map(installment => ({
@@ -462,6 +463,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     memoizedMethodsOfPaymentsOptions,
     watch('method_of_payment'),
   ]);
+
+  console.log(errors);
 
   const isLoading =
     !memorizedCustomersOptions ||
@@ -502,7 +505,6 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         register={register}
         errorMessage={errors.observation?.message}
         defaultValue={sale?.observation}
-        isRequired
       />
 
       <MaskedInput
@@ -527,21 +529,6 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           searchLabel="Pesquisar funcionário"
           emptyLabel="Sem funcionários cadastrados"
           defaultValue={employeeSelected}
-          isRequired
-        />
-      )}
-
-      {status && statusSelected && (
-        <ControlledSelect
-          label="Status"
-          name="status"
-          control={control}
-          errorMessage={errors.status?.message}
-          options={status}
-          placeHolder="Selecione um status"
-          searchLabel="Pesquisar status"
-          emptyLabel="Sem status cadastrados"
-          defaultValue={statusSelected}
           isRequired
         />
       )}

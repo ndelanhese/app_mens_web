@@ -16,7 +16,14 @@ import { nanoid } from 'nanoid';
 import { SaleFormProps } from './viewSaleForm.types';
 
 const ViewSaleFormComponent = ({ sale }: SaleFormProps) => {
-  const columns = ['Código', 'Nome', 'Part Number', 'Quantidade'];
+  const columns = [
+    'Código',
+    'Nome',
+    'Part Number',
+    'Valor Uni',
+    'Qtd.',
+    'Valor Total',
+  ];
 
   console.log(sale);
 
@@ -25,8 +32,9 @@ const ViewSaleFormComponent = ({ sale }: SaleFormProps) => {
       <TableCell>{product.id}</TableCell>
       <TableCell>{product.name}</TableCell>
       <TableCell>{product.part_number}</TableCell>
-
+      <TableCell>{product.product_final_value_unity_formatted}</TableCell>
       <TableCell>{product.sold_product_qty} Und.</TableCell>
+      <TableCell>{product.products_final_value_formatted}</TableCell>
     </TableRow>
   ));
 
@@ -51,12 +59,14 @@ const ViewSaleFormComponent = ({ sale }: SaleFormProps) => {
         value={`${sale?.customer.name} - ${sale?.customer.cpf}`}
       />
 
-      <ControlledInput
-        id="observation"
-        label="Observação"
-        readOnly
-        value={sale?.observation}
-      />
+      {sale?.observation && (
+        <ControlledInput
+          id="observation"
+          label="Observação"
+          readOnly
+          value={sale?.observation}
+        />
+      )}
 
       <ControlledInput
         id="date"
