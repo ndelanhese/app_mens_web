@@ -35,10 +35,12 @@ export const saleFormSchema = z
       .default(null)
       .transform(value => {
         const replacedValue = value
-          ?.replaceAll(',', '.')
           ?.replaceAll('.', '')
+          ?.replaceAll(',', '.')
           ?.replaceAll('%', '')
-          ?.replaceAll('R$ ', '');
+          ?.replaceAll('R$', '')
+          ?.replaceAll(' ', '');
+        console.log(replacedValue);
         return value ? Number(replacedValue) : null;
       }),
     discount_type: z
@@ -82,7 +84,7 @@ export const saleFormSchema = z
         return;
       }
 
-      if (!!discountAmount && discountType) {
+      if (!discountAmount && discountType) {
         ctx.addIssue({
           code: 'custom',
           message: 'Informe também o valor do desconto',

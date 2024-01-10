@@ -35,10 +35,11 @@ export const saleFormSchema = z
       .default(null)
       .transform(value => {
         const replacedValue = value
-          ?.replaceAll(',', '.')
           ?.replaceAll('.', '')
+          ?.replaceAll(',', '.')
           ?.replaceAll('%', '')
-          ?.replaceAll('R$ ', '');
+          ?.replaceAll('R$', '')
+          ?.replaceAll(' ', '');
         return value ? Number(replacedValue) : null;
       }),
     discount_type: z

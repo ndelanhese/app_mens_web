@@ -259,19 +259,18 @@ export function Table<T>({
         </TableBody>
       </TableComponent>
 
-      {table.getCanPreviousPage() ||
-        (table.getCanNextPage() && (
-          <TablePagination
-            previous={{
-              onClick: () => table.previousPage(),
-              disabled: !table.getCanPreviousPage(),
-            }}
-            next={{
-              onClick: () => table.nextPage(),
-              disabled: !table.getCanNextPage(),
-            }}
-          />
-        ))}
+      {(table.getCanPreviousPage() || table.getCanNextPage()) && (
+        <TablePagination
+          previous={{
+            onClick: () => table.previousPage(),
+            disabled: !table.getCanPreviousPage(),
+          }}
+          next={{
+            onClick: () => table.nextPage(),
+            disabled: !table.getCanNextPage(),
+          }}
+        />
+      )}
     </div>
   );
 }
