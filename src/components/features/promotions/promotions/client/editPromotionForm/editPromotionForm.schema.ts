@@ -52,10 +52,11 @@ export const promotionFormSchema = z
       .min(1, 'O valor de desconto é obrigatório')
       .transform(value => {
         const replacedValue = value
-          ?.replaceAll(',', '.')
           ?.replaceAll('.', '')
+          ?.replaceAll(',', '.')
           ?.replaceAll('%', '')
-          ?.replaceAll('R$ ', '');
+          ?.replaceAll('R$', '')
+          ?.replaceAll(' ', '');
         return value ? Number(replacedValue) : undefined;
       }),
     discount_type: z
