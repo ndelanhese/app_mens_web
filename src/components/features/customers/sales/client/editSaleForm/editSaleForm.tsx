@@ -29,7 +29,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { nanoid } from 'nanoid';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, set, useForm } from 'react-hook-form';
 import {
   getCustomers,
   getDiscountType,
@@ -97,16 +97,35 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     </StyledDiv>
   );
 
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<SaleFormSchema>({
+    resolver: zodResolver(saleFormSchema),
+    defaultValues: {
+      date: currentDateString(),
+      discount_type: null,
+    },
+  });
+
   const handleRemoveItemFromProducts = useCallback(
     (idToRemove: number) => {
       if (products) {
         const updatedProducts = products.filter(
           product => product.id !== idToRemove,
         );
+        if (updatedProducts.length === 0) {
+          setValue('final_amount', '');
+          setValue('total_amount', '');
+        }
         setProducts(updatedProducts);
       }
     },
-    [products],
+    [products, setValue],
   );
 
   const updateProductQuantity = useCallback(
@@ -114,7 +133,15 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
       setProducts(prev => {
         return prev?.map(product => {
           if (product.id === id) {
-            return { ...product, qty: currentQty + operator };
+            const value = Number(
+              (product.unity_value * (currentQty + operator)).toFixed(2),
+            );
+            return {
+              ...product,
+              qty: currentQty + operator,
+              value,
+              value_formatted: formatMoneyByCurrencySymbol(value),
+            };
           }
           return product;
         });
@@ -130,8 +157,10 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         name: saleProduct.name,
         part_number: saleProduct.part_number,
         qty: saleProduct.sold_product_qty,
-        unity_value: saleProduct.price,
-        value: saleProduct.price * saleProduct.sold_product_qty,
+        unity_value: saleProduct.product_final_value_unity,
+        unity_value_formatted: saleProduct.product_final_value_unity_formatted,
+        value: saleProduct.products_final_value,
+        value_formatted: saleProduct.products_final_value_formatted,
       }),
     );
     setProducts(saleProducts);
@@ -145,8 +174,8 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
             <TableCell>{product.name}</TableCell>
             <TableCell>{product.part_number}</TableCell>
             <TableCell>{product.qty}</TableCell>
-            <TableCell>{product.value}</TableCell>
-            <TableCell>{product.unity_value}</TableCell>
+            <TableCell>{product.value_formatted}</TableCell>
+            <TableCell>{product.unity_value_formatted}</TableCell>
             <TableCell className="inline-flex w-fit space-x-2">
               <ShadCnButton
                 size="icon"
@@ -185,21 +214,6 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           </TableRow>
         ))
       : undefined;
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<SaleFormSchema>({
-    resolver: zodResolver(saleFormSchema),
-    defaultValues: {
-      date: currentDateString(),
-      discount_type: null,
-    },
-  });
 
   const onSubmit: SubmitHandler<SaleFormSchema> = async data => {
     try {
@@ -351,7 +365,9 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         part_number: row.partNumber,
         qty: 1,
         unity_value: convertMoneyStringToNumber(row.price),
+        unity_value_formatted: row.price,
         value: convertMoneyStringToNumber(row.price),
+        value_formatted: row.price,
       };
 
       const existingIds = new Set(prev?.map(product => product.id));

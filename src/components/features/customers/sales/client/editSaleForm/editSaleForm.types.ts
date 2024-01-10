@@ -22,7 +22,9 @@ export type Product = {
   name: string;
   qty: number;
   value: number;
+  value_formatted: string;
   unity_value: number;
+  unity_value_formatted: string;
 };
 
 type Category = {
