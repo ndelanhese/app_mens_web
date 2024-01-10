@@ -85,6 +85,23 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     </StyledDiv>
   );
 
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<SaleFormSchema>({
+    resolver: zodResolver(saleFormSchema),
+    defaultValues: {
+      date: currentDateString(),
+      status: 'completed',
+      discount_type: null,
+      installments: null,
+    },
+  });
+
   const handleRemoveItemFromProducts = useCallback(
     (idToRemove: number) => {
       if (products) {
@@ -92,9 +109,13 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           product => product.id !== idToRemove,
         );
         setProducts(updatedProducts);
+        if (updatedProducts.length === 0) {
+          setValue('final_amount', '');
+          setValue('total_amount', '');
+        }
       }
     },
-    [products],
+    [products, setValue],
   );
 
   const updateProductQuantity = useCallback(
@@ -102,10 +123,14 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       setProducts(prev => {
         return prev?.map(product => {
           if (product.id === id) {
+            const value = Number(
+              (product.unity_value * (currentQty + operator)).toFixed(2),
+            );
             return {
               ...product,
               qty: currentQty + operator,
-              value: product.unity_value * (currentQty + operator),
+              value,
+              value_formatted: formatMoneyByCurrencySymbol(value),
             };
           }
           return product;
@@ -122,9 +147,9 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
             <TableCell>{product.id}</TableCell>
             <TableCell>{product.name}</TableCell>
             <TableCell>{product.part_number}</TableCell>
-            <TableCell>{product.unity_value}</TableCell>
+            <TableCell>{product.unity_value_formatted}</TableCell>
             <TableCell>{product.qty} Und.</TableCell>
-            <TableCell>{product.value}</TableCell>
+            <TableCell>{product.value_formatted}</TableCell>
             <TableCell className="inline-flex w-fit space-x-2">
               <ShadCnButton
                 size="icon"
@@ -164,23 +189,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         ))
       : undefined;
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<SaleFormSchema>({
-    resolver: zodResolver(saleFormSchema),
-    defaultValues: {
-      date: currentDateString(),
-      status: 'completed',
-      discount_type: null,
-      installments: null,
-    },
-  });
-
   const onSubmit: SubmitHandler<SaleFormSchema> = async data => {
     try {
       if (!products || (products && products?.length < 1)) {
@@ -204,6 +212,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         final_amount: finalAmount,
         method_of_payment: methodOfPayment,
         installments,
+        discount_type: discountType,
         ...rest
       } = data;
 
@@ -227,6 +236,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           payments,
           total_value: formattedTotalAmount,
           final_value: formattedFinalAmount,
+          discount_type: discountType?.value,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -249,7 +259,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
   };
 
   useEffect(() => {
-    setDiscountTypeSelected(watch('discount_type') as DiscountTypeEnum);
+    setDiscountTypeSelected(watch('discount_type')?.value as DiscountTypeEnum);
   }, [watch('discount_type')]);
 
   const getCustomersData = useCallback(async () => {
@@ -325,7 +335,9 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         part_number: row.partNumber,
         qty: 1,
         unity_value: convertMoneyStringToNumber(row.price),
+        unity_value_formatted: row.price,
         value: convertMoneyStringToNumber(row.price),
+        value_formatted: row.price,
       };
 
       const existingIds = new Set(prev?.map(product => product.id));
@@ -357,7 +369,10 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       memoizedTotalValue &&
       watch('discount_amount')
     ) {
-      return memoizedTotalValue - (watch('discount_amount') ?? 0);
+      const formattedDiscountAmount = convertMoneyStringToNumber(
+        String(watch('discount_amount')) ?? '0',
+      );
+      return memoizedTotalValue - formattedDiscountAmount;
     }
     if (
       discountTypeSelected === 'percentage' &&

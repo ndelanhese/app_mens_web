@@ -110,6 +110,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
       date: currentDateString(),
       status: 'completed',
       discount_type: null,
+      installments: null,
     },
   });
 
@@ -119,11 +120,11 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         const updatedProducts = products.filter(
           product => product.id !== idToRemove,
         );
+        setProducts(updatedProducts);
         if (updatedProducts.length === 0) {
           setValue('final_amount', '');
           setValue('total_amount', '');
         }
-        setProducts(updatedProducts);
       }
     },
     [products, setValue],
@@ -239,6 +240,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         final_amount: finalAmount,
         method_of_payment: methodOfPayment,
         installments,
+        discount_type: discountType,
         ...rest
       } = data;
       const formattedTotalAmount = convertMoneyStringToNumber(totalAmount);
@@ -261,6 +263,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           payments,
           total_value: formattedTotalAmount,
           final_value: formattedFinalAmount,
+          discount_type: discountType?.value,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -283,7 +286,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   };
 
   useEffect(() => {
-    setDiscountTypeSelected(watch('discount_type') as DiscountTypeEnum);
+    setDiscountTypeSelected(watch('discount_type')?.value as DiscountTypeEnum);
   }, [watch('discount_type')]);
 
   const getCustomersData = useCallback(async () => {
@@ -421,7 +424,10 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
       memoizedTotalValue &&
       watch('discount_amount')
     ) {
-      return memoizedTotalValue - (watch('discount_amount') ?? 0);
+      const formattedDiscountAmount = convertMoneyStringToNumber(
+        String(watch('discount_amount')) ?? '0',
+      );
+      return memoizedTotalValue - formattedDiscountAmount;
     }
     if (
       discountTypeSelected === 'percentage' &&
@@ -464,8 +470,6 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     watch('method_of_payment'),
   ]);
 
-  console.log(errors);
-
   const isLoading =
     !memorizedCustomersOptions ||
     !memorizedUsersOptions ||
@@ -476,8 +480,6 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     // TODO -> add skeleton
     return <h1>loading...</h1>;
   }
-
-  console.log(errors);
 
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
@@ -627,7 +629,9 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           control={control}
           errorMessage={errors.installments?.message}
           options={memoizedInstallments}
-          defaultValue="1"
+          defaultValue={
+            sale?.methods_of_payments[0].installment.toString() ?? '1'
+          }
           placeHolder="Selecione o método de pagamento"
           searchLabel="Pesquisar método de pagamento"
           emptyLabel="Sem resultados"

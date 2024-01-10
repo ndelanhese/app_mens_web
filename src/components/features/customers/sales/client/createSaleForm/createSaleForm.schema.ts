@@ -47,10 +47,7 @@ export const saleFormSchema = z
         label: z.string().min(1, 'O tipo do desconto é obrigatório'),
       })
       .nullable()
-      .default(null)
-      .transform(value => {
-        return value?.value || null;
-      }),
+      .default(null),
     total_amount: z.string(),
     final_amount: z.string(),
     method_of_payment: z.object(
@@ -85,7 +82,7 @@ export const saleFormSchema = z
         return;
       }
 
-      if (!discountAmount && discountType) {
+      if (!!discountAmount && discountType) {
         ctx.addIssue({
           code: 'custom',
           message: 'Informe também o valor do desconto',
@@ -95,7 +92,6 @@ export const saleFormSchema = z
     },
   )
   .superRefine(({ method_of_payment: methodOfPayment, installments }, ctx) => {
-    console.log(methodOfPayment);
     if (methodOfPayment.value === '2' && !installments) {
       ctx.addIssue({
         code: 'custom',

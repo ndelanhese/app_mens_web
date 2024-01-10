@@ -9,7 +9,7 @@ import { Products } from './apiData.types';
 
 const { token } = parseCookies();
 
-export const getProducts = cache(async () => {
+export const getProducts = async () => {
   try {
     const { data } = await api.get<Products>('/products', {
       headers: {
@@ -25,4 +25,4 @@ export const getProducts = cache(async () => {
       variant: 'destructive',
     });
   }
-});
+};
