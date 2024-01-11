@@ -11,6 +11,42 @@ export const editUserFormSchema = z
         invalid_type_error: 'O funcionário é obrigatório',
       },
     ),
+    roles: z
+      .array(
+        z.object(
+          {
+            value: z.string().min(1, 'O papel é obrigatório'),
+            label: z.string().min(1, 'O papel é obrigatório'),
+          },
+          {
+            invalid_type_error: 'O papel é obrigatório',
+          },
+        ),
+      )
+      .transform(permissions =>
+        permissions
+          ? permissions.map(permission => Number(permission?.value))
+          : null,
+      )
+      .nullable()
+      .default(null),
+    permissions: z
+      .array(
+        z.object(
+          {
+            value: z.string().min(1, 'A permissão é obrigatória'),
+            label: z.string().min(1, 'A permissão é obrigatória'),
+          },
+          {
+            invalid_type_error: 'A permissão é obrigatória',
+          },
+        ),
+      )
+      .transform(roles =>
+        roles ? roles.map(role => Number(role?.value)) : null,
+      )
+      .nullable()
+      .default(null),
     email: z.string().email('O e-mail é inválido'),
     user: z.string().min(1, 'O usuário é obrigatório'),
     current_password: z.string().min(1, 'A senha atual é obrigatória'),
@@ -35,14 +71,14 @@ export const editUserFormSchema = z
       message: 'As senhas devem ser idênticas',
       path: ['confirm_password'],
     },
-  )
-  .refine(
-    ({ new_password: newPassword, current_password: currentPassword }) =>
-      newPassword !== currentPassword,
-    {
-      message: 'A nova senha deve ser diferente da atual',
-      path: ['new_password'],
-    },
   );
+// .refine(
+//   ({ new_password: newPassword, current_password: currentPassword }) =>
+//     newPassword !== currentPassword,
+//   {
+//     message: 'A nova senha deve ser diferente da atual',
+//     path: ['new_password'],
+//   },
+// );
 
 export type EditUserFormSchema = z.infer<typeof editUserFormSchema>;

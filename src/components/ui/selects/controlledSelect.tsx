@@ -2,14 +2,16 @@
 
 import { memo, useMemo } from 'react';
 
-import { convertStringToSlug } from '@utils/helpers/stringManipulation';
-
+import { useTheme } from 'next-themes';
 import { Controller } from 'react-hook-form';
 import type { StylesConfig } from 'react-select';
 import Select from 'react-select';
 import { twMerge } from 'tailwind-merge';
-import { SelectProps } from './controlledSelect.types';
-import { useTheme } from 'next-themes';
+import {
+  SelectGroupedOption,
+  SelectOption,
+  SelectProps,
+} from './controlledSelect.types';
 
 const ControlledSelectComponent = ({
   name,
@@ -26,7 +28,10 @@ const ControlledSelectComponent = ({
   isLoading = false,
   isClearable = true,
   isSearchable = true,
+  isMulti = false,
+  closeMenuOnSelect = true,
   menuPosition = 'top',
+  formatGroupLabel,
 }: SelectProps) => {
   const { theme } = useTheme();
 
@@ -132,14 +137,33 @@ const ControlledSelectComponent = ({
     }),
   };
 
-  const memoizedDefaultValue = useMemo(
-    () =>
-      options?.find(
+  const memoizedDefaultValue = useMemo(() => {
+    if (isMulti && !!formatGroupLabel) {
+      const groupedOptions: SelectGroupedOption[] | undefined = options;
+      const initialValue: SelectOption[] = [];
+      const allOptions: SelectOption[] | undefined = groupedOptions?.reduce(
+        (accumulator, currentValue) => accumulator.concat(currentValue.options),
+        initialValue,
+      );
+
+      return allOptions?.filter(
         option =>
-          option?.label === defaultValue || option?.value === defaultValue,
-      ),
-    [defaultValue, options],
-  );
+          defaultValue?.includes(option?.label) ||
+          defaultValue?.includes(option?.value),
+      );
+    }
+    if (isMulti && !formatGroupLabel) {
+      return options?.filter(
+        option =>
+          defaultValue?.includes(option?.label) ||
+          defaultValue?.includes(option?.value),
+      );
+    }
+    return options?.find(
+      option =>
+        option?.label === defaultValue || option?.value === defaultValue,
+    );
+  }, [defaultValue, formatGroupLabel, isMulti, options]);
   return (
     <Controller
       name={name}
@@ -159,11 +183,14 @@ const ControlledSelectComponent = ({
             isDisabled={disabled}
             isClearable={isClearable}
             isSearchable={isSearchable}
+            isMulti={isMulti}
             menuPlacement={menuPosition}
             styles={colorStyles}
             closeMenuOnScroll
+            closeMenuOnSelect={closeMenuOnSelect}
             placeholder={placeHolder}
             noOptionsMessage={() => emptyLabel ?? 'Sem itens'}
+            formatGroupLabel={formatGroupLabel}
           />
           {errorMessage && (
             <span className="text-sm text-red-600">{errorMessage}</span>

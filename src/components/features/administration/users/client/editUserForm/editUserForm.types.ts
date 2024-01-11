@@ -31,6 +31,19 @@ export type Employees = {
   cpf: string;
 };
 
+export type Roles = {
+  id: number;
+  description: string;
+};
+
+export type PermissionsGroup = {
+  group_name: string;
+  permissions: Array<{
+    id: number;
+    description: string;
+  }>;
+};
+
 export type EditUserFormProps = {
   user: User | undefined;
   handleCloseModal: () => void;

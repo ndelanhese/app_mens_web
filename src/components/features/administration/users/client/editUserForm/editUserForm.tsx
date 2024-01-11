@@ -2,31 +2,50 @@
 /* eslint-disable camelcase */
 'use client';
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { api } from '@axios';
+import {
+  SelectGroupedOption,
+  SelectOption,
+} from '@/components/ui/selects/controlledSelect.types';
 
-import { PasswordInput } from '@components/ui/inputs/passwordInput';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { FormGrid } from '@components/shared/formGrid/formGrid';
-import { toast } from '@components/ui/shadcn/toast/use-toast';
+import { PasswordInput } from '@components/ui/inputs/passwordInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { toast } from '@components/ui/shadcn/toast/use-toast';
 
-import { convertStatus } from '@utils/status';
-
-import { EditUserFormProps, Employees } from './editUserForm.types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { EditUserFormSchema, editUserFormSchema } from './editUserForm.schema';
 import { parseCookies } from 'nookies';
-import { getEmployees } from '../api/apiData';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import type { GroupBase } from 'react-select';
+import { getEmployees, getPermissions, getRoles } from '../api/apiData';
+import { EditUserFormSchema, editUserFormSchema } from './editUserForm.schema';
+import {
+  EditUserFormProps,
+  Employees,
+  PermissionsGroup,
+  Roles,
+} from './editUserForm.types';
 
 export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
   const { token } = parseCookies();
   const [employees, setEmployees] = useState<Employees[] | undefined>(
     undefined,
   );
+  const [roles, setRoles] = useState<Roles[] | undefined>(undefined);
+  const [permissionsGroup, setPermissionsGroup] = useState<
+    PermissionsGroup[] | undefined
+  >(undefined);
+
   const {
     register,
     control,
@@ -43,6 +62,8 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
         confirm_password,
         current_password: currentPassword,
         new_password: newPassword,
+        roles,
+        permissions,
         ...rest
       } = data;
       await api.put(
@@ -54,6 +75,13 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
           password: newPassword,
           current_password: currentPassword,
         },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      await api.put(
+        `/users/${user?.id}/roles-permissions`,
+        { roles, permissions },
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -79,9 +107,21 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
     setEmployees(response);
   }, []);
 
+  const getRolesData = useCallback(async () => {
+    const response = await getRoles();
+    setRoles(response);
+  }, []);
+
+  const getPermissionsGroupData = useCallback(async () => {
+    const response = await getPermissions();
+    setPermissionsGroup(response);
+  }, []);
+
   useEffect(() => {
     getEmployeesData();
-  }, [getEmployeesData]);
+    getRolesData();
+    getPermissionsGroupData();
+  }, [getEmployeesData, getPermissionsGroupData, getRolesData]);
 
   const memorizedEmployeesOptions = useMemo(() => {
     if (employees) {
@@ -92,6 +132,67 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
     }
     return [];
   }, [employees]);
+
+  const memorizedRolesOptions = useMemo(() => {
+    if (roles) {
+      return roles.map(role => ({
+        value: role.id.toString(),
+        label: role.description,
+      }));
+    }
+    return [];
+  }, [roles]);
+
+  const memorizedPermissionsOptions = useMemo(() => {
+    if (permissionsGroup) {
+      return permissionsGroup.map(group => {
+        const permissions = group.permissions.map(permission => ({
+          value: permission.id.toString(),
+          label: permission.description,
+        }));
+        return {
+          label: group.group_name,
+          options: permissions,
+        };
+      });
+    }
+    return [];
+  }, [permissionsGroup]);
+
+  const memoizedUserRoles = useMemo(
+    () => user?.user_roles?.map(role => role?.id?.toString()),
+    [user?.user_roles],
+  );
+
+  const memoizedUserPermissions = useMemo(
+    () => user?.permissions?.map(permission => permission?.id?.toString()),
+    [user?.permissions],
+  );
+
+  const groupStyles = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  };
+  const groupBadgeStyles: CSSProperties = {
+    backgroundColor: '#EBECF0',
+    borderRadius: '2em',
+    color: '#172B4D',
+    display: 'inline-block',
+    fontSize: 12,
+    fontWeight: 'normal',
+    lineHeight: '1',
+    minWidth: 1,
+    padding: '0.16666666666667em 0.5em',
+    textAlign: 'center',
+  };
+
+  const formatGroupLabel = (data: GroupBase<unknown>) => (
+    <div style={groupStyles}>
+      <span>{data.label}</span>
+      <span style={groupBadgeStyles}>{data.options.length}</span>
+    </div>
+  );
 
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
@@ -151,6 +252,43 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
         errorMessage={errors.confirm_password?.message}
         isRequired
       />
+
+      {memorizedRolesOptions && memorizedRolesOptions.length > 0 && (
+        <ControlledSelect
+          label="Papéis"
+          name="roles"
+          control={control}
+          defaultValue={memoizedUserRoles}
+          errorMessage={errors.roles?.message}
+          options={memorizedRolesOptions}
+          placeHolder="Selecione um Papel"
+          searchLabel="Pesquisar Papéis"
+          emptyLabel="Sem papéis cadastrados"
+          isMulti
+          menuPosition="top"
+        />
+      )}
+
+      {memorizedPermissionsOptions &&
+        memorizedPermissionsOptions.length > 0 && (
+          <ControlledSelect
+            label="Permissões"
+            name="permissions"
+            control={control}
+            defaultValue={memoizedUserPermissions}
+            errorMessage={errors.permissions?.message}
+            options={
+              memorizedPermissionsOptions as SelectOption[] &
+                SelectGroupedOption[]
+            }
+            formatGroupLabel={formatGroupLabel}
+            placeHolder="Selecione uma Permissão"
+            searchLabel="Pesquisar Permissões"
+            emptyLabel="Sem permissões cadastrados"
+            isMulti
+            menuPosition="top"
+          />
+        )}
 
       <div className="flex">
         <Button
