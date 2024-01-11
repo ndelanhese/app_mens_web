@@ -25,8 +25,6 @@ const ViewSaleFormComponent = ({ sale }: SaleFormProps) => {
     'Valor Total',
   ];
 
-  console.log(sale);
-
   const products = sale?.products.map(product => (
     <TableRow key={nanoid()}>
       <TableCell>{product.id}</TableCell>
