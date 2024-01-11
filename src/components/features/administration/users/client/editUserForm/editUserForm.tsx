@@ -60,7 +60,6 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
       const {
         employee,
         confirm_password,
-        current_password: currentPassword,
         new_password: newPassword,
         roles,
         permissions,
@@ -73,7 +72,6 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
           employee_id: employee.value,
           status: 'active',
           password: newPassword,
-          current_password: currentPassword,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -226,14 +224,6 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
         defaultValue={user?.email}
         register={register}
         errorMessage={errors.email?.message}
-        isRequired
-      />
-      <PasswordInput
-        id="current_password"
-        label="Senha Atual"
-        placeholder="ex: S3nh4.user"
-        register={register}
-        errorMessage={errors.current_password?.message}
         isRequired
       />
       <PasswordInput

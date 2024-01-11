@@ -49,7 +49,6 @@ export const editUserFormSchema = z
       .default(null),
     email: z.string().email('O e-mail é inválido'),
     user: z.string().min(1, 'O usuário é obrigatório'),
-    current_password: z.string().min(1, 'A senha atual é obrigatória'),
     new_password: z
       .string()
       .min(1, 'A nova senha é obrigatória')
