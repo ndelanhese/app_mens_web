@@ -14,12 +14,6 @@ export const ViewUserForm = ({ user }: UserData) => {
         value={user?.employee?.name}
         readOnly
       />
-      <ControlledInput
-        id="cpf"
-        label="CPF:"
-        value={user?.employee?.cpf}
-        readOnly
-      />
       <ControlledInput id="email" label="Email:" value={user?.email} readOnly />
       <ControlledInput id="user" label="Usuário:" value={user?.user} readOnly />
       <ControlledInput
@@ -28,8 +22,6 @@ export const ViewUserForm = ({ user }: UserData) => {
         value={convertStatus(user?.status)}
         readOnly
       />
-
-      {/* TODO -> Add roles and permissions if logged user is admin */}
     </FormGrid>
   );
 };
