@@ -9,6 +9,10 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
+import {
+  PostalCodeInput,
+  ViacepResponseData,
+} from '@components/ui/inputs/postalCodeInput';
 
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 
@@ -35,6 +39,9 @@ const CreateSupplierFormComponent = ({
 
   const [states, setStates] = useState<StateResponse[] | undefined>(undefined);
   const [cities, setCities] = useState<CityResponse[] | undefined>(undefined);
+  const [isLoadingCities, setIsLoadingCities] = useState<boolean>(false);
+  const [isLoadingPostalCode, setIsLoadingPostalCode] =
+    useState<boolean>(false);
 
   const {
     register,
@@ -42,6 +49,7 @@ const CreateSupplierFormComponent = ({
     control,
     watch,
     setValue,
+    setFocus,
     formState: { errors, isSubmitting },
   } = useForm<SupplierFormSchema>({
     resolver: zodResolver(supplierFormSchema),
@@ -136,6 +144,56 @@ const CreateSupplierFormComponent = ({
     }
   };
 
+  const handleSearchCep = useCallback(
+    async (data: Promise<ViacepResponseData>) => {
+      try {
+        setIsLoadingPostalCode(true);
+        const response = await Promise.resolve(data);
+
+        if (response.cep) {
+          setValue('address.address', response.logradouro);
+          setValue('address.district', response.bairro);
+          const postalCodeState = memorizedStates?.find(
+            state => state.value === response.uf,
+          );
+          if (postalCodeState) {
+            setValue('address.state', postalCodeState);
+          }
+
+          const postalCodeCity = memorizedCities?.find(
+            city => city.value === convertStringToSlug(response.localidade),
+          );
+
+          if (postalCodeCity && !isLoadingCities) {
+            await new Promise(resolve => setTimeout(resolve, 2500));
+            setValue('address.city', postalCodeCity);
+          }
+          setIsLoadingPostalCode(false);
+          response.logradouro
+            ? setFocus('address.number')
+            : setFocus('address.address');
+        }
+      } catch (error: Error | any) {
+        setIsLoadingPostalCode(false);
+        const errorMessage =
+          error?.response?.data?.message ?? 'Erro desconhecido';
+        toast({
+          title: 'Erro ao buscar CEP',
+          description: errorMessage,
+          variant: 'destructive',
+        });
+      }
+    },
+    [
+      setValue,
+      memorizedStates,
+      memorizedCities,
+      isLoadingCities,
+      setFocus,
+      toast,
+    ],
+  );
+
   return (
     <form
       className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
@@ -166,6 +224,17 @@ const CreateSupplierFormComponent = ({
         placeholder="Ex. 12.345.678/9012-34"
         mask="99.999.999/9999-99"
       />
+      <PostalCodeInput
+        id="address.postal_code"
+        label="CEP"
+        isRequired
+        control={control}
+        errorMessage={errors.address?.postal_code?.message}
+        placeholder="Ex. 12345-678"
+        mask="99999-999"
+        handleSearchCep={handleSearchCep}
+        disabled={isLoadingPostalCode}
+      />
       <ControlledInput
         id="address.address"
         label="Endereço"
@@ -173,6 +242,7 @@ const CreateSupplierFormComponent = ({
         register={register}
         errorMessage={errors.address?.address?.message}
         placeholder="Ex. Rua de casa"
+        disabled={isLoadingPostalCode}
       />
       <ControlledInput
         id="address.number"
@@ -181,6 +251,7 @@ const CreateSupplierFormComponent = ({
         register={register}
         errorMessage={errors.address?.number?.message}
         placeholder="Ex. 123A"
+        disabled={isLoadingPostalCode}
       />
       <ControlledInput
         id="address.district"
@@ -189,15 +260,7 @@ const CreateSupplierFormComponent = ({
         register={register}
         errorMessage={errors.address?.district?.message}
         placeholder="Ex. Centro"
-      />
-      <MaskedInput
-        id="address.postal_code"
-        label="CEP"
-        isRequired
-        control={control}
-        errorMessage={errors.address?.postal_code?.message}
-        placeholder="Ex. 12345-678"
-        mask="99999-999"
+        disabled={isLoadingPostalCode}
       />
       <ControlledSelect
         label="Estado"
@@ -209,6 +272,7 @@ const CreateSupplierFormComponent = ({
         placeHolder="Selecione um estado"
         searchLabel="Pesquisar estado"
         emptyLabel="Sem estados cadastrados"
+        disabled={isLoadingPostalCode}
       />
       <ControlledSelect
         label="Cidade"
@@ -220,6 +284,7 @@ const CreateSupplierFormComponent = ({
         placeHolder="Selecione uma cidade"
         searchLabel="Pesquisar cidade"
         emptyLabel="Sem cidades cadastrados"
+        disabled={isLoadingPostalCode}
       />
       <Button
         isLoading={isSubmitting}
