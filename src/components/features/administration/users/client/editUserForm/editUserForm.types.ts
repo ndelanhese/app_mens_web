@@ -1,4 +1,5 @@
 type Employee = {
+  id: number;
   name: string;
   cpf: string;
 };
@@ -22,6 +23,12 @@ export type User = {
   employee: Employee;
   user_roles: Array<role>;
   permissions: Array<permission>;
+};
+
+export type Employees = {
+  id: number;
+  name: string;
+  cpf: string;
 };
 
 export type EditUserFormProps = {

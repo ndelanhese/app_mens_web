@@ -1,12 +1,15 @@
 'use client';
 
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { api } from '@axios';
 
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { PasswordInput } from '@components/ui/inputs/passwordInput';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -15,14 +18,21 @@ import {
   CreateUserFormSchema,
   createUserFormSchema,
 } from './createUserForm.schema';
-import { CreateUserFormProps } from './createUserForm.types';
+import { CreateUserFormProps, Employees } from './createUserForm.types';
+import { getEmployees } from '../api/apiData';
+import { twJoin } from 'tailwind-merge';
 
 export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
 
+  const [employees, setEmployees] = useState<Employees[] | undefined>(
+    undefined,
+  );
+
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -32,9 +42,11 @@ export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
 
   const onSubmit: SubmitHandler<CreateUserFormSchema> = async data => {
     try {
+      // eslint-disable-next-line camelcase, @typescript-eslint/no-unused-vars
+      const { employee, confirm_password, ...rest } = data;
       await api.post(
         '/users',
-        { ...data },
+        { ...rest, employee_id: employee.value, status: 'active' },
         { headers: { Authorization: `Bearer ${token}` } },
       );
       handleCloseModal();
@@ -53,9 +65,39 @@ export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
     }
   };
 
+  const getEmployeesData = useCallback(async () => {
+    const response = await getEmployees();
+    setEmployees(response);
+  }, []);
+
+  useEffect(() => {
+    getEmployeesData();
+  }, [getEmployeesData]);
+
+  const memorizedEmployeesOptions = useMemo(() => {
+    if (employees) {
+      return employees.map(employee => ({
+        value: employee.id.toString(),
+        label: `${employee.name.trim()} - ${employee.cpf}`,
+      }));
+    }
+    return [];
+  }, [employees]);
+
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
-      {/* TODO -> add employee */}
+      <ControlledSelect
+        label="Funcionário"
+        name="employee"
+        control={control}
+        errorMessage={errors.employee?.message}
+        options={memorizedEmployeesOptions}
+        placeHolder="Selecione um Funcionário"
+        searchLabel="Pesquisar funcionário"
+        emptyLabel="Sem funcionários cadastrados"
+        isRequired
+        menuPosition="bottom"
+      />
 
       <ControlledInput
         id="user"
@@ -90,13 +132,16 @@ export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
         errorMessage={errors.confirm_password?.message}
         isRequired
       />
-      <Button
-        disabled={isSubmitting}
-        type="submit"
-        className="sm:col-start-2 sm:self-end"
-      >
-        Criar
-      </Button>
+
+      <div className="flex">
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          className="h-fit w-full sm:col-start-2 sm:mt-8"
+        >
+          Criar Usuário
+        </Button>
+      </div>
     </FormGrid>
   );
 };
