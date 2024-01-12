@@ -36,7 +36,7 @@ export const CreateCategoryForm = ({ handleCloseModal }: CategoryFormProps) => {
         { ...data },
         { headers: { Authorization: `Bearer ${token}` } },
       );
-      handleCloseModal();
+      await handleCloseModal();
       toast({
         title: 'Categoria criada com sucesso',
         variant: 'default',

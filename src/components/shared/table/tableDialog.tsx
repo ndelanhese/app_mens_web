@@ -52,7 +52,7 @@ const TableDialogComponent = ({
       {isTriggered && <DialogTrigger>{trigger ?? 'Abrir Modal'}</DialogTrigger>}
       <DialogContent
         className={twMerge(
-          'flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto sm:min-w-[60rem]',
+          'flex h-full w-full flex-col gap-4 bg-white-100 sm:h-auto sm:w-auto sm:min-w-[60rem]',
           className,
         )}
       >

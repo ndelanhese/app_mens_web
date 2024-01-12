@@ -59,5 +59,5 @@ export type NewItemModal = {
   newItemDialogDescription: string;
   newItemDialogContent: ReactNode;
   newItemDialogRef: (ref: RefModalProps) => void | undefined;
-  newItemCallbackFunction: () => Promise<void>;
+  newItemName: CreatableSelects;
 };
