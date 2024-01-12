@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
 
@@ -10,6 +10,10 @@ import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { NumberInput } from '@components/ui/inputs/numberInput';
+import { RefModalProps } from '@components/shared/table/table.types';
+import { CreateBrandForm } from '@components/features/dataManagement/brands/client/createBrandForm/createBrandForm';
+import { CreateCategoryForm } from '@components/features/dataManagement/categories/client/createCategoryForm/createCategoryForm';
+import { CreateSupplierForm } from '@components/features/employees/suppliers/client/createSupplierForm/createSupplierForm';
 
 import { formatMoneyByCurrencySymbol } from '@utils/helpers';
 
@@ -23,6 +27,8 @@ import {
   CategoriesResponse,
   Category,
   ComboboxOption,
+  CreatableSelects,
+  NewItemModal,
   ProductFormProps,
   Supplier,
   SuppliersResponse,
@@ -35,6 +41,11 @@ const EditProductFormComponent = ({
   const { toast } = useToast();
 
   const { token } = parseCookies();
+
+  const createItemModalRef = useRef<RefModalProps | null>(null);
+  const [newItemModal, setNewItemModal] = useState<NewItemModal | undefined>(
+    undefined,
+  );
 
   const [categories, setCategories] = useState<Category[] | undefined>(
     undefined,
@@ -172,6 +183,79 @@ const EditProductFormComponent = ({
     }
   };
 
+  const handleCloseNewItemModal = useCallback(async () => {
+    await getCategories();
+    await getBrands();
+    await getSuppliers();
+    setNewItemModal(undefined);
+    createItemModalRef.current?.close();
+  }, [getBrands, getCategories, getSuppliers]);
+
+  useEffect(() => {
+    if (newItemModal) {
+      createItemModalRef.current?.open();
+    }
+  }, [newItemModal]);
+
+  const newItemCallbackFunction = useCallback(
+    async (inputName: string) => {
+      switch (inputName as CreatableSelects) {
+        case 'category':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateCategoryForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar nova categoria no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar nova categoria',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+        case 'brand':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateBrandForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar nova marca no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar nova marca',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+        case 'supplier':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateSupplierForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar novo fornecedor no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar novo fornecedor',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+      }
+    },
+    [handleCloseNewItemModal],
+  );
+
   useEffect(() => {
     setFocus('name');
   }, [setFocus]);
@@ -187,7 +271,13 @@ const EditProductFormComponent = ({
   }
 
   return (
-    <FormGrid onSubmit={handleSubmit(onSubmit)}>
+    <FormGrid
+      onSubmit={handleSubmit(onSubmit)}
+      newItemDialogContent={newItemModal?.newItemDialogContent}
+      newItemDialogDescription={newItemModal?.newItemDialogDescription}
+      newItemDialogTitle={newItemModal?.newItemDialogTitle}
+      newItemDialogRef={newItemModal?.newItemDialogRef}
+    >
       <ControlledInput value={product?.id} id="id" label="Código" readOnly />
       <ControlledInput
         defaultValue={product?.name}
@@ -239,6 +329,7 @@ const EditProductFormComponent = ({
         label="Tamanho"
         register={register}
         errorMessage={errors.size?.message}
+        placeholder="Tamanho do produto"
       />
       <ControlledInput
         defaultValue={product?.color}
@@ -246,6 +337,7 @@ const EditProductFormComponent = ({
         label="Cor"
         register={register}
         errorMessage={errors.color?.message}
+        placeholder="Cor do produto"
       />
       <ControlledInput
         defaultValue={product?.quantity}
@@ -266,6 +358,8 @@ const EditProductFormComponent = ({
         placeHolder="Selecione uma categoria"
         searchLabel="Pesquisar categoria"
         emptyLabel="Sem categorias cadastradas"
+        newItemLabel="Criar uma nova categoria?"
+        newItemCallbackFunction={newItemCallbackFunction}
       />
       <ControlledSelect
         label="Marca"
@@ -277,6 +371,8 @@ const EditProductFormComponent = ({
         placeHolder="Selecione uma marca"
         searchLabel="Pesquisar marca"
         emptyLabel="Sem marcas cadastradas"
+        newItemLabel="Criar uma nova marca?"
+        newItemCallbackFunction={newItemCallbackFunction}
       />
       <ControlledSelect
         label="Fornecer"
@@ -288,6 +384,8 @@ const EditProductFormComponent = ({
         placeHolder="Selecione um fornecedor"
         searchLabel="Pesquisar fornecedor"
         emptyLabel="Sem fornecedores cadastradas"
+        newItemLabel="Criar um novo fornecedor?"
+        newItemCallbackFunction={newItemCallbackFunction}
       />
       <Button
         disabled={isSubmitting}

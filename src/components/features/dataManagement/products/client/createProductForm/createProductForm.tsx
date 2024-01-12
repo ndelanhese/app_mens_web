@@ -3,18 +3,17 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
-import { getCategories } from '@/components/features/promotions/promotions/api/apiData';
 
-import { RefModalProps } from '@components/shared/table/table.types';
+import { CreateBrandForm } from '@components/features/dataManagement/brands/client/createBrandForm/createBrandForm';
+import { CreateCategoryForm } from '@components/features/dataManagement/categories/client/createCategoryForm/createCategoryForm';
+import { CreateSupplierForm } from '@components/features/employees/suppliers/client/createSupplierForm/createSupplierForm';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { RefModalProps } from '@components/shared/table/table.types';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
+import { NumberInput } from '@components/ui/inputs/numberInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
-import { NumberInput } from '@components/ui/inputs/numberInput';
-import { CreateCategoryForm } from '@components/features/dataManagement/categories/client/createCategoryForm/createCategoryForm';
-import { CreateBrandForm } from '@components/features/dataManagement/brands/client/createBrandForm/createBrandForm';
-import { CreateSupplierForm } from '@components/features/employees/suppliers/client/createSupplierForm/createSupplierForm';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -29,11 +28,11 @@ import {
   CategoriesResponse,
   Category,
   ComboboxOption,
+  CreatableSelects,
+  NewItemModal,
   ProductFormProps,
   Supplier,
   SuppliersResponse,
-  CreatableSelects,
-  NewItemModal,
 } from './createProductForm.types';
 
 const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
@@ -301,6 +300,7 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         prefix="R$"
         inputMode="decimal"
         type="number"
+        isRequired
       />
       <ControlledInput
         id="size"

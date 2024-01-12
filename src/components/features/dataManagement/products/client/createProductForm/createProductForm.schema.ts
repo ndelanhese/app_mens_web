@@ -7,7 +7,8 @@ export const productFormSchema = z.object({
   description: z.string().min(1, 'A descrição é obrigatária'),
   purchase_price: z
     .string()
-    .transform(value => (value ? convertMoneyStringToNumber(value) : value)),
+    .nullable()
+    .transform(value => (value ? convertMoneyStringToNumber(value) : null)),
   price: z
     .string()
     .min(1, 'O preço deve ser maior que zero')
