@@ -15,7 +15,7 @@ export const saleFormSchema = z
         },
       )
       .transform(({ value }) => value),
-    observation: z.string().min(1, 'A observação é obrigatória'),
+    observation: z.string().nullable(),
     date: z.string().transform(value => value || currentDateString()),
     status: z.string().min(1, 'O status é obrigatório'),
     user: z
@@ -29,38 +29,49 @@ export const saleFormSchema = z
         },
       )
       .transform(({ value }) => value),
-    discount_amount: z.string().transform(value => {
-      const replacedValue = value
-        .replaceAll(',', '.')
-        .replaceAll('.', '')
-        .replaceAll('%', '')
-        .replaceAll('R$ ', '');
-      return value ? Number(replacedValue) : null;
-    }),
+    discount_amount: z
+      .string()
+      .nullable()
+      .default(null)
+      .transform(value => {
+        const replacedValue = value
+          ?.replaceAll('.', '')
+          ?.replaceAll(',', '.')
+          ?.replaceAll('%', '')
+          ?.replaceAll('R$', '')
+          ?.replaceAll(' ', '');
+        console.log(replacedValue);
+        return value ? Number(replacedValue) : null;
+      }),
     discount_type: z
       .object({
         value: z.string().min(1, 'O tipo do desconto é obrigatório'),
         label: z.string().min(1, 'O tipo do desconto é obrigatório'),
       })
       .nullable()
-      .default(null)
-      .transform(value => {
-        return value?.value || null;
-      }),
+      .default(null),
     total_amount: z.string(),
     final_amount: z.string(),
-    method_of_payment: z
+    method_of_payment: z.object(
+      {
+        value: z.string().min(1, 'O método de pagamento é obrigatório'),
+        label: z.string().min(1, 'O método de pagamento é obrigatório'),
+      },
+      {
+        invalid_type_error: 'O método de pagamento é obrigatório',
+      },
+    ),
+    installments: z
       .object(
         {
-          value: z.string().min(1, 'O método de pagamento é obrigatório'),
-          label: z.string().min(1, 'O método de pagamento é obrigatório'),
+          value: z.string().min(1, 'A quantidade de parcelas é obrigatória'),
+          label: z.string().min(1, 'A quantidade de parcelas é obrigatória'),
         },
         {
-          invalid_type_error: 'O método de pagamento é obrigatório',
+          invalid_type_error: 'A quantidade de parcelas é obrigatória',
         },
       )
-      .transform(({ value }) => value),
-    installments: z.string().default('1'),
+      .nullable(),
   })
   .superRefine(
     ({ discount_amount: discountAmount, discount_type: discountType }, ctx) => {
@@ -83,8 +94,7 @@ export const saleFormSchema = z
     },
   )
   .superRefine(({ method_of_payment: methodOfPayment, installments }, ctx) => {
-    console.log(methodOfPayment);
-    if (methodOfPayment === '2' && !installments) {
+    if (methodOfPayment.value === '2' && !installments) {
       ctx.addIssue({
         code: 'custom',
         message: 'Informe também as parcelas',

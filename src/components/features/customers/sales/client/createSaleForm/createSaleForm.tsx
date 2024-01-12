@@ -58,7 +58,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
 
   const [customers, setCustomers] = useState<Customer[] | undefined>(undefined);
   const [users, setUsers] = useState<User[] | undefined>(undefined);
-  // FIXME -> remove this
   const [products, setProducts] = useState<Product[] | undefined>(undefined);
   const [discountType, setDiscountType] = useState<DiscountType[] | undefined>(
     undefined,
@@ -68,15 +67,15 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
   >(undefined);
   const [discountTypeSelected, setDiscountTypeSelected] = useState<
     DiscountTypeEnum | undefined
-  >('percentage');
+  >(undefined);
 
   const columns = [
     'Código',
     'Nome',
     'Part Number',
-    'Qtd.',
-    'Valor',
     'Valor Uni',
+    'Qtd.',
+    'Valor Total',
     '',
   ];
 
@@ -86,6 +85,23 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     </StyledDiv>
   );
 
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<SaleFormSchema>({
+    resolver: zodResolver(saleFormSchema),
+    defaultValues: {
+      date: currentDateString(),
+      status: 'completed',
+      discount_type: null,
+      installments: null,
+    },
+  });
+
   const handleRemoveItemFromProducts = useCallback(
     (idToRemove: number) => {
       if (products) {
@@ -93,9 +109,13 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           product => product.id !== idToRemove,
         );
         setProducts(updatedProducts);
+        if (updatedProducts.length === 0) {
+          setValue('final_amount', '');
+          setValue('total_amount', '');
+        }
       }
     },
-    [products],
+    [products, setValue],
   );
 
   const updateProductQuantity = useCallback(
@@ -103,10 +123,14 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       setProducts(prev => {
         return prev?.map(product => {
           if (product.id === id) {
+            const value = Number(
+              (product.unity_value * (currentQty + operator)).toFixed(2),
+            );
             return {
               ...product,
               qty: currentQty + operator,
-              value: product.unity_value * (currentQty + operator),
+              value,
+              value_formatted: formatMoneyByCurrencySymbol(value),
             };
           }
           return product;
@@ -123,9 +147,9 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
             <TableCell>{product.id}</TableCell>
             <TableCell>{product.name}</TableCell>
             <TableCell>{product.part_number}</TableCell>
-            <TableCell>{product.qty}</TableCell>
-            <TableCell>{product.value}</TableCell>
-            <TableCell>{product.unity_value}</TableCell>
+            <TableCell>{product.unity_value_formatted}</TableCell>
+            <TableCell>{product.qty} Und.</TableCell>
+            <TableCell>{product.value_formatted}</TableCell>
             <TableCell className="inline-flex w-fit space-x-2">
               <ShadCnButton
                 size="icon"
@@ -165,21 +189,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         ))
       : undefined;
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<SaleFormSchema>({
-    resolver: zodResolver(saleFormSchema),
-    defaultValues: {
-      date: currentDateString(),
-      status: 'completed',
-    },
-  });
-
   const onSubmit: SubmitHandler<SaleFormSchema> = async data => {
     try {
       if (!products || (products && products?.length < 1)) {
@@ -194,9 +203,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       const selectedProducts = products.map(product => ({
         id: product.id,
         quantity: product.qty,
-        discount_amount: null,
-        discount_type: null,
-        final_value: product.value,
       }));
       const {
         customer,
@@ -206,6 +212,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         final_amount: finalAmount,
         method_of_payment: methodOfPayment,
         installments,
+        discount_type: discountType,
         ...rest
       } = data;
 
@@ -214,8 +221,8 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
 
       const payments = [
         {
-          type: Number(methodOfPayment),
-          installment: installments ? Number(installments) : 1,
+          type: Number(methodOfPayment.value),
+          installment: installments ? Number(installments.value) : 1,
         },
       ];
       await api.post(
@@ -229,6 +236,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           payments,
           total_value: formattedTotalAmount,
           final_value: formattedFinalAmount,
+          discount_type: discountType?.value,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -251,7 +259,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
   };
 
   useEffect(() => {
-    setDiscountTypeSelected(watch('discount_type') as DiscountTypeEnum);
+    setDiscountTypeSelected(watch('discount_type')?.value as DiscountTypeEnum);
   }, [watch('discount_type')]);
 
   const getCustomersData = useCallback(async () => {
@@ -326,10 +334,11 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         name: row.name,
         part_number: row.partNumber,
         qty: 1,
-        unity_value: row.price,
-        value: row.price,
+        unity_value: convertMoneyStringToNumber(row.price),
+        unity_value_formatted: row.price,
+        value: convertMoneyStringToNumber(row.price),
+        value_formatted: row.price,
       };
-      // TODO -> add probability to use discount in product
 
       const existingIds = new Set(prev?.map(product => product.id));
 
@@ -360,7 +369,10 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       memoizedTotalValue &&
       watch('discount_amount')
     ) {
-      return memoizedTotalValue - (watch('discount_amount') ?? 0);
+      const formattedDiscountAmount = convertMoneyStringToNumber(
+        String(watch('discount_amount')) ?? '0',
+      );
+      return memoizedTotalValue - formattedDiscountAmount;
     }
     if (
       discountTypeSelected === 'percentage' &&
@@ -388,8 +400,8 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     const inputMethod = watch('method_of_payment');
     if (!inputMethod) return;
     const methodName = memoizedMethodsOfPaymentsOptions?.find(
-      method => method.value === inputMethod,
-    )?.value;
+      method => method.value === inputMethod.value,
+    )?.label;
     if (methodName === 'Cartão de Crédito' && memoizedFinalValue) {
       const installments = calculateInstallments(memoizedFinalValue, 12);
       return installments.map(installment => ({
@@ -415,6 +427,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         searchLabel="Pesquisar cliente"
         emptyLabel="Sem clientes cadastrados"
         isRequired
+        menuPosition="bottom"
       />
 
       <ControlledInput
@@ -423,7 +436,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         placeholder="Ex. A calça tem um bolso..."
         register={register}
         errorMessage={errors.observation?.message}
-        isRequired
       />
 
       <MaskedInput
@@ -446,10 +458,11 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         searchLabel="Pesquisar funcionário"
         emptyLabel="Sem funcionários cadastrados"
         isRequired
+        menuPosition="bottom"
       />
 
       <div className="col-start-1 col-end-2 flex flex-col items-center justify-between pb-2 sm:col-end-3 sm:flex-row">
-        <h1 className="mb-2 text-black-80 sm:mb-0 dark:text-white-80">
+        <h1 className="mb-2 text-black-80 dark:text-white-80 sm:mb-0">
           Produtos
         </h1>
         <SearchProductModal
@@ -460,7 +473,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           }}
         />
       </div>
-      <div className="col-start-1 col-end-2 h-px bg-neutral-600 sm:col-end-3 dark:bg-black-80" />
+      <div className="col-start-1 col-end-2 h-px bg-neutral-600 dark:bg-black-80 sm:col-end-3" />
 
       <div className="col-start-1 col-end-2 sm:col-end-3">
         <DataTable
@@ -481,18 +494,20 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         searchLabel="Pesquisar tipo de desconto"
         emptyLabel="Sem resultados"
       />
-      <NumberInput
-        id="discount_amount"
-        label="Valor do desconto"
-        control={control}
-        errorMessage={errors.discount_amount?.message}
-        placeholder={
-          discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
-        }
-        disabled={!discountTypeSelected}
-        mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
-        prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
-      />
+      {discountTypeSelected && (
+        <NumberInput
+          id="discount_amount"
+          label="Valor do desconto"
+          control={control}
+          errorMessage={errors.discount_amount?.message}
+          placeholder={
+            discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
+          }
+          disabled={!discountTypeSelected}
+          mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
+          prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
+        />
+      )}
 
       <ControlledInput
         id="total_amount"
@@ -526,6 +541,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           searchLabel="Pesquisar método de pagamento"
           emptyLabel="Sem resultados"
           isRequired
+          isClearable={false}
         />
       )}
 

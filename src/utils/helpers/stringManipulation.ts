@@ -11,6 +11,7 @@ export const getFirstName = (fullName?: string) => {
  * This function is used to remove special characters from a string.
  */
 export const removeSpecialCharacters = (str: string): string => {
+  if (!str) return '';
   return str?.toLowerCase()?.replace(/[^\w\s]/g, '');
 };
 
@@ -25,6 +26,7 @@ const replaceSpacesWithUnderscores = (str: string): string => {
  * This function is used to convert a string to a slug.
  */
 export const convertStringToSlug = (inputString: string): string => {
+  if (!inputString) return '';
   const cleanedString = removeSpecialCharacters(inputString);
   return replaceSpacesWithUnderscores(cleanedString);
 };

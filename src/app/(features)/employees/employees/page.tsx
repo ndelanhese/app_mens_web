@@ -21,6 +21,7 @@ const iterateResponse = (employees?: Employees) => {
     resignationDate: employee?.resignation_date,
     status: employee?.status,
     addresses: employee?.addresses?.map(address => ({
+      id: address.id,
       address: address.address,
       number: address.number,
       district: address.district,

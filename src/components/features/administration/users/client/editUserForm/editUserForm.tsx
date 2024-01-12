@@ -1,25 +1,54 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable camelcase */
 'use client';
 
-import { api } from '@axios';
+import {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
+import { api } from '@axios';
+import {
+  SelectGroupedOption,
+  SelectOption,
+} from '@/components/ui/selects/controlledSelect.types';
+
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { PasswordInput } from '@components/ui/inputs/passwordInput';
+import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { toast } from '@components/ui/shadcn/toast/use-toast';
 
-import { convertStatus } from '@utils/status';
-
-import { EditUserFormProps } from './editUserForm.types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { EditUserFormSchema, editUserFormSchema } from './editUserForm.schema';
 import { parseCookies } from 'nookies';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import type { GroupBase } from 'react-select';
+import { getEmployees, getPermissions, getRoles } from '../api/apiData';
+import { EditUserFormSchema, editUserFormSchema } from './editUserForm.schema';
+import {
+  EditUserFormProps,
+  Employees,
+  PermissionsGroup,
+  Roles,
+} from './editUserForm.types';
 
 export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
   const { token } = parseCookies();
+  const [employees, setEmployees] = useState<Employees[] | undefined>(
+    undefined,
+  );
+  const [roles, setRoles] = useState<Roles[] | undefined>(undefined);
+  const [permissionsGroup, setPermissionsGroup] = useState<
+    PermissionsGroup[] | undefined
+  >(undefined);
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<EditUserFormSchema>({
@@ -28,9 +57,33 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
 
   const onSubmit: SubmitHandler<EditUserFormSchema> = async data => {
     try {
-      await api.put(`/users/${user?.id}`, data, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const {
+        employee,
+        confirm_password,
+        new_password: newPassword,
+        roles,
+        permissions,
+        ...rest
+      } = data;
+      await api.put(
+        `/users/${user?.id}`,
+        {
+          ...rest,
+          employee_id: employee.value,
+          status: 'active',
+          password: newPassword,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      await api.put(
+        `/users/${user?.id}/roles-permissions`,
+        { roles, permissions },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       handleCloseModal();
       toast({
         title: 'Usuário atualizado com sucesso',
@@ -47,52 +100,195 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
     }
   };
 
+  const getEmployeesData = useCallback(async () => {
+    const response = await getEmployees();
+    setEmployees(response);
+  }, []);
+
+  const getRolesData = useCallback(async () => {
+    const response = await getRoles();
+    setRoles(response);
+  }, []);
+
+  const getPermissionsGroupData = useCallback(async () => {
+    const response = await getPermissions();
+    setPermissionsGroup(response);
+  }, []);
+
+  useEffect(() => {
+    getEmployeesData();
+    getRolesData();
+    getPermissionsGroupData();
+  }, [getEmployeesData, getPermissionsGroupData, getRolesData]);
+
+  const memorizedEmployeesOptions = useMemo(() => {
+    if (employees) {
+      return employees.map(employee => ({
+        value: employee.id.toString(),
+        label: `${employee.name.trim()} - ${employee.cpf}`,
+      }));
+    }
+    return [];
+  }, [employees]);
+
+  const memorizedRolesOptions = useMemo(() => {
+    if (roles) {
+      return roles.map(role => ({
+        value: role.id.toString(),
+        label: role.description,
+      }));
+    }
+    return [];
+  }, [roles]);
+
+  const memorizedPermissionsOptions = useMemo(() => {
+    if (permissionsGroup) {
+      return permissionsGroup.map(group => {
+        const permissions = group.permissions.map(permission => ({
+          value: permission.id.toString(),
+          label: permission.description,
+        }));
+        return {
+          label: group.group_name,
+          options: permissions,
+        };
+      });
+    }
+    return [];
+  }, [permissionsGroup]);
+
+  const memoizedUserRoles = useMemo(
+    () => user?.user_roles?.map(role => role?.id?.toString()),
+    [user?.user_roles],
+  );
+
+  const memoizedUserPermissions = useMemo(
+    () => user?.permissions?.map(permission => permission?.id?.toString()),
+    [user?.permissions],
+  );
+
+  const groupStyles = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  };
+  const groupBadgeStyles: CSSProperties = {
+    backgroundColor: '#EBECF0',
+    borderRadius: '2em',
+    color: '#172B4D',
+    display: 'inline-block',
+    fontSize: 12,
+    fontWeight: 'normal',
+    lineHeight: '1',
+    minWidth: 1,
+    padding: '0.16666666666667em 0.5em',
+    textAlign: 'center',
+  };
+
+  const formatGroupLabel = (data: GroupBase<unknown>) => (
+    <div style={groupStyles}>
+      <span>{data.label}</span>
+      <span style={groupBadgeStyles}>{data.options.length}</span>
+    </div>
+  );
+
   return (
-    // TODO -> FIX FORM
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
-      <ControlledInput
-        id="name"
-        label="Nome:"
-        defaultValue={user?.employee.name}
-        register={register}
-        // errorMessage={errors.name?.message}
-        readOnly
-      />
-      <ControlledInput
-        id="cpf"
-        label="CPF:"
-        defaultValue={user?.employee.cpf}
-        register={register}
-        // errorMessage={errors.cpf?.message}
-      />
-      <ControlledInput
-        id="email"
-        label="Email:"
-        defaultValue={user?.email}
-        register={register}
-        errorMessage={errors.email?.message}
-      />
+      {memorizedEmployeesOptions && memorizedEmployeesOptions.length > 1 && (
+        <ControlledSelect
+          label="Funcionário"
+          name="employee"
+          control={control}
+          defaultValue={user?.employee?.id.toString()}
+          errorMessage={errors.employee?.message}
+          options={memorizedEmployeesOptions}
+          placeHolder="Selecione um Funcionário"
+          searchLabel="Pesquisar funcionário"
+          emptyLabel="Sem funcionários cadastrados"
+          isRequired
+          menuPosition="bottom"
+        />
+      )}
+
       <ControlledInput
         id="user"
-        label="Usuário:"
+        label="Usuário"
         defaultValue={user?.user}
         register={register}
         errorMessage={errors.user?.message}
+        isRequired
       />
       <ControlledInput
-        id="status"
-        label="Status:"
-        defaultValue={convertStatus(user?.status)}
+        id="email"
+        label="Email"
+        defaultValue={user?.email}
         register={register}
-        // errorMessage={errors.status?.message}
-        readOnly
+        errorMessage={errors.email?.message}
+        isRequired
+      />
+      <PasswordInput
+        id="new_password"
+        label="Nova Senha"
+        placeholder="ex: S3nh4.user"
+        register={register}
+        errorMessage={errors.new_password?.message}
+        isRequired
+      />
+      <PasswordInput
+        id="confirm_password"
+        label="Confirmar Senha"
+        placeholder="ex: S3nh4.user"
+        register={register}
+        errorMessage={errors.confirm_password?.message}
+        isRequired
       />
 
-      {/* TODO -> Add roles and permissions with the logged user is admin */}
+      {memorizedRolesOptions && memorizedRolesOptions.length > 0 && (
+        <ControlledSelect
+          label="Papéis"
+          name="roles"
+          control={control}
+          defaultValue={memoizedUserRoles}
+          errorMessage={errors.roles?.message}
+          options={memorizedRolesOptions}
+          placeHolder="Selecione um Papel"
+          searchLabel="Pesquisar Papéis"
+          emptyLabel="Sem papéis cadastrados"
+          isMulti
+          menuPosition="top"
+        />
+      )}
 
-      <Button disabled={isSubmitting} type="submit" className="h-min self-end">
-        Salvar
-      </Button>
+      {memorizedPermissionsOptions &&
+        memorizedPermissionsOptions.length > 0 && (
+          <ControlledSelect
+            label="Permissões"
+            name="permissions"
+            control={control}
+            defaultValue={memoizedUserPermissions}
+            errorMessage={errors.permissions?.message}
+            options={
+              memorizedPermissionsOptions as SelectOption[] &
+                SelectGroupedOption[]
+            }
+            formatGroupLabel={formatGroupLabel}
+            placeHolder="Selecione uma Permissão"
+            searchLabel="Pesquisar Permissões"
+            emptyLabel="Sem permissões cadastrados"
+            isMulti
+            menuPosition="top"
+          />
+        )}
+
+      <div className="flex">
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          className="h-fit w-full sm:col-start-2 sm:mt-8"
+        >
+          Editar Usuário
+        </Button>
+      </div>
     </FormGrid>
   );
 };

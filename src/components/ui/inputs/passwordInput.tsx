@@ -8,7 +8,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
 import { Input } from './input';
 
 const passwordInput = tv({
-  base: 'flex flex-col transition-colors',
+  base: 'flex flex-col transition-colors relative',
 });
 
 export interface InputVariants

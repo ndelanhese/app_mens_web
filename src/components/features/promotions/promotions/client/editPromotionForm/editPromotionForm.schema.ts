@@ -47,14 +47,18 @@ export const promotionFormSchema = z
         label: 'Pendente',
       })
       .transform(({ value }) => value),
-    discount_amount: z.string().transform(value => {
-      const replacedValue = value
-        .replaceAll(',', '.')
-        .replaceAll('.', '')
-        .replaceAll('%', '')
-        .replaceAll('R$ ', '');
-      return value ? Number(replacedValue) : undefined;
-    }),
+    discount_amount: z
+      .string()
+      .min(1, 'O valor de desconto é obrigatório')
+      .transform(value => {
+        const replacedValue = value
+          ?.replaceAll('.', '')
+          ?.replaceAll(',', '.')
+          ?.replaceAll('%', '')
+          ?.replaceAll('R$', '')
+          ?.replaceAll(' ', '');
+        return value ? Number(replacedValue) : undefined;
+      }),
     discount_type: z
       .object(
         {

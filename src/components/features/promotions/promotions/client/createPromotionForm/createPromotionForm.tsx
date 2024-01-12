@@ -7,6 +7,7 @@ import { RefModalProps } from '@/components/shared/table/table.types';
 import { TableCell, TableRow } from '@/components/ui/shadcn/table';
 import { currentDateString, getNextDay } from '@/utils/helpers/date';
 import { api } from '@axios';
+import { FormGrid } from '@/components/shared/formGrid/formGrid';
 
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
@@ -107,6 +108,7 @@ const CreatePromotionFormComponent = ({
     formState: { errors, isSubmitting },
     control,
     watch,
+    setValue,
   } = useForm<PromotionFormSchema>({
     resolver: zodResolver(promotionFormSchema),
     defaultValues: {
@@ -204,11 +206,14 @@ const CreatePromotionFormComponent = ({
     });
   }, []);
 
+  useEffect(() => {
+    if (watch('discount_type')) {
+      setValue('discount_amount', undefined);
+    }
+  }, [watch('discount_type')]);
+
   return (
-    <form
-      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <FormGrid onSubmit={handleSubmit(onSubmit)}>
       <ControlledInput
         id="name"
         label="Nome"
@@ -254,16 +259,19 @@ const CreatePromotionFormComponent = ({
         mask="99/99/9999"
         isRequired
       />
-      <ControlledSelect
-        label="Status"
-        name="status"
-        control={control}
-        errorMessage={errors.status?.message}
-        options={status}
-        placeHolder="Selecione um status"
-        searchLabel="Pesquisar status"
-        emptyLabel="Sem status cadastrados"
-      />
+      {status && (
+        <ControlledSelect
+          label="Status"
+          name="status"
+          control={control}
+          errorMessage={errors.status?.message}
+          options={status}
+          defaultValue="pending"
+          placeHolder="Selecione um status"
+          searchLabel="Pesquisar status"
+          emptyLabel="Sem status cadastrados"
+        />
+      )}
       <ControlledSelect
         label="Tipo de desconto"
         name="discount_type"
@@ -291,7 +299,7 @@ const CreatePromotionFormComponent = ({
       />
 
       <div className="col-start-1 col-end-2 flex flex-col items-center justify-between sm:col-end-3 sm:flex-row">
-        <h1 className="mb-2 text-black-80 sm:mb-0 dark:text-white-80">
+        <h1 className="mb-2 text-black-80 dark:text-white-80 sm:mb-0">
           Produtos
         </h1>
         <SearchProductModal
@@ -302,7 +310,7 @@ const CreatePromotionFormComponent = ({
           }}
         />
       </div>
-      <div className="col-start-1 col-end-2 h-px bg-neutral-600 sm:col-end-3 dark:bg-black-80" />
+      <div className="col-start-1 col-end-2 h-px bg-neutral-600 dark:bg-black-80 sm:col-end-3" />
 
       <div className="col-start-1 col-end-2 sm:col-end-3">
         <DataTable
@@ -319,7 +327,7 @@ const CreatePromotionFormComponent = ({
       >
         Criar promoção
       </Button>
-    </form>
+    </FormGrid>
   );
 };
 

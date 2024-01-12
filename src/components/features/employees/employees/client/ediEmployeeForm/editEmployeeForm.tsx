@@ -10,8 +10,13 @@ import { MaskedInput } from '@components/ui/inputs/maskedInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
+import {
+  ViacepResponseData,
+  PostalCodeInput,
+} from '@components/ui/inputs/postalCodeInput';
 
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
+import { convertDateFormat } from '@utils/helpers/date';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -37,6 +42,9 @@ const EditEmployeeFormComponent = ({
 
   const [states, setStates] = useState<StateResponse[] | undefined>(undefined);
   const [cities, setCities] = useState<CityResponse[] | undefined>(undefined);
+  const [selectedState, setSelectedState] = useState<boolean>(false);
+  const [isLoadingPostalCode, setIsLoadingPostalCode] =
+    useState<boolean>(false);
 
   const {
     register,
@@ -44,6 +52,7 @@ const EditEmployeeFormComponent = ({
     control,
     watch,
     setValue,
+    setFocus,
     formState: { errors, isSubmitting },
   } = useForm<EmployeeFormSchema>({
     resolver: zodResolver(employeeFormSchema),
@@ -69,6 +78,7 @@ const EditEmployeeFormComponent = ({
 
   useEffect(() => {
     if (watch('address.state')?.value) {
+      setSelectedState(true);
       handleSelectState();
       setValue('address.city', null);
     }
@@ -100,9 +110,40 @@ const EditEmployeeFormComponent = ({
 
   const onSubmit: SubmitHandler<EmployeeFormSchema> = async data => {
     try {
-      await api.put(`/employees/${employee?.id}`, data, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const {
+        address,
+        admission_date: admissionDate,
+        birth_date: birthDate,
+        resignation_date: resignationDate,
+        ...restData
+      } = data;
+      const { city, state, ...restAddress } = address;
+      const stateValue = memorizedStates.find(
+        item => item.label === state.label,
+      )?.label;
+      const cityValue = memorizedCities.find(item => item.label === city?.label)
+        ?.label;
+
+      await api.put(
+        `/employees/${employee?.id}`,
+        {
+          ...restData,
+          admission_date: convertDateFormat(admissionDate),
+          birth_date: convertDateFormat(birthDate),
+          ...(resignationDate
+            ? { resignation_date: convertDateFormat(resignationDate) }
+            : {}),
+          address: {
+            id: employee?.addresses[0].id,
+            city: stateValue,
+            state: cityValue,
+            ...restAddress,
+          },
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       handleCloseModal();
       toast({
         title: 'Funcionário atualizado com sucesso',
@@ -119,11 +160,52 @@ const EditEmployeeFormComponent = ({
     }
   };
 
+  const handleSearchCep = useCallback(
+    async (data: Promise<ViacepResponseData>) => {
+      try {
+        setIsLoadingPostalCode(true);
+        const response = await Promise.resolve(data);
+
+        if (response.cep) {
+          setValue('address.address', response.logradouro);
+          setValue('address.district', response.bairro);
+          const postalCodeState = memorizedStates?.find(
+            state => state.value === response.uf,
+          );
+          if (postalCodeState) {
+            setValue('address.state', postalCodeState);
+          }
+
+          const postalCodeCity = memorizedCities?.find(
+            city => city.value === convertStringToSlug(response.localidade),
+          );
+
+          if (postalCodeCity) {
+            await new Promise(resolve => setTimeout(resolve, 2500));
+            setValue('address.city', postalCodeCity);
+          }
+          setIsLoadingPostalCode(false);
+          response.logradouro
+            ? setFocus('address.number')
+            : setFocus('address.address');
+        }
+      } catch (error: Error | any) {
+        setIsLoadingPostalCode(false);
+        const errorMessage =
+          error?.response?.data?.message ?? 'Erro desconhecido';
+        toast({
+          title: 'Erro ao buscar CEP',
+          description: errorMessage,
+          variant: 'destructive',
+        });
+      }
+    },
+    [memorizedCities, memorizedStates, setFocus, setValue, toast],
+  );
+
   if (!employee || memorizedStates.length < 1) {
     return <TableSkeleton />;
   }
-
-  // TODO -> fix addresses list
 
   return (
     <form
@@ -215,6 +297,20 @@ const EditEmployeeFormComponent = ({
             placeholder="Ex. 01/01/2000"
             mask="99/99/9999"
           />
+
+          <PostalCodeInput
+            id="address.postal_code"
+            label="CEP"
+            isRequired
+            control={control}
+            errorMessage={errors.address?.postal_code?.message}
+            placeholder="Ex. 12345-678"
+            mask="99999-999"
+            handleSearchCep={handleSearchCep}
+            disabled={isLoadingPostalCode}
+            defaultValue={employee?.addresses?.[0]?.postalCode}
+          />
+
           <ControlledInput
             id="address.address"
             label="Endereço"
@@ -223,6 +319,7 @@ const EditEmployeeFormComponent = ({
             errorMessage={errors.address?.address?.message}
             defaultValue={employee?.addresses?.[0]?.address}
             placeholder="Ex. Rua de casa"
+            disabled={isLoadingPostalCode}
           />
           <ControlledInput
             id="address.number"
@@ -232,6 +329,7 @@ const EditEmployeeFormComponent = ({
             errorMessage={errors.address?.number?.message}
             defaultValue={employee?.addresses?.[0]?.number}
             placeholder="Ex. 123A"
+            disabled={isLoadingPostalCode}
           />
           <ControlledInput
             id="address.district"
@@ -241,16 +339,7 @@ const EditEmployeeFormComponent = ({
             errorMessage={errors.address?.district?.message}
             defaultValue={employee?.addresses?.[0]?.district}
             placeholder="Ex. Centro"
-          />
-          <MaskedInput
-            id="address.postal_code"
-            label="CEP"
-            isRequired
-            control={control}
-            errorMessage={errors.address?.postal_code?.message}
-            defaultValue={employee?.addresses?.[0]?.postalCode}
-            placeholder="Ex. 12345-678"
-            mask="99999-999"
+            disabled={isLoadingPostalCode}
           />
           {memorizedStates && (
             <ControlledSelect
@@ -264,9 +353,10 @@ const EditEmployeeFormComponent = ({
               placeHolder="Selecione um estado"
               searchLabel="Pesquisar estado"
               emptyLabel="Sem estados cadastrados"
+              disabled={isLoadingPostalCode}
             />
           )}
-          {memorizedStates && memorizedCities && (
+          {memorizedStates && memorizedCities && selectedState && (
             <ControlledSelect
               label="Cidade"
               name="address.city"
@@ -278,6 +368,7 @@ const EditEmployeeFormComponent = ({
               placeHolder="Selecione uma cidade"
               searchLabel="Pesquisar cidade"
               emptyLabel="Sem cidades cadastrados"
+              disabled={isLoadingPostalCode}
             />
           )}
         </>

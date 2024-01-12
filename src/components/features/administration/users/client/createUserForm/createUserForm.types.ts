@@ -24,6 +24,12 @@ export type User = {
   permissions: Array<permission>;
 };
 
+export type Employees = {
+  id: number;
+  name: string;
+  cpf: string;
+};
+
 export type CreateUserFormProps = {
   handleCloseModal: () => void;
 };

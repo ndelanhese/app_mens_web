@@ -1,4 +1,5 @@
 type AddressResponse = {
+  id: number;
   address: string;
   number: string;
   district: string;

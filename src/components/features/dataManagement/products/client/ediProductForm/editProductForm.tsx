@@ -224,6 +224,15 @@ const EditProductFormComponent = ({
         defaultValue={formatMoneyByCurrencySymbol(product?.price)}
       />
 
+      {product?.final_price && (
+        <ControlledInput
+          value={product?.final_price}
+          id="final_price"
+          label="Preço com desconto"
+          readOnly
+        />
+      )}
+
       <ControlledInput
         defaultValue={product?.size}
         id="size"

@@ -20,6 +20,8 @@ export type Product = {
   description: string;
   price: number;
   size: string;
+  final_price?: string;
+  price_formatted: string;
   color: string;
   quantity: number;
   category: Category;

@@ -4,18 +4,24 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { api } from '@axios';
 
-import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
-import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import {
+  PostalCodeInput,
+  ViacepResponseData,
+} from '@components/ui/inputs/postalCodeInput';
 
+import { convertDateFormat } from '@utils/helpers/date';
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { getCities, getStates } from '../../api/apiData';
 import {
   EmployeeFormSchema,
   employeeFormSchema,
@@ -25,7 +31,6 @@ import {
   EmployeeFormProps,
   StateResponse,
 } from './createEmployeeForm.types';
-import { getCities, getStates } from '../../api/apiData';
 
 const CreateEmployeeFormComponent = ({
   handleCloseModal,
@@ -35,7 +40,12 @@ const CreateEmployeeFormComponent = ({
   const { token } = parseCookies();
 
   const [states, setStates] = useState<StateResponse[] | undefined>(undefined);
-  const [cities, setCities] = useState<CityResponse[] | undefined>(undefined);
+  const [cities, setCities] = useState<
+    { value: string; label: string }[] | undefined
+  >(undefined);
+  const [isLoadingCities, setIsLoadingCities] = useState<boolean>(false);
+  const [isLoadingPostalCode, setIsLoadingPostalCode] =
+    useState<boolean>(false);
 
   const {
     register,
@@ -43,6 +53,7 @@ const CreateEmployeeFormComponent = ({
     control,
     watch,
     setValue,
+    setFocus,
     formState: { errors, isSubmitting },
   } = useForm<EmployeeFormSchema>({
     resolver: zodResolver(employeeFormSchema),
@@ -56,9 +67,11 @@ const CreateEmployeeFormComponent = ({
   const handleSelectState = useCallback(async () => {
     const state = watch('address.state');
     if (state) {
+      setIsLoadingCities(true);
       const response = await getCities(state.value);
-      setCities(response);
+      response && setCities(convertCitiesToComboboxOptions(response));
       setValue('address.city', null);
+      setIsLoadingCities(false);
     }
   }, [setValue, watch]);
 
@@ -92,25 +105,28 @@ const CreateEmployeeFormComponent = ({
     return [];
   }, [states]);
 
-  const memorizedCities = useMemo(() => {
-    if (cities) {
-      return convertCitiesToComboboxOptions(cities);
-    }
-    return [];
-  }, [cities]);
-
   const onSubmit: SubmitHandler<EmployeeFormSchema> = async data => {
     try {
-      const { address, ...restData } = data;
+      const {
+        address,
+        admission_date: admissionDate,
+        birth_date: birthDate,
+        resignation_date: resignationDate,
+        ...restData
+      } = data;
       const { state, city, ...restAddress } = address;
       const stateValue = memorizedStates.find(
         item => item.label === state.label,
-      )?.value;
-      const cityValue = memorizedCities.find(item => item.label === city?.label)
-        ?.value;
+      )?.label;
+      const cityValue = cities?.find(item => item.label === city?.label)?.label;
 
       const newEmployee = {
         ...restData,
+        admission_date: convertDateFormat(admissionDate),
+        birth_date: convertDateFormat(birthDate),
+        ...(resignationDate
+          ? { resignation_date: convertDateFormat(resignationDate) }
+          : {}),
         address: {
           ...restAddress,
           state: stateValue,
@@ -138,6 +154,49 @@ const CreateEmployeeFormComponent = ({
       });
     }
   };
+
+  const handleSearchCep = useCallback(
+    async (data: Promise<ViacepResponseData>) => {
+      try {
+        setIsLoadingPostalCode(true);
+        const response = await Promise.resolve(data);
+
+        if (response.cep) {
+          setValue('address.address', response.logradouro);
+          setValue('address.district', response.bairro);
+          const postalCodeState = memorizedStates?.find(
+            state => state.value === response.uf,
+          );
+          if (postalCodeState) {
+            setValue('address.state', postalCodeState);
+          }
+
+          const postalCodeCity = cities?.find(
+            city => city.value === convertStringToSlug(response.localidade),
+          );
+
+          if (postalCodeCity && !isLoadingCities) {
+            await new Promise(resolve => setTimeout(resolve, 2500));
+            setValue('address.city', postalCodeCity);
+          }
+          setIsLoadingPostalCode(false);
+          response.logradouro
+            ? setFocus('address.number')
+            : setFocus('address.address');
+        }
+      } catch (error: Error | any) {
+        setIsLoadingPostalCode(false);
+        const errorMessage =
+          error?.response?.data?.message ?? 'Erro desconhecido';
+        toast({
+          title: 'Erro ao buscar CEP',
+          description: errorMessage,
+          variant: 'destructive',
+        });
+      }
+    },
+    [isLoadingCities, cities, memorizedStates, setFocus, setValue, toast],
+  );
 
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
@@ -210,6 +269,17 @@ const CreateEmployeeFormComponent = ({
         placeholder="Ex. 01/01/2000"
         mask="99/99/9999"
       />
+      <PostalCodeInput
+        id="address.postal_code"
+        label="CEP"
+        isRequired
+        control={control}
+        errorMessage={errors.address?.postal_code?.message}
+        placeholder="Ex. 12345-678"
+        mask="99999-999"
+        handleSearchCep={handleSearchCep}
+        disabled={isLoadingPostalCode}
+      />
       <ControlledInput
         id="address.address"
         label="Endereço"
@@ -217,6 +287,7 @@ const CreateEmployeeFormComponent = ({
         register={register}
         errorMessage={errors.address?.address?.message}
         placeholder="Ex. Rua de casa"
+        disabled={isLoadingPostalCode}
       />
       <ControlledInput
         id="address.number"
@@ -225,6 +296,7 @@ const CreateEmployeeFormComponent = ({
         register={register}
         errorMessage={errors.address?.number?.message}
         placeholder="Ex. 123A"
+        disabled={isLoadingPostalCode}
       />
       <ControlledInput
         id="address.district"
@@ -233,15 +305,7 @@ const CreateEmployeeFormComponent = ({
         register={register}
         errorMessage={errors.address?.district?.message}
         placeholder="Ex. Centro"
-      />
-      <MaskedInput
-        id="address.postal_code"
-        label="CEP"
-        isRequired
-        control={control}
-        errorMessage={errors.address?.postal_code?.message}
-        placeholder="Ex. 12345-678"
-        mask="99999-999"
+        disabled={isLoadingPostalCode}
       />
       <ControlledSelect
         label="Estado"
@@ -253,18 +317,20 @@ const CreateEmployeeFormComponent = ({
         placeHolder="Selecione um estado"
         searchLabel="Pesquisar estado"
         emptyLabel="Sem estados cadastrados"
+        disabled={isLoadingPostalCode}
       />
-      {memorizedCities && memorizedCities.length > 0 && (
+      {cities && cities.length > 0 && (
         <ControlledSelect
           label="Cidade"
           name="address.city"
           control={control}
           isRequired
           errorMessage={errors.address?.city?.message}
-          options={memorizedCities}
+          options={cities}
           placeHolder="Selecione uma cidade"
           searchLabel="Pesquisar cidade"
           emptyLabel="Sem cidades cadastrados"
+          disabled={isLoadingPostalCode}
         />
       )}
       <Button

@@ -1,10 +1,16 @@
-import path from 'path';
-
 import { z } from 'zod';
 
 export const createUserFormSchema = z
   .object({
-    // employee: z.number().min(1, 'O funcionário é obrigatório'),
+    employee: z.object(
+      {
+        value: z.string().min(1, 'O funcionário é obrigatório'),
+        label: z.string().min(1, 'O funcionário é obrigatório'),
+      },
+      {
+        invalid_type_error: 'O funcionário é obrigatório',
+      },
+    ),
     email: z.string().email('O e-mail é inválido'),
     user: z.string().min(1, 'O usuário é obrigatório'),
     password: z
@@ -19,7 +25,6 @@ export const createUserFormSchema = z
       )
       .min(8, 'Mais de 8 caracteres'),
     confirm_password: z.string().min(1, 'A confirmação de senha é obrigatória'),
-    // status: z.string().min(1, 'O status é obrigatório'),
   })
   .refine(
     ({ password, confirm_password: confirmPassword }) =>

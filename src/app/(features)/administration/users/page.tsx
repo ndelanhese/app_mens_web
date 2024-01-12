@@ -14,6 +14,7 @@ const iterateResponse = (users?: Users) => {
     user: user?.user,
     status: user?.status,
     employee: {
+      id: user?.employee?.id,
       name: user?.employee?.name,
       cpf: user?.employee?.cpf,
     },

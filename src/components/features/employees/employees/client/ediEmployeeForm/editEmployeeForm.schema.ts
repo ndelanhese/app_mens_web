@@ -8,7 +8,7 @@ export const employeeFormSchema = z.object({
   phone: z.string().min(1, 'O telefone é obrigatório'),
   pis_pasep: z.string().min(1, 'O PIS/PASEP é obrigatório'),
   admission_date: z.string().min(1, 'A data de admissão é obrigatória'),
-  resignation_date: z.string().nullable(),
+  resignation_date: z.string(),
   address: z.object({
     address: z.string().min(1, 'O endereço é obrigatório'),
     number: z.string().min(1, 'O número é obrigatório'),

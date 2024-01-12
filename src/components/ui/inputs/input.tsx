@@ -44,7 +44,7 @@ export const Input: FC<InputVariants> = ({
         {...(register ? register(id) : {})}
       />
       {errorMessage && (
-        <span className="text-sm text-red-600">{errorMessage}</span>
+        <span className=" left-0 text-sm text-red-600">{errorMessage}</span>
       )}
     </div>
   );
