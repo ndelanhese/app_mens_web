@@ -30,6 +30,8 @@ export type Props = {
   isClearable?: boolean;
   closeMenuOnSelect?: boolean;
   menuPosition?: 'top' | 'bottom';
+  newItemLabel?: string;
+  newItemCallbackFunction?: (name: string) => void;
 };
 
 export type multiProps =

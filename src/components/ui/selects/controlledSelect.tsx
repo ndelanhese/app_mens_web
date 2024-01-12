@@ -32,6 +32,8 @@ const ControlledSelectComponent = ({
   closeMenuOnSelect = true,
   menuPosition = 'top',
   formatGroupLabel,
+  newItemLabel,
+  newItemCallbackFunction,
 }: SelectProps) => {
   const { theme } = useTheme();
 
@@ -171,8 +173,19 @@ const ControlledSelectComponent = ({
       defaultValue={memoizedDefaultValue ?? ''}
       render={({ field: { onChange, value } }) => (
         <div className={twMerge('flex flex-col transition-colors', className)}>
-          <label className="mb-2 text-zinc-900 dark:text-white-80">
-            {label} {isRequired && <span className="text-red-700"> *</span>}
+          <label className="mb-2 inline-flex text-zinc-900 dark:text-white-80">
+            <div>
+              {label} {isRequired && <span className="text-red-700"> *</span>}
+            </div>
+            {newItemLabel && newItemCallbackFunction && (
+              <button
+                type="button"
+                className="ml-auto cursor-pointer text-sm hover:underline"
+                onClick={() => newItemCallbackFunction(name)}
+              >
+                {newItemLabel}
+              </button>
+            )}
           </label>
           <Select
             options={options}

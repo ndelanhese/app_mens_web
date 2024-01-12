@@ -1,21 +1,20 @@
 'use client';
 
-import { memo } from 'react';
-
 import { api } from '@axios';
 
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseCookies } from 'nookies';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   CategoryFormSchema,
   categoryFormSchema,
 } from './createCategoryForm.schema';
 import { CategoryFormProps } from './createCategoryForm.types';
-import { parseCookies } from 'nookies';
 
 export const CreateCategoryForm = ({ handleCloseModal }: CategoryFormProps) => {
   const { toast } = useToast();
@@ -54,10 +53,7 @@ export const CreateCategoryForm = ({ handleCloseModal }: CategoryFormProps) => {
   };
 
   return (
-    <form
-      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <FormGrid onSubmit={handleSubmit(onSubmit)}>
       <ControlledInput
         id="name"
         label="Categoria"
@@ -74,6 +70,6 @@ export const CreateCategoryForm = ({ handleCloseModal }: CategoryFormProps) => {
       >
         Criar categoria
       </Button>
-    </form>
+    </FormGrid>
   );
 };

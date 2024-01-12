@@ -85,6 +85,7 @@ export type tableDialogProps = {
   description?: string;
   content?: ReactNode;
   dialogRef?: (ref: RefModalProps) => void | undefined;
+  isTriggered?: boolean;
   trigger?: ReactNode;
   actionCallback?: (row: any, action: TableActionCallbackOptions) => void;
   row?: any;
