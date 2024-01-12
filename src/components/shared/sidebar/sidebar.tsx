@@ -23,6 +23,7 @@ import { getFirstName } from '@utils/helpers/stringManipulation';
 
 import { AnimatePresence } from 'framer-motion';
 import {
+  Contact,
   Container,
   Library,
   LogOut,
@@ -58,7 +59,7 @@ export const Sidebar = () => {
     <AnimatePresence>
       {open && (
         <Animation variant={isMobile ? 'fadeIn' : 'slideRight'}>
-          <aside className="absolute z-20 h-[100svh] w-screen border-r border-black-10 bg-white-100 px-4 py-3 sm:relative sm:w-56 dark:border-white-10 dark:bg-zinc-950">
+          <aside className="absolute z-20 h-[100svh] w-screen border-r border-black-10 bg-white-100 px-4 py-3 dark:border-white-10 dark:bg-zinc-950 sm:relative sm:w-56">
             <div className="flex h-full w-full flex-col justify-between">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4 px-4 pt-2">
@@ -76,7 +77,7 @@ export const Sidebar = () => {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="bg-white-100 sm:hidden dark:bg-zinc-950"
+                  className="bg-white-100 dark:bg-zinc-950 sm:hidden"
                   onClick={() => isMobile && handleToggleSidebar()}
                 >
                   <X className="h-5 w-5" />
@@ -140,6 +141,12 @@ export const Sidebar = () => {
                     <AccordionTrigger>Clientes</AccordionTrigger>
                     <AccordionContent>
                       <div className="flex w-full flex-col gap-2">
+                        <SidebarLink
+                          href="/customers/customers"
+                          title="Clientes"
+                          icon={Contact}
+                          onClick={() => isMobile && handleToggleSidebar()}
+                        />
                         <SidebarLink
                           href="/customers/orders"
                           title="Pedidos"
