@@ -48,11 +48,6 @@ const ControlledSelectComponent = ({
         border: theme === 'light' ? '1px solid #cccccc' : '1px solid #555555',
       },
     }),
-    group: styles => ({
-      ...styles,
-      backgroundColor: '#09090b',
-      color: '#fafafa',
-    }),
     menu: styles => ({
       ...styles,
       backgroundColor: theme === 'light' ? '#e7e7e7' : '#09090b',
