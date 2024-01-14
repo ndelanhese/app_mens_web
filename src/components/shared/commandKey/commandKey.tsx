@@ -1,28 +1,26 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 import {
   CommandDialog,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
-  CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
 } from '@components/ui/shadcn/command/command';
 
-import { CreditCard, Settings, User } from 'lucide-react';
 import { CommandKeyProps } from './commandKey.types';
 import { CommandKeyItems } from './commandKeyItems';
 
 export function CommandKey({ open, setOpen }: CommandKeyProps) {
+  const pathName = usePathname();
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && e.ctrlKey) {
-        setOpen(!open);
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
+        setOpen((open: boolean) => !open);
       }
     };
 
@@ -38,28 +36,11 @@ export function CommandKey({ open, setOpen }: CommandKeyProps) {
         </kbd>
       </p>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Aperte um comando ou pesquise..." />
+        <CommandInput placeholder="Pesquise..." />
         <CommandList>
           <CommandEmpty>Sem resultados.</CommandEmpty>
-          <CommandKeyItems />
+          <CommandKeyItems setOpen={setOpen} />
           <CommandSeparator />
-          <CommandGroup heading="Settings">
-            <CommandItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <CreditCard className="mr-2 h-4 w-4" />
-              <span>Billing</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
         </CommandList>
       </CommandDialog>
     </>
