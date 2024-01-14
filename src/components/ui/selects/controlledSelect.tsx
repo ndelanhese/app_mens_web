@@ -1,6 +1,7 @@
 'use client';
 
 import { memo, useMemo } from 'react';
+import { type } from 'os';
 
 import { useTheme } from 'next-themes';
 import { Controller } from 'react-hook-form';
@@ -34,6 +35,7 @@ const ControlledSelectComponent = ({
   formatGroupLabel,
   newItemLabel,
   newItemCallbackFunction,
+  isSmallDropdown = false,
 }: SelectProps) => {
   const { theme } = useTheme();
 
@@ -54,6 +56,7 @@ const ControlledSelectComponent = ({
       border: theme === 'light' ? '1px solid #cccccc' : '1px solid #27272a',
       borderRadius: '6px',
     }),
+
     option: (styles, { isDisabled, isFocused, isSelected }) => {
       return {
         ...styles,
@@ -199,6 +202,7 @@ const ControlledSelectComponent = ({
             placeholder={placeHolder}
             noOptionsMessage={() => emptyLabel ?? 'Sem itens'}
             formatGroupLabel={formatGroupLabel}
+            maxMenuHeight={isSmallDropdown ? 140 : undefined}
           />
           {errorMessage && (
             <span className="text-sm text-red-600">{errorMessage}</span>

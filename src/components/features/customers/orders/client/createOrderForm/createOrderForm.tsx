@@ -17,6 +17,8 @@ import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { Button as ShadCnButton } from '@components/ui/shadcn/button';
+import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
+import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
 
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 
@@ -28,7 +30,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { getCustomers, getStatus, getUsers } from '../../api/apiData';
 import { OrderFormSchema, orderFormSchema } from './createOrderForm.schema';
 import {
+  CreatableSelects,
   Customer,
+  NewItemModal,
   OrderFormProps,
   Product,
   ProductTable,
@@ -40,6 +44,11 @@ const CreateOrderFormComponent = ({ handleCloseModal }: OrderFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
+
+  const createItemModalRef = useRef<RefModalProps | null>(null);
+  const [newItemModal, setNewItemModal] = useState<NewItemModal | undefined>(
+    undefined,
+  );
 
   const selectProductModalRef = useRef<RefModalProps | null>(null);
 
@@ -250,8 +259,69 @@ const CreateOrderFormComponent = ({ handleCloseModal }: OrderFormProps) => {
     });
   }, []);
 
+  const handleCloseNewItemModal = useCallback(async () => {
+    await getCustomersData();
+    await getUsersData();
+    setNewItemModal(undefined);
+    createItemModalRef.current?.close();
+  }, [getCustomersData, getUsersData]);
+
+  useEffect(() => {
+    if (newItemModal) {
+      createItemModalRef.current?.open();
+    }
+  }, [newItemModal]);
+
+  const newItemCallbackFunction = useCallback(
+    async (inputName: string) => {
+      switch (inputName as CreatableSelects) {
+        case 'customer':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateCustomerForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar um novo cliente no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar novo cliente',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+        case 'user':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateUserForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar novo funcionário no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar novo funcionário',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+      }
+    },
+    [handleCloseNewItemModal],
+  );
+
   return (
-    <FormGrid onSubmit={handleSubmit(onSubmit)}>
+    <FormGrid
+      onSubmit={handleSubmit(onSubmit)}
+      newItemDialogContent={newItemModal?.newItemDialogContent}
+      newItemDialogDescription={newItemModal?.newItemDialogDescription}
+      newItemDialogTitle={newItemModal?.newItemDialogTitle}
+      newItemDialogRef={newItemModal?.newItemDialogRef}
+    >
       <ControlledSelect
         label="Cliente"
         name="customer"
@@ -262,6 +332,9 @@ const CreateOrderFormComponent = ({ handleCloseModal }: OrderFormProps) => {
         searchLabel="Pesquisar cliente"
         emptyLabel="Sem clientes cadastrados"
         isRequired
+        menuPosition="bottom"
+        newItemLabel="Criar um novo cliente?"
+        newItemCallbackFunction={newItemCallbackFunction}
       />
 
       <ControlledInput
@@ -292,17 +365,20 @@ const CreateOrderFormComponent = ({ handleCloseModal }: OrderFormProps) => {
         isRequired
       />
 
-      <ControlledSelect
-        label="Status"
-        name="status"
-        control={control}
-        errorMessage={errors.status?.message}
-        options={status}
-        placeHolder="Selecione um status"
-        searchLabel="Pesquisar status"
-        emptyLabel="Sem status cadastrados"
-        isRequired
-      />
+      {status && (
+        <ControlledSelect
+          label="Status"
+          name="status"
+          control={control}
+          errorMessage={errors.status?.message}
+          options={status}
+          placeHolder="Selecione um status"
+          searchLabel="Pesquisar status"
+          emptyLabel="Sem status cadastrados"
+          isRequired
+          defaultValue="Pendente"
+        />
+      )}
 
       <ControlledSelect
         label="Funcionário"
@@ -314,6 +390,8 @@ const CreateOrderFormComponent = ({ handleCloseModal }: OrderFormProps) => {
         searchLabel="Pesquisar funcionário"
         emptyLabel="Sem funcionários cadastrados"
         isRequired
+        newItemLabel="Criar um novo funcionário?"
+        newItemCallbackFunction={newItemCallbackFunction}
       />
 
       <div className="col-start-1 col-end-2 flex flex-col items-center justify-between sm:col-end-3 sm:flex-row">

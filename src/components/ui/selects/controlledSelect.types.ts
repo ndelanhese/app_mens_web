@@ -32,6 +32,7 @@ export type Props = {
   menuPosition?: 'top' | 'bottom';
   newItemLabel?: string;
   newItemCallbackFunction?: (name: string) => void;
+  isSmallDropdown?: boolean;
 };
 
 export type multiProps =

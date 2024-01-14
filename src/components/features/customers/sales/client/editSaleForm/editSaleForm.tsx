@@ -18,6 +18,8 @@ import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
 import { NumberInput } from '@components/ui/inputs/numberInput';
+import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
+import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
 
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 import {
@@ -48,6 +50,8 @@ import {
   DiscountType,
   DiscountTypeEnum,
   MethodOfPayment,
+  NewItemModal,
+  CreatableSelects,
 } from './editSaleForm.types';
 import { parseCookies } from 'nookies';
 
@@ -55,6 +59,11 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
+
+  const createItemModalRef = useRef<RefModalProps | null>(null);
+  const [newItemModal, setNewItemModal] = useState<NewItemModal | undefined>(
+    undefined,
+  );
 
   const selectProductModalRef = useRef<RefModalProps | null>(null);
 
@@ -470,6 +479,61 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     watch('method_of_payment'),
   ]);
 
+  const handleCloseNewItemModal = useCallback(async () => {
+    await getCustomersData();
+    await getUsersData();
+    setNewItemModal(undefined);
+    createItemModalRef.current?.close();
+  }, [getCustomersData, getUsersData]);
+
+  useEffect(() => {
+    if (newItemModal) {
+      createItemModalRef.current?.open();
+    }
+  }, [newItemModal]);
+
+  const newItemCallbackFunction = useCallback(
+    async (inputName: string) => {
+      switch (inputName as CreatableSelects) {
+        case 'customer':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateCustomerForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar um novo cliente no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar novo cliente',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+        case 'user':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateUserForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar novo funcionário no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar novo funcionário',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+      }
+    },
+    [handleCloseNewItemModal],
+  );
+
   const isLoading =
     !memorizedCustomersOptions ||
     !memorizedUsersOptions ||
@@ -482,7 +546,13 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   }
 
   return (
-    <FormGrid onSubmit={handleSubmit(onSubmit)}>
+    <FormGrid
+      onSubmit={handleSubmit(onSubmit)}
+      newItemDialogContent={newItemModal?.newItemDialogContent}
+      newItemDialogDescription={newItemModal?.newItemDialogDescription}
+      newItemDialogTitle={newItemModal?.newItemDialogTitle}
+      newItemDialogRef={newItemModal?.newItemDialogRef}
+    >
       <ControlledInput value={sale?.id} id="id" label="Código" readOnly />
 
       {memorizedCustomersOptions && customerSelected && (
@@ -497,6 +567,9 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           emptyLabel="Sem clientes cadastrados"
           defaultValue={customerSelected}
           isRequired
+          menuPosition="bottom"
+          newItemLabel="Criar um novo cliente?"
+          newItemCallbackFunction={newItemCallbackFunction}
         />
       )}
 
@@ -532,6 +605,9 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           emptyLabel="Sem funcionários cadastrados"
           defaultValue={employeeSelected}
           isRequired
+          menuPosition="bottom"
+          newItemLabel="Criar um novo funcionário?"
+          newItemCallbackFunction={newItemCallbackFunction}
         />
       )}
 
