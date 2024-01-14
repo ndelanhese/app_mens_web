@@ -12,7 +12,6 @@ import {
   SidebarDrawerContextData,
   SidebarDrawerProviderProps,
 } from './sidebarDrawer.types';
-import { parseCookies, setCookie } from 'nookies';
 
 export const SidebarDrawerContext = createContext<SidebarDrawerContextData>(
   {} as SidebarDrawerContextData,
@@ -21,21 +20,11 @@ export const SidebarDrawerContext = createContext<SidebarDrawerContextData>(
 export const SidebarDrawerProvider = ({
   children,
 }: SidebarDrawerProviderProps) => {
-  const { 'mens.sidebar_status': sidebarStatus } = parseCookies();
-
-  const [open, setOpen] = useState<boolean>(sidebarStatus !== 'false' ?? false);
+  const [open, setOpen] = useState<boolean>(true);
 
   const handleToggleSidebar = useCallback(() => {
-    setOpen(!open);
-  }, [open]);
-
-  useEffect(() => {
-    const THIRTY_DAYS_IN_SECONDS = 60 * 60 * 24 * 30;
-    setCookie(undefined, 'mens.sidebar_status', String(open), {
-      maxAge: THIRTY_DAYS_IN_SECONDS,
-      path: '/',
-    });
-  }, [open]);
+    setOpen(open => !open);
+  }, []);
 
   const memoizedSidebarStatus = useMemo(
     () => ({ open, handleToggleSidebar }),
