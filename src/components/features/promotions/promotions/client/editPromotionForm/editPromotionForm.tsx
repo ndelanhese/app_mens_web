@@ -10,6 +10,8 @@ import { ControlledSelect } from '@/components/ui/selects/controlledSelect';
 import { TableCell, TableRow } from '@/components/ui/shadcn/table';
 import { api } from '@axios';
 
+import { CreateCategoryForm } from '@components/features/promotions/promotionCategories/client/createPromotionCategoryForm/createCategoryForm';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
@@ -33,6 +35,8 @@ import {
   promotionFormSchema,
 } from './editPromotionForm.schema';
 import {
+  CreatableSelects,
+  NewItemModal,
   ProductSelectTable,
   ProductTable,
   PromotionCategory,
@@ -47,6 +51,11 @@ const EditPromotionFormComponent = ({
 
   const { token } = parseCookies();
 
+  const createItemModalRef = useRef<RefModalProps | null>(null);
+  const [newItemModal, setNewItemModal] = useState<NewItemModal | undefined>(
+    undefined,
+  );
+
   const selectProductModalRef = useRef<RefModalProps | null>(null);
   const [categories, setCategories] = useState<PromotionCategory[] | undefined>(
     undefined,
@@ -58,12 +67,6 @@ const EditPromotionFormComponent = ({
   const [discountTypeSelected, setDiscountTypeSelected] = useState<
     DiscountTypeEnum | undefined
   >('percentage');
-  const [categorySelected, setCategorySelected] = useState<string | undefined>(
-    undefined,
-  );
-  const [statusSelected, setStatusSelected] = useState<string | undefined>(
-    undefined,
-  );
   const [products, setProducts] = useState<ProductTable[] | undefined>(
     undefined,
   );
@@ -128,10 +131,10 @@ const EditPromotionFormComponent = ({
   } = useForm<PromotionFormSchema>({
     resolver: zodResolver(promotionFormSchema),
     defaultValues: {
-      name: promotion?.name,
       description: promotion?.description,
       initial_date: promotion?.initialDate,
       final_date: promotion?.finalDate,
+      discount_amount: promotion?.discount_amount,
     },
   });
 
@@ -171,14 +174,6 @@ const EditPromotionFormComponent = ({
 
   useEffect(() => {
     if (memoizedCategories && status && discountType) {
-      const promotionCategory = memoizedCategories.find(
-        category => category?.value === promotion?.category,
-      )?.value;
-      setCategorySelected(promotionCategory);
-      const promotionStatus = status.find(
-        oneStatus => oneStatus.value === promotion?.status,
-      )?.value;
-      setStatusSelected(promotionStatus);
       const promotionDiscountType = promotion?.discount.startsWith('R$')
         ? 'fixed'
         : 'percentage';
@@ -265,6 +260,41 @@ const EditPromotionFormComponent = ({
     }
   }, [watch('discount_type')]);
 
+  const handleCloseNewItemModal = useCallback(async () => {
+    await getCategoriesData();
+
+    setNewItemModal(undefined);
+    createItemModalRef.current?.close();
+  }, [getCategoriesData]);
+
+  useEffect(() => {
+    if (newItemModal) {
+      createItemModalRef.current?.open();
+    }
+  }, [newItemModal]);
+
+  const newItemCallbackFunction = useCallback(
+    async (inputName: string) => {
+      setNewItemModal({
+        newItemDialogContent: (
+          <CreateCategoryForm
+            handleCloseModal={async () => {
+              await handleCloseNewItemModal();
+            }}
+          />
+        ),
+        newItemDialogDescription:
+          'Criar nova categoria de promoção no sistema.',
+        newItemDialogRef: ref => {
+          createItemModalRef.current = ref;
+        },
+        newItemDialogTitle: 'Criar nova categoria de promoção',
+        newItemName: inputName as CreatableSelects,
+      });
+    },
+    [handleCloseNewItemModal],
+  );
+
   const isLoading = !memoizedCategories || !discountType || !status;
 
   if (isLoading) {
@@ -272,9 +302,12 @@ const EditPromotionFormComponent = ({
     return <h1>loading...</h1>;
   }
   return (
-    <form
-      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
+    <FormGrid
       onSubmit={handleSubmit(onSubmit)}
+      newItemDialogContent={newItemModal?.newItemDialogContent}
+      newItemDialogDescription={newItemModal?.newItemDialogDescription}
+      newItemDialogTitle={newItemModal?.newItemDialogTitle}
+      newItemDialogRef={newItemModal?.newItemDialogRef}
     >
       <ControlledInput value={promotion?.id} id="id" label="Código" readOnly />
       <ControlledInput
@@ -282,6 +315,7 @@ const EditPromotionFormComponent = ({
         label="Promoção de verão"
         register={register}
         errorMessage={errors.name?.message}
+        defaultValue={promotion?.name}
         isRequired
       />
       <ControlledInput
@@ -292,7 +326,7 @@ const EditPromotionFormComponent = ({
         errorMessage={errors.description?.message}
         isRequired
       />
-      {memoizedCategories && categorySelected && (
+      {memoizedCategories && (
         <ControlledSelect
           label="Categoria"
           name="promotion_category_id"
@@ -300,10 +334,12 @@ const EditPromotionFormComponent = ({
           isRequired
           errorMessage={errors.promotion_category_id?.message}
           options={memoizedCategories}
-          defaultValue={categorySelected}
+          defaultValue={promotion?.category}
           placeHolder="Selecione uma categoria"
           searchLabel="Pesquisar categoria"
           emptyLabel="Sem categorias cadastradas"
+          newItemLabel="Criar uma nova categoria?"
+          newItemCallbackFunction={newItemCallbackFunction}
         />
       )}
       <MaskedInput
@@ -324,14 +360,14 @@ const EditPromotionFormComponent = ({
         mask="99/99/9999"
         isRequired
       />
-      {status && statusSelected && (
+      {status && (
         <ControlledSelect
           label="Status"
           name="status"
           control={control}
           errorMessage={errors.status?.message}
           options={status}
-          defaultValue={statusSelected}
+          defaultValue={promotion?.status}
           placeHolder="Selecione um status"
           searchLabel="Pesquisar status"
           emptyLabel="Sem status cadastrados"
@@ -395,7 +431,7 @@ const EditPromotionFormComponent = ({
       >
         Alterar promoção
       </Button>
-    </form>
+    </FormGrid>
   );
 };
 
