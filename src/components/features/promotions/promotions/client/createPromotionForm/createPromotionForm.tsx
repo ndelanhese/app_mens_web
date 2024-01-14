@@ -2,13 +2,12 @@
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { DataTable } from '@/components/shared/dataTable';
-import { RefModalProps } from '@/components/shared/table/table.types';
-import { TableCell, TableRow } from '@/components/ui/shadcn/table';
-import { currentDateString, getNextDay } from '@/utils/helpers/date';
 import { api } from '@axios';
-import { FormGrid } from '@/components/shared/formGrid/formGrid';
 
+import { TableCell, TableRow } from '@components/ui/shadcn/table';
+import { RefModalProps } from '@components/shared/table/table.types';
+import { DataTable } from '@components/shared/dataTable';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
@@ -17,6 +16,9 @@ import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
+import { CreateCategoryForm } from '@components/features/promotions/promotionCategories/client/createPromotionCategoryForm/createCategoryForm';
+
+import { currentDateString, getNextDay } from '@utils/helpers/date';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { nanoid } from 'nanoid';
@@ -34,6 +36,8 @@ import {
   promotionFormSchema,
 } from './createPromotionForm.schema';
 import {
+  CreatableSelects,
+  NewItemModal,
   Product,
   ProductTable,
   PromotionCategory,
@@ -47,6 +51,11 @@ const CreatePromotionFormComponent = ({
   const { toast } = useToast();
 
   const { token } = parseCookies();
+
+  const createItemModalRef = useRef<RefModalProps | null>(null);
+  const [newItemModal, setNewItemModal] = useState<NewItemModal | undefined>(
+    undefined,
+  );
 
   const selectProductModalRef = useRef<RefModalProps | null>(null);
 
@@ -212,8 +221,49 @@ const CreatePromotionFormComponent = ({
     }
   }, [watch('discount_type')]);
 
+  const handleCloseNewItemModal = useCallback(async () => {
+    await getCategoriesData();
+
+    setNewItemModal(undefined);
+    createItemModalRef.current?.close();
+  }, [getCategoriesData]);
+
+  useEffect(() => {
+    if (newItemModal) {
+      createItemModalRef.current?.open();
+    }
+  }, [newItemModal]);
+
+  const newItemCallbackFunction = useCallback(
+    async (inputName: string) => {
+      setNewItemModal({
+        newItemDialogContent: (
+          <CreateCategoryForm
+            handleCloseModal={async () => {
+              await handleCloseNewItemModal();
+            }}
+          />
+        ),
+        newItemDialogDescription:
+          'Criar nova categoria de promoção no sistema.',
+        newItemDialogRef: ref => {
+          createItemModalRef.current = ref;
+        },
+        newItemDialogTitle: 'Criar nova categoria de promoção',
+        newItemName: inputName as CreatableSelects,
+      });
+    },
+    [handleCloseNewItemModal],
+  );
+
   return (
-    <FormGrid onSubmit={handleSubmit(onSubmit)}>
+    <FormGrid
+      onSubmit={handleSubmit(onSubmit)}
+      newItemDialogContent={newItemModal?.newItemDialogContent}
+      newItemDialogDescription={newItemModal?.newItemDialogDescription}
+      newItemDialogTitle={newItemModal?.newItemDialogTitle}
+      newItemDialogRef={newItemModal?.newItemDialogRef}
+    >
       <ControlledInput
         id="name"
         label="Nome"
@@ -240,6 +290,8 @@ const CreatePromotionFormComponent = ({
         placeHolder="Selecione uma categoria"
         searchLabel="Pesquisar categoria"
         emptyLabel="Sem categorias cadastradas"
+        newItemLabel="Criar uma nova categoria?"
+        newItemCallbackFunction={newItemCallbackFunction}
       />
       <MaskedInput
         id="initial_date"
