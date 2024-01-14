@@ -340,6 +340,7 @@ const EditPromotionFormComponent = ({
           emptyLabel="Sem categorias cadastradas"
           newItemLabel="Criar uma nova categoria?"
           newItemCallbackFunction={newItemCallbackFunction}
+          menuPosition="bottom"
         />
       )}
       <MaskedInput

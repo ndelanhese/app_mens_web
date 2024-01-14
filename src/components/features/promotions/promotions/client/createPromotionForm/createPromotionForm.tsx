@@ -292,6 +292,7 @@ const CreatePromotionFormComponent = ({
         emptyLabel="Sem categorias cadastradas"
         newItemLabel="Criar uma nova categoria?"
         newItemCallbackFunction={newItemCallbackFunction}
+        menuPosition="bottom"
       />
       <MaskedInput
         id="initial_date"
