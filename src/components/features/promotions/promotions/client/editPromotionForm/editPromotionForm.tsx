@@ -17,6 +17,7 @@ import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
+import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash } from 'lucide-react';
@@ -29,7 +30,6 @@ import {
   DiscountTypeEnum,
   Status,
 } from '../../api/apiData.types';
-import { SearchProductModal } from '../searchProductModal/searchProductModal';
 import {
   PromotionFormSchema,
   promotionFormSchema,

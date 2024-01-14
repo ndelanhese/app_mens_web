@@ -17,6 +17,7 @@ import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { CreateCategoryForm } from '@components/features/promotions/promotionCategories/client/createPromotionCategoryForm/createCategoryForm';
+import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
 
 import { currentDateString, getNextDay } from '@utils/helpers/date';
 
@@ -30,7 +31,6 @@ import {
   DiscountTypeEnum,
   Status,
 } from '../../api/apiData.types';
-import { SearchProductModal } from '../searchProductModal/searchProductModal';
 import {
   PromotionFormSchema,
   promotionFormSchema,

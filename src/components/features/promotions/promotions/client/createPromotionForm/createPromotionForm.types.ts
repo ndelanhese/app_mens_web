@@ -44,7 +44,7 @@ export type ProductTable = {
   name: string;
   partNumber: string;
   description: string;
-  price: number;
+  price: string;
   size: string;
   color: string;
   quantity: number;
