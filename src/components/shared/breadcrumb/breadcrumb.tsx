@@ -6,19 +6,19 @@ import { memo } from 'react';
 import { BreadcrumbMapping } from './breadcrumb.types';
 
 const breadcrumbMapping: BreadcrumbMapping = {
-  '/': 'Tela Inicial',
-  '/administration/users': 'Administração / Usuários',
-  '/administration/roles-permissions': 'Administração / Permissões',
-  '/data-management/brands': 'Gerenciamento de Dados / Marcas',
-  '/data-management/categories': 'Gerenciamento de Dados / Categorias',
-  '/data-management/products': 'Gerenciamento de Dados / Produtos',
-  '/customers/orders': 'Clientes / Pedidos',
-  '/customers/sales': 'Clientes / Vendas',
-  '/employees/employees': 'Funcionários / Funcionários',
-  '/employees/suppliers': 'Funcionários / Fornecedores',
-  '/financial/summaries': 'Financeiro / Resumos',
-  '/promotions/promotion-categories': 'Promoções / Categorias de Promoção',
-  '/promotions/promotions': 'Promoções / Promoções',
+  '/dashboard': 'Dashboard',
+  '/administration/users': 'Usuários',
+  '/administration/roles-permissions': 'Papéis e permissões',
+  '/data-management/brands': 'Marcas',
+  '/data-management/categories': 'Categorias',
+  '/data-management/products': 'Produtos',
+  '/customers/customers': 'Clientes',
+  '/customers/orders': 'Pedidos',
+  '/customers/sales': 'Vendas',
+  '/employees/employees': 'Funcionários',
+  '/employees/suppliers': 'Fornecedores',
+  '/promotions/promotion-categories': 'Categorias de Promoção',
+  '/promotions/promotions': 'Promoções',
 };
 
 const getDefaultBreadcrumb = (): string => 'Página Desconhecida';
@@ -28,7 +28,6 @@ const getBreadcrumbText = (pathname: string): string =>
 
 const BreadcrumbComponent = () => {
   const pathname = usePathname();
-  // TODO -> adicionar validação de pathname para sub rotas
   const breadcrumbText = getBreadcrumbText(pathname);
 
   return (
