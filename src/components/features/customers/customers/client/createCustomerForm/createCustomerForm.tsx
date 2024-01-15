@@ -162,12 +162,19 @@ const CreateCustomerFormComponent = ({
             setValue('address.state', postalCodeState);
           }
 
-          const postalCodeCity = cities?.find(
+          setIsLoadingCities(true);
+          const citiesResponse = await getCities(response.uf);
+          const convertedCities = citiesResponse
+            ? convertCitiesToComboboxOptions(citiesResponse)
+            : undefined;
+          setCities(convertedCities);
+          setIsLoadingCities(false);
+
+          const postalCodeCity = convertedCities?.find(
             city => city.value === convertStringToSlug(response.localidade),
           );
 
-          if (postalCodeCity && !isLoadingCities) {
-            await new Promise(resolve => setTimeout(resolve, 2500));
+          if (postalCodeCity) {
             setValue('address.city', postalCodeCity);
           }
           setIsLoadingPostalCode(false);
@@ -186,7 +193,7 @@ const CreateCustomerFormComponent = ({
         });
       }
     },
-    [isLoadingCities, cities, memorizedStates, setFocus, setValue, toast],
+    [setValue, memorizedStates, setFocus, toast],
   );
 
   return (

@@ -213,7 +213,7 @@ export const Sidebar = () => {
     return (
       <aside
         className={
-          'absolute z-20 hidden h-[100dvh] w-screen border-r border-black-10 bg-white-100 px-4 py-3 dark:border-white-10 dark:bg-zinc-950 sm:relative sm:w-56'
+          'absolute z-20 hidden h-[100dvh] w-screen border-r border-black-10 bg-white-100 px-4 py-3 transition-all duration-700 ease-in-out dark:border-white-10 dark:bg-zinc-950 sm:relative sm:w-56'
         }
       >
         {CHILDREN}
@@ -224,7 +224,7 @@ export const Sidebar = () => {
   return (
     <aside
       className={
-        'absolute z-20 h-[100dvh] w-screen border-r border-black-10 bg-white-100 px-4 py-3 dark:border-white-10 dark:bg-zinc-950 sm:relative sm:w-56'
+        'absolute z-20 h-[100dvh] w-screen border-r border-black-10 bg-white-100 px-4 py-3 transition-all duration-700 ease-in-out dark:border-white-10 dark:bg-zinc-950 sm:relative sm:w-56'
       }
     >
       {CHILDREN}
