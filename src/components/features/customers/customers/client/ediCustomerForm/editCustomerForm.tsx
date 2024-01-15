@@ -4,19 +4,19 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { api } from '@axios';
 
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
+import {
+  PostalCodeInput,
+  ViacepResponseData,
+} from '@components/ui/inputs/postalCodeInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
-import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
-import {
-  ViacepResponseData,
-  PostalCodeInput,
-} from '@components/ui/inputs/postalCodeInput';
 
-import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 import { convertDateFormat } from '@utils/helpers/date';
+import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -194,8 +194,10 @@ const EditCustomerFormComponent = ({
     [memorizedCities, memorizedStates, setFocus, setValue, toast],
   );
 
-  if (!customer || memorizedStates.length < 1) {
-    return <TableSkeleton />;
+  const isLoading = !customer || !memorizedStates || !memorizedCities;
+
+  if (isLoading) {
+    return <FormGridSkeleton qtyOfInputs={12} />;
   }
 
   return (
