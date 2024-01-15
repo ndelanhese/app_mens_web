@@ -19,6 +19,7 @@ import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
 import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 
@@ -359,11 +360,10 @@ const EditOrderFormComponent = ({
   );
 
   const isLoading =
-    !memorizedCustomersOptions || !memorizedUsersOptions || !status;
+    !memorizedCustomersOptions || !memorizedUsersOptions || !status || !order;
 
   if (isLoading) {
-    // TODO -> add skeleton
-    return <h1>loading...</h1>;
+    return <FormGridSkeleton qtyOfInputs={6} />;
   }
 
   return (

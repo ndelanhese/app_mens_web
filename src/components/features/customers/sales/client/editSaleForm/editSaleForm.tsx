@@ -20,6 +20,7 @@ import { SearchProductModal } from '@components/shared/searchProductModal/search
 import { NumberInput } from '@components/ui/inputs/numberInput';
 import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
 import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 import {
@@ -538,11 +539,11 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     !memorizedCustomersOptions ||
     !memorizedUsersOptions ||
     !memoizedMethodsOfPaymentsOptions ||
-    !status;
+    !status ||
+    !sale;
 
   if (isLoading) {
-    // TODO -> add skeleton
-    return <h1>loading...</h1>;
+    return <FormGridSkeleton qtyOfInputs={9} />;
   }
 
   return (

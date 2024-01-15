@@ -20,6 +20,7 @@ import { Button as ShadCnButton } from '@components/ui/shadcn/button';
 import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 
 import {
   calculateInstallments,
@@ -478,6 +479,15 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     },
     [handleCloseNewItemModal],
   );
+
+  const isLoading =
+    !memorizedCustomersOptions ||
+    !memorizedUsersOptions ||
+    !memoizedMethodsOfPaymentsOptions;
+
+  if (isLoading) {
+    return <FormGridSkeleton qtyOfInputs={8} />;
+  }
 
   return (
     <FormGrid

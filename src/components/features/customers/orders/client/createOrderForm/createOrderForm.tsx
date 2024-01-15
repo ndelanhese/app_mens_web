@@ -19,6 +19,7 @@ import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { Button as ShadCnButton } from '@components/ui/shadcn/button';
 import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
 import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 
@@ -313,6 +314,13 @@ const CreateOrderFormComponent = ({ handleCloseModal }: OrderFormProps) => {
     },
     [handleCloseNewItemModal],
   );
+
+  const isLoading =
+    !memorizedCustomersOptions || !memorizedUsersOptions || !status;
+
+  if (isLoading) {
+    return <FormGridSkeleton qtyOfInputs={5} />;
+  }
 
   return (
     <FormGrid
