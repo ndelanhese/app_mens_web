@@ -15,6 +15,8 @@ const iterateResponse = (promotions?: PromotionsResponse) => {
     name: promotion?.name,
     description: promotion?.description,
     discount: promotion?.formatted_discount,
+    discount_amount: promotion?.discount_amount,
+    formatted_discount: promotion?.formatted_discount,
     initialDate: promotion?.initial_date,
     finalDate: promotion?.final_date,
     status: promotion?.status,

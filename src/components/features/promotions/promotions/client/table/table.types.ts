@@ -11,6 +11,8 @@ export type Promotion = {
   name: string;
   description: string;
   discount: string;
+  discount_amount: number;
+  formatted_discount: string;
   initialDate: string;
   finalDate: string;
   status: string;
