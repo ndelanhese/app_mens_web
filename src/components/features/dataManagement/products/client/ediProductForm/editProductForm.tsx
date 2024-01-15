@@ -14,6 +14,7 @@ import { RefModalProps } from '@components/shared/table/table.types';
 import { CreateBrandForm } from '@components/features/dataManagement/brands/client/createBrandForm/createBrandForm';
 import { CreateCategoryForm } from '@components/features/dataManagement/categories/client/createCategoryForm/createCategoryForm';
 import { CreateSupplierForm } from '@components/features/employees/suppliers/client/createSupplierForm/createSupplierForm';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 
 import { formatMoneyByCurrencySymbol } from '@utils/helpers';
 
@@ -260,14 +261,14 @@ const EditProductFormComponent = ({
     setFocus('name');
   }, [setFocus]);
 
-  if (
+  const isLoading =
     !product ||
-    memorizedBrandsOptions.length < 1 ||
-    memorizedCategoriesOptions.length < 1 ||
-    memorizedSuppliersOptions.length < 1
-  ) {
-    // TODO -> Add skeleton
-    return <h1>Carregando...</h1>;
+    !memorizedCategoriesOptions ||
+    !memorizedBrandsOptions ||
+    !memorizedSuppliersOptions;
+
+  if (isLoading) {
+    return <FormGridSkeleton qtyOfInputs={10} />;
   }
 
   return (

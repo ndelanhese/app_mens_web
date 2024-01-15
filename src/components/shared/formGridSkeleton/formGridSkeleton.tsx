@@ -28,7 +28,7 @@ export const FormGridSkeleton = ({
   return (
     <FormGrid>
       {elements}
-      <Button isLoading className="h-fit w-full sm:col-start-2 sm:mt-6">
+      <Button isLoading className="h-fit w-full sm:col-start-2">
         <Skeleton className="h-4 w-20" />
       </Button>
     </FormGrid>
