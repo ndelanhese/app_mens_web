@@ -8,12 +8,13 @@ import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
-import { ControlledSelect } from '@components/ui/selects/controlledSelect';
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import {
   PostalCodeInput,
   ViacepResponseData,
 } from '@components/ui/inputs/postalCodeInput';
+import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 
 import { convertDateFormat } from '@utils/helpers/date';
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
@@ -43,7 +44,6 @@ const CreateCustomerFormComponent = ({
   const [cities, setCities] = useState<
     { value: string; label: string }[] | undefined
   >(undefined);
-  const [isLoadingCities, setIsLoadingCities] = useState<boolean>(false);
   const [isLoadingPostalCode, setIsLoadingPostalCode] =
     useState<boolean>(false);
 
@@ -67,11 +67,9 @@ const CreateCustomerFormComponent = ({
   const handleSelectState = useCallback(async () => {
     const state = watch('address.state');
     if (state) {
-      setIsLoadingCities(true);
       const response = await getCities(state.value);
       response && setCities(convertCitiesToComboboxOptions(response));
       setValue('address.city', null);
-      setIsLoadingCities(false);
     }
   }, [setValue, watch]);
 
@@ -162,13 +160,11 @@ const CreateCustomerFormComponent = ({
             setValue('address.state', postalCodeState);
           }
 
-          setIsLoadingCities(true);
           const citiesResponse = await getCities(response.uf);
           const convertedCities = citiesResponse
             ? convertCitiesToComboboxOptions(citiesResponse)
             : undefined;
           setCities(convertedCities);
-          setIsLoadingCities(false);
 
           const postalCodeCity = convertedCities?.find(
             city => city.value === convertStringToSlug(response.localidade),
@@ -195,6 +191,12 @@ const CreateCustomerFormComponent = ({
     },
     [setValue, memorizedStates, setFocus, toast],
   );
+
+  const isLoading = !memorizedStates;
+
+  if (isLoading) {
+    return <FormGridSkeleton qtyOfInputs={10} />;
+  }
 
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>

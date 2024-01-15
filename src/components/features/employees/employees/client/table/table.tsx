@@ -119,10 +119,6 @@ const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
     router.refresh();
   }, [router]);
 
-  if (!rows) {
-    return <TableSkeleton />;
-  }
-
   return (
     <Table
       tableColumns={tableColumns}

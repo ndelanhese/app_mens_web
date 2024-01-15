@@ -119,10 +119,6 @@ const SuppliersTableComponent = ({ rows }: SuppliersTableProps) => {
     router.refresh();
   }, [router]);
 
-  if (!rows) {
-    return <TableSkeleton />;
-  }
-
   return (
     <Table
       tableColumns={tableColumns}

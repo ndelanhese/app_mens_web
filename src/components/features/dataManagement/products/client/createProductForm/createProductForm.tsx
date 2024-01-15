@@ -14,6 +14,7 @@ import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { NumberInput } from '@components/ui/inputs/numberInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -255,6 +256,15 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
     [handleCloseNewItemModal],
   );
 
+  const isLoading =
+    !memorizedCategoriesOptions ||
+    !memorizedBrandsOptions ||
+    !memorizedSuppliersOptions;
+
+  if (isLoading) {
+    return <FormGridSkeleton qtyOfInputs={10} />;
+  }
+
   return (
     <FormGrid
       onSubmit={handleSubmit(onSubmit)}
@@ -327,7 +337,7 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         isRequired
         min={0}
       />
-      {memorizedCategoriesOptions && memorizedCategoriesOptions.length > 0 && (
+      {memorizedCategoriesOptions && (
         <ControlledSelect
           label="Categoria"
           name="category"
@@ -342,32 +352,36 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
           newItemCallbackFunction={newItemCallbackFunction}
         />
       )}
-      <ControlledSelect
-        label="Marca"
-        name="brand"
-        control={control}
-        errorMessage={errors.brand?.message}
-        options={memorizedBrandsOptions}
-        placeHolder="Selecione uma marca"
-        searchLabel="Pesquisar marca"
-        emptyLabel="Sem marcas cadastradas"
-        isRequired
-        newItemLabel="Criar uma nova marca?"
-        newItemCallbackFunction={newItemCallbackFunction}
-      />
-      <ControlledSelect
-        label="Fornecer"
-        name="supplier"
-        control={control}
-        errorMessage={errors.supplier?.message}
-        options={memorizedSuppliersOptions}
-        placeHolder="Selecione um fornecedor"
-        searchLabel="Pesquisar fornecedor"
-        emptyLabel="Sem fornecedores cadastradas"
-        isRequired
-        newItemLabel="Criar um novo fornecedor?"
-        newItemCallbackFunction={newItemCallbackFunction}
-      />
+      {memorizedBrandsOptions && (
+        <ControlledSelect
+          label="Marca"
+          name="brand"
+          control={control}
+          errorMessage={errors.brand?.message}
+          options={memorizedBrandsOptions}
+          placeHolder="Selecione uma marca"
+          searchLabel="Pesquisar marca"
+          emptyLabel="Sem marcas cadastradas"
+          isRequired
+          newItemLabel="Criar uma nova marca?"
+          newItemCallbackFunction={newItemCallbackFunction}
+        />
+      )}
+      {memorizedSuppliersOptions && (
+        <ControlledSelect
+          label="Fornecer"
+          name="supplier"
+          control={control}
+          errorMessage={errors.supplier?.message}
+          options={memorizedSuppliersOptions}
+          placeHolder="Selecione um fornecedor"
+          searchLabel="Pesquisar fornecedor"
+          emptyLabel="Sem fornecedores cadastradas"
+          isRequired
+          newItemLabel="Criar um novo fornecedor?"
+          newItemCallbackFunction={newItemCallbackFunction}
+        />
+      )}
 
       <Button disabled={isSubmitting} type="submit" className="sm:col-start-2">
         Criar Produto

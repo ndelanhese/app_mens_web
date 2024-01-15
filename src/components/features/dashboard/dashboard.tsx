@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+
 import { Button } from '@components/ui/shadcn/button';
 import {
   Tabs,
@@ -14,6 +18,8 @@ import { ReportsTab } from './components/tabs/reportsTab';
 import { NotificationsTab } from './components/tabs/notificationsTab';
 
 export const Dashboard = () => {
+  const [value, setValue] = useState<string>('overview');
+
   return (
     <div>
       <div className="flex flex-col">
@@ -22,13 +28,20 @@ export const Dashboard = () => {
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
             <div className="flex w-full items-center justify-between sm:w-auto sm:space-x-2">
               <CalendarDateRangePicker />
-              <Button className="inline-flex gap-2">
-                <Download className="h-4 w-4" />
-                <p className="hidden sm:block">Baixar</p>
-              </Button>
+              {(value === 'analytics' || value === 'reports') && (
+                <Button className="inline-flex gap-2">
+                  <Download className="h-4 w-4" />
+                  <p className="hidden sm:block">Baixar</p>
+                </Button>
+              )}
             </div>
           </div>
-          <Tabs defaultValue="overview" className="space-y-4">
+          <Tabs
+            defaultValue="overview"
+            value={value}
+            onValueChange={setValue}
+            className="space-y-4"
+          >
             <TabsList className="w-full sm:w-auto">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>

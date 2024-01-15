@@ -4,19 +4,20 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { api } from '@axios';
 
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
+import {
+  PostalCodeInput,
+  ViacepResponseData,
+} from '@components/ui/inputs/postalCodeInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
-import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
-import {
-  ViacepResponseData,
-  PostalCodeInput,
-} from '@components/ui/inputs/postalCodeInput';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 
-import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 import { convertDateFormat } from '@utils/helpers/date';
+import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -68,9 +69,8 @@ const EditCustomerFormComponent = ({
     if (state) {
       const response = await getCities(state);
       setCities(response);
-      setValue('address.city', null);
     }
-  }, [setValue, watch]);
+  }, [watch]);
 
   useEffect(() => {
     stateResponse();
@@ -126,8 +126,8 @@ const EditCustomerFormComponent = ({
           status: 'active',
           address: {
             id: customer?.addresses[0].id,
-            city: stateValue,
-            state: cityValue,
+            city: cityValue,
+            state: stateValue,
             ...restAddress,
           },
         },
@@ -194,15 +194,14 @@ const EditCustomerFormComponent = ({
     [memorizedCities, memorizedStates, setFocus, setValue, toast],
   );
 
-  if (!customer || memorizedStates.length < 1) {
-    return <TableSkeleton />;
+  const isLoading = !customer || !memorizedStates || !states;
+
+  if (isLoading) {
+    return <FormGridSkeleton qtyOfInputs={12} />;
   }
 
   return (
-    <form
-      className="grid w-full grid-cols-1 gap-4 overflow-y-auto sm:h-auto sm:grid-cols-2"
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <FormGrid onSubmit={handleSubmit(onSubmit)}>
       {customer && (
         <>
           <ControlledInput
@@ -302,7 +301,7 @@ const EditCustomerFormComponent = ({
             placeholder="Ex. Centro"
             disabled={isLoadingPostalCode}
           />
-          {memorizedStates && memorizedStates.length > 0 && (
+          {memorizedStates && states && (
             <ControlledSelect
               label="Estado"
               name="address.state"
@@ -317,21 +316,25 @@ const EditCustomerFormComponent = ({
               disabled={isLoadingPostalCode}
             />
           )}
-          {memorizedStates && memorizedCities && selectedState && (
-            <ControlledSelect
-              label="Cidade"
-              name="address.city"
-              control={control}
-              isRequired
-              errorMessage={errors.address?.city?.message}
-              defaultValue={customer?.addresses?.[0]?.city}
-              options={memorizedCities}
-              placeHolder="Selecione uma cidade"
-              searchLabel="Pesquisar cidade"
-              emptyLabel="Sem cidades cadastrados"
-              disabled={isLoadingPostalCode}
-            />
-          )}
+          {memorizedStates &&
+            memorizedStates.length > 0 &&
+            memorizedCities &&
+            memorizedCities.length > 0 &&
+            selectedState && (
+              <ControlledSelect
+                label="Cidade"
+                name="address.city"
+                control={control}
+                isRequired
+                errorMessage={errors.address?.city?.message}
+                defaultValue={customer?.addresses?.[0]?.city}
+                options={memorizedCities}
+                placeHolder="Selecione uma cidade"
+                searchLabel="Pesquisar cidade"
+                emptyLabel="Sem cidades cadastrados"
+                disabled={isLoadingPostalCode}
+              />
+            )}
         </>
       )}
       <Button
@@ -341,7 +344,7 @@ const EditCustomerFormComponent = ({
       >
         Alterar cliente
       </Button>
-    </form>
+    </FormGrid>
   );
 };
 

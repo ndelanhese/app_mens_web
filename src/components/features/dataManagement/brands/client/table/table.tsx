@@ -116,10 +116,6 @@ export const BrandsTable = ({ rows }: BrandsTableProps) => {
     return selectedBrand;
   }, [selectedBrand]);
 
-  if (!rows) {
-    return <TableSkeleton />;
-  }
-
   return (
     <Table
       tableColumns={tableColumns}

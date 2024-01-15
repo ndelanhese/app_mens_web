@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
 
 import {
   CommandDialog,
@@ -15,7 +14,6 @@ import { CommandKeyProps } from './commandKey.types';
 import { CommandKeyItems } from './commandKeyItems';
 
 export function CommandKey({ open, setOpen }: CommandKeyProps) {
-  const pathName = usePathname();
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {

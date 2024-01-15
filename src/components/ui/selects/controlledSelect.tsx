@@ -164,6 +164,7 @@ const ControlledSelectComponent = ({
         option?.label === defaultValue || option?.value === defaultValue,
     );
   }, [defaultValue, formatGroupLabel, isMulti, options]);
+
   return (
     <Controller
       name={name}

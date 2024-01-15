@@ -104,10 +104,6 @@ const SalesTableComponent = ({ rows }: SalesTableProps) => {
     router.refresh();
   }, [router]);
 
-  if (!rows) {
-    return <TableSkeleton />;
-  }
-
   return (
     <Table
       tableColumns={tableColumns}
