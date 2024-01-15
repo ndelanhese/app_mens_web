@@ -12,11 +12,11 @@ import {
 } from 'react';
 
 import { api } from '@axios';
+
 import {
   SelectGroupedOption,
   SelectOption,
-} from '@/components/ui/selects/controlledSelect.types';
-
+} from '@components/ui/selects/controlledSelect.types';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
@@ -25,6 +25,7 @@ import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { toast } from '@components/ui/shadcn/toast/use-toast';
 import { RefModalProps } from '@components/shared/table/table.types';
 import { CreateRoleForm } from '@components/features/administration/roles/client/createRoleForm/createRoleForm';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -238,6 +239,15 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
     [handleCloseNewItemModal],
   );
 
+  const isLoading =
+    !memorizedEmployeesOptions ||
+    !memorizedRolesOptions ||
+    !memorizedPermissionsOptions;
+
+  if (isLoading) {
+    return <FormGridSkeleton qtyOfInputs={7} />;
+  }
+
   return (
     <FormGrid
       onSubmit={handleSubmit(onSubmit)}
@@ -246,7 +256,7 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
       newItemDialogTitle={newItemModal?.newItemDialogTitle}
       newItemDialogRef={newItemModal?.newItemDialogRef}
     >
-      {memorizedEmployeesOptions && memorizedEmployeesOptions.length > 1 && (
+      {memorizedEmployeesOptions && (
         <ControlledSelect
           label="Funcionário"
           name="employee"
@@ -295,7 +305,7 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
         isRequired
       />
 
-      {memorizedRolesOptions && memorizedRolesOptions.length > 0 && (
+      {memorizedRolesOptions && (
         <ControlledSelect
           label="Papéis"
           name="roles"
@@ -313,26 +323,25 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
         />
       )}
 
-      {memorizedPermissionsOptions &&
-        memorizedPermissionsOptions.length > 0 && (
-          <ControlledSelect
-            label="Permissões"
-            name="permissions"
-            control={control}
-            defaultValue={memoizedUserPermissions}
-            errorMessage={errors.permissions?.message}
-            options={
-              memorizedPermissionsOptions as SelectOption[] &
-                SelectGroupedOption[]
-            }
-            formatGroupLabel={formatGroupLabel}
-            placeHolder="Selecione uma Permissão"
-            searchLabel="Pesquisar Permissões"
-            emptyLabel="Sem permissões cadastrados"
-            isMulti
-            menuPosition="top"
-          />
-        )}
+      {memorizedPermissionsOptions && (
+        <ControlledSelect
+          label="Permissões"
+          name="permissions"
+          control={control}
+          defaultValue={memoizedUserPermissions}
+          errorMessage={errors.permissions?.message}
+          options={
+            memorizedPermissionsOptions as SelectOption[] &
+              SelectGroupedOption[]
+          }
+          formatGroupLabel={formatGroupLabel}
+          placeHolder="Selecione uma Permissão"
+          searchLabel="Pesquisar Permissões"
+          emptyLabel="Sem permissões cadastrados"
+          isMulti
+          menuPosition="top"
+        />
+      )}
 
       <div className="flex">
         <Button

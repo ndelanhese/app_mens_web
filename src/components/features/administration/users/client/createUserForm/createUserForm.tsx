@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
 
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
@@ -127,6 +128,12 @@ export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
     },
     [handleCloseNewItemModal],
   );
+
+  const isLoading = !memorizedEmployeesOptions;
+
+  if (isLoading) {
+    return <FormGridSkeleton qtyOfInputs={5} />;
+  }
 
   return (
     <FormGrid
