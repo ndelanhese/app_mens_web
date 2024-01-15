@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import { Button } from '@components/ui/shadcn/button';
-
 import { CommandKey } from './commandKey';
 
 export const CommandKeySearchBar = () => {
