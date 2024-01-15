@@ -112,10 +112,6 @@ const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
     router.refresh();
   }, [router]);
 
-  if (!rows) {
-    return <TableSkeleton />;
-  }
-
   return (
     <Table
       tableColumns={tableColumns}

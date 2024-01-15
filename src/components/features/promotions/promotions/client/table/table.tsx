@@ -154,10 +154,6 @@ const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
     router.refresh();
   }, [router]);
 
-  if (!rows) {
-    return <TableSkeleton />;
-  }
-
   return (
     <Table
       tableColumns={tableColumns}

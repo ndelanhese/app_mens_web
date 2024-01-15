@@ -113,10 +113,6 @@ const OrdersTableComponent = ({ rows }: OrdersTableProps) => {
     router.refresh();
   }, [router]);
 
-  if (!rows) {
-    return <TableSkeleton />;
-  }
-
   return (
     <Table
       tableColumns={tableColumns}

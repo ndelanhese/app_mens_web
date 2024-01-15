@@ -110,10 +110,6 @@ export const RolesTable = ({ rows }: RolesTableProps) => {
     setSelectRoles(undefined);
   }, [router]);
 
-  if (!rows) {
-    return <TableSkeleton />;
-  }
-
   return (
     <Table
       tableColumns={tableColumns}

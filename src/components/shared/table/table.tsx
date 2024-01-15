@@ -37,6 +37,7 @@ import { Eye, Pencil, Search, Trash } from 'lucide-react';
 import { twJoin } from 'tailwind-merge';
 import { UserTableProps } from './table.types';
 import { TableDialog } from './tableDialog';
+import { TableSkeleton } from '../skeleton/tableSkeleton/tableSkeleton';
 
 export function Table<T>({
   rows,
@@ -103,6 +104,10 @@ export function Table<T>({
       <Eye className="h-4 w-4" />
     </StyledDiv>
   );
+
+  if (!rows) {
+    return <TableSkeleton />;
+  }
 
   return (
     <div className="flex w-full flex-col items-start justify-start pb-3">
