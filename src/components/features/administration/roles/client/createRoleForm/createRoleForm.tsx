@@ -10,6 +10,7 @@ import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 
@@ -103,7 +104,11 @@ export const CreateRoleForm = ({ handleCloseModal }: CreateRoleFormProps) => {
     [],
   );
 
-  // TODO -> add skeleton
+  const isLoading = !permissions;
+
+  if (isLoading) {
+    return <FormGridSkeleton />;
+  }
 
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>

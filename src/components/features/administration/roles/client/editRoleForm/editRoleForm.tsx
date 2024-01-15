@@ -3,13 +3,15 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { api } from '@axios';
-import { CheckboxTree } from '@/components/shared/checkboxTree';
-import { generateRandomNumber } from '@/utils/helpers';
 
+import { CheckboxTree } from '@components/shared/checkboxTree';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { toast } from '@components/ui/shadcn/toast/use-toast';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
+
+import { generateRandomNumber } from '@utils/helpers';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -118,7 +120,11 @@ export const EditRoleForm = ({ role, handleCloseModal }: EditRoleFormProps) => {
     setFocus('description');
   }, [setFocus]);
 
-  // TODO -> add skeleton
+  const isLoading = !permissions;
+
+  if (isLoading) {
+    return <FormGridSkeleton qtyOfInputs={2} />;
+  }
 
   return (
     <FormGrid onSubmit={handleSubmit(onSubmit)}>
