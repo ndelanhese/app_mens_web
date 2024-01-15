@@ -7,6 +7,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -22,6 +23,8 @@ import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { PasswordInput } from '@components/ui/inputs/passwordInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { toast } from '@components/ui/shadcn/toast/use-toast';
+import { RefModalProps } from '@components/shared/table/table.types';
+import { CreateRoleForm } from '@components/features/administration/roles/client/createRoleForm/createRoleForm';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -30,14 +33,22 @@ import type { GroupBase } from 'react-select';
 import { getEmployees, getPermissions, getRoles } from '../api/apiData';
 import { EditUserFormSchema, editUserFormSchema } from './editUserForm.schema';
 import {
+  CreatableSelects,
   EditUserFormProps,
   Employees,
+  NewItemModal,
   PermissionsGroup,
   Roles,
 } from './editUserForm.types';
 
 export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
   const { token } = parseCookies();
+
+  const createItemModalRef = useRef<RefModalProps | null>(null);
+  const [newItemModal, setNewItemModal] = useState<NewItemModal | undefined>(
+    undefined,
+  );
+
   const [employees, setEmployees] = useState<Employees[] | undefined>(
     undefined,
   );
@@ -192,8 +203,49 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
     </div>
   );
 
+  const handleCloseNewItemModal = useCallback(async () => {
+    await getRolesData();
+    setNewItemModal(undefined);
+    createItemModalRef.current?.close();
+  }, [getRolesData]);
+
+  useEffect(() => {
+    if (newItemModal) {
+      createItemModalRef.current?.open();
+    }
+  }, [newItemModal]);
+
+  const newItemCallbackFunction = useCallback(
+    async (inputName: string) => {
+      inputName as CreatableSelects;
+
+      setNewItemModal({
+        newItemDialogContent: (
+          <CreateRoleForm
+            handleCloseModal={async () => {
+              await handleCloseNewItemModal();
+            }}
+          />
+        ),
+        newItemDialogDescription: 'Criar nova categoria no sistema.',
+        newItemDialogRef: ref => {
+          createItemModalRef.current = ref;
+        },
+        newItemDialogTitle: 'Criar nova categoria',
+        newItemName: inputName as CreatableSelects,
+      });
+    },
+    [handleCloseNewItemModal],
+  );
+
   return (
-    <FormGrid onSubmit={handleSubmit(onSubmit)}>
+    <FormGrid
+      onSubmit={handleSubmit(onSubmit)}
+      newItemDialogContent={newItemModal?.newItemDialogContent}
+      newItemDialogDescription={newItemModal?.newItemDialogDescription}
+      newItemDialogTitle={newItemModal?.newItemDialogTitle}
+      newItemDialogRef={newItemModal?.newItemDialogRef}
+    >
       {memorizedEmployeesOptions && memorizedEmployeesOptions.length > 1 && (
         <ControlledSelect
           label="Funcionário"
@@ -256,6 +308,8 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
           emptyLabel="Sem papéis cadastrados"
           isMulti
           menuPosition="top"
+          newItemLabel="Criar um novo papel?"
+          newItemCallbackFunction={newItemCallbackFunction}
         />
       )}
 

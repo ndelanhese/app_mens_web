@@ -17,6 +17,8 @@ import { Button as ShadCnButton } from '@components/ui/shadcn/button';
 import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
+import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
+import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
 
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 
@@ -28,7 +30,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { getCustomers, getStatus, getUsers } from '../../api/apiData';
 import { OrderFormSchema, orderFormSchema } from './editOrderForm.schema';
 import {
+  CreatableSelects,
   Customer,
+  NewItemModal,
   OrderFormProps,
   Product,
   ProductTable,
@@ -43,6 +47,11 @@ const EditOrderFormComponent = ({
   const { toast } = useToast();
 
   const { token } = parseCookies();
+
+  const createItemModalRef = useRef<RefModalProps | null>(null);
+  const [newItemModal, setNewItemModal] = useState<NewItemModal | undefined>(
+    undefined,
+  );
 
   const selectProductModalRef = useRef<RefModalProps | null>(null);
 
@@ -294,6 +303,60 @@ const EditOrderFormComponent = ({
       setEmployeeSelected(order?.employee.id.toString());
     }
   }, [order?.employee, memorizedUsersOptions]);
+  const handleCloseNewItemModal = useCallback(async () => {
+    await getCustomersData();
+    await getUsersData();
+    setNewItemModal(undefined);
+    createItemModalRef.current?.close();
+  }, [getCustomersData, getUsersData]);
+
+  useEffect(() => {
+    if (newItemModal) {
+      createItemModalRef.current?.open();
+    }
+  }, [newItemModal]);
+
+  const newItemCallbackFunction = useCallback(
+    async (inputName: string) => {
+      switch (inputName as CreatableSelects) {
+        case 'customer':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateCustomerForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar um novo cliente no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar novo cliente',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+        case 'user':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateUserForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar novo funcionário no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar novo funcionário',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+      }
+    },
+    [handleCloseNewItemModal],
+  );
 
   const isLoading =
     !memorizedCustomersOptions || !memorizedUsersOptions || !status;
@@ -317,6 +380,9 @@ const EditOrderFormComponent = ({
           emptyLabel="Sem clientes cadastrados"
           defaultValue={customerSelected}
           isRequired
+          menuPosition="bottom"
+          newItemLabel="Criar um novo cliente?"
+          newItemCallbackFunction={newItemCallbackFunction}
         />
       )}
 
@@ -378,6 +444,8 @@ const EditOrderFormComponent = ({
           emptyLabel="Sem funcionários cadastrados"
           defaultValue={employeeSelected}
           isRequired
+          newItemLabel="Criar um novo funcionário?"
+          newItemCallbackFunction={newItemCallbackFunction}
         />
       )}
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { memo, useMemo } from 'react';
+import { type } from 'os';
 
 import { useTheme } from 'next-themes';
 import { Controller } from 'react-hook-form';
@@ -32,6 +33,9 @@ const ControlledSelectComponent = ({
   closeMenuOnSelect = true,
   menuPosition = 'top',
   formatGroupLabel,
+  newItemLabel,
+  newItemCallbackFunction,
+  isSmallDropdown = false,
 }: SelectProps) => {
   const { theme } = useTheme();
 
@@ -46,17 +50,13 @@ const ControlledSelectComponent = ({
         border: theme === 'light' ? '1px solid #cccccc' : '1px solid #555555',
       },
     }),
-    group: styles => ({
-      ...styles,
-      backgroundColor: '#09090b',
-      color: '#fafafa',
-    }),
     menu: styles => ({
       ...styles,
       backgroundColor: theme === 'light' ? '#e7e7e7' : '#09090b',
       border: theme === 'light' ? '1px solid #cccccc' : '1px solid #27272a',
       borderRadius: '6px',
     }),
+
     option: (styles, { isDisabled, isFocused, isSelected }) => {
       return {
         ...styles,
@@ -171,8 +171,19 @@ const ControlledSelectComponent = ({
       defaultValue={memoizedDefaultValue ?? ''}
       render={({ field: { onChange, value } }) => (
         <div className={twMerge('flex flex-col transition-colors', className)}>
-          <label className="mb-2 text-zinc-900 dark:text-white-80">
-            {label} {isRequired && <span className="text-red-700"> *</span>}
+          <label className="mb-2 inline-flex text-zinc-900 dark:text-white-80">
+            <div>
+              {label} {isRequired && <span className="text-red-700"> *</span>}
+            </div>
+            {newItemLabel && newItemCallbackFunction && (
+              <button
+                type="button"
+                className="ml-auto cursor-pointer text-sm hover:underline"
+                onClick={() => newItemCallbackFunction(name)}
+              >
+                {newItemLabel}
+              </button>
+            )}
           </label>
           <Select
             options={options}
@@ -191,6 +202,7 @@ const ControlledSelectComponent = ({
             placeholder={placeHolder}
             noOptionsMessage={() => emptyLabel ?? 'Sem itens'}
             formatGroupLabel={formatGroupLabel}
+            maxMenuHeight={isSmallDropdown ? 140 : undefined}
           />
           {errorMessage && (
             <span className="text-sm text-red-600">{errorMessage}</span>

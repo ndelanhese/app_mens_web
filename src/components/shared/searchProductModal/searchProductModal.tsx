@@ -1,12 +1,16 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Table } from '@/components/shared/table/table';
-import { TableColumn } from '@/components/shared/table/table.types';
-import { TableColumnHeader } from '@/components/shared/table/tableColumnHeader';
-import { TableDialog } from '@/components/shared/table/tableDialog';
-import { StyledDiv } from '@/components/ui/styledDiv/styledDiv';
+import { Table } from '@components/shared/table/table';
+import {
+  RefModalProps,
+  TableColumn,
+} from '@components/shared/table/table.types';
+import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
+import { TableDialog } from '@components/shared/table/tableDialog';
+import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
+import { CreateProductForm } from '@components/features/dataManagement/products/client/createProductForm/createProductForm';
 
 import { Plus } from 'lucide-react';
 import { Products } from './api/apiData.types';
@@ -24,6 +28,8 @@ export const SearchProductModal = ({
   handleCloseModal,
 }: SearchProductModalProps) => {
   const [products, setProducts] = useState<Product[] | []>([]);
+
+  const createProductModalRef = useRef<RefModalProps | null>(null);
 
   const tableColumns: Array<TableColumn<Product>> = useMemo(
     () => [
@@ -142,6 +148,18 @@ export const SearchProductModal = ({
     [handleCloseModal, rowClick],
   );
 
+  const NEW_PRODUCT_TRIGGER = (
+    <StyledDiv>
+      Criar novo produto
+      <Plus className="h-4 w-4" />
+    </StyledDiv>
+  );
+
+  const handleCloseNewProductModal = useCallback(async () => {
+    await getProductsData();
+    createProductModalRef.current?.close();
+  }, [getProductsData]);
+
   return (
     <TableDialog
       dialogRef={modalRef}
@@ -149,12 +167,21 @@ export const SearchProductModal = ({
       content={
         <Table
           actionCallback={() => {
-            console.log('ops');
+            // Nothing here
           }}
           tableColumns={tableColumns}
           rows={products}
           rowIsClickable
           handleRowClick={handleRowClick}
+          newItemDialogContent={
+            <CreateProductForm handleCloseModal={handleCloseNewProductModal} />
+          }
+          newItemDialogDescription="Criar um novo produto no sistema."
+          newItemDialogTitle="Criar novo produto"
+          newItemTrigger={NEW_PRODUCT_TRIGGER}
+          newItemDialogRef={ref => {
+            createProductModalRef.current = ref;
+          }}
         />
       }
       description={description ?? 'Encontre um produto já cadastrado'}

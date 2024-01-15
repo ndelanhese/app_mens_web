@@ -40,9 +40,16 @@ export const ViewProductForm = ({ product }: ProductPreviewProps) => {
         value={product?.size}
         id="size"
         label="Tamanho"
+        placeholder="Tamanho do produto"
         readOnly
       />
-      <ControlledInput value={product?.color} id="color" label="Cor" readOnly />
+      <ControlledInput
+        value={product?.color}
+        id="color"
+        label="Cor"
+        readOnly
+        placeholder="Cor do produto"
+      />
       <ControlledInput
         value={product?.quantity}
         id="quantity"

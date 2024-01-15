@@ -11,17 +11,21 @@ export const CommandKeyItem = ({
   icon: Icon,
   title,
   route,
+  setOpen,
 }: CommandKeyItemProps) => {
   const router = useRouter();
   return (
     <Link href={route} passHref prefetch={true}>
       <CommandItem
         onSelect={() => {
+          setOpen(open => !open);
           router.push(route);
         }}
         onClick={() => {
+          setOpen(open => !open);
           router.push(route);
         }}
+        className="cursor-pointer"
       >
         <Icon className="mr-2 h-4 w-4" />
         <span>{title}</span>

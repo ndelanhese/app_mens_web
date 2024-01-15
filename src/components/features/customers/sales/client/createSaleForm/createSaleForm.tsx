@@ -4,6 +4,8 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
 
+import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
+import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
 import { DataTable } from '@components/shared/dataTable';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
@@ -39,10 +41,12 @@ import {
 } from '../../api/apiData';
 import { SaleFormSchema, saleFormSchema } from './createSaleForm.schema';
 import {
+  CreatableSelects,
   Customer,
   DiscountType,
   DiscountTypeEnum,
   MethodOfPayment,
+  NewItemModal,
   Product,
   ProductTable,
   SaleFormProps,
@@ -53,6 +57,11 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
+
+  const createItemModalRef = useRef<RefModalProps | null>(null);
+  const [newItemModal, setNewItemModal] = useState<NewItemModal | undefined>(
+    undefined,
+  );
 
   const selectProductModalRef = useRef<RefModalProps | null>(null);
 
@@ -415,8 +424,69 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     watch('method_of_payment'),
   ]);
 
+  const handleCloseNewItemModal = useCallback(async () => {
+    await getCustomersData();
+    await getUsersData();
+    setNewItemModal(undefined);
+    createItemModalRef.current?.close();
+  }, [getCustomersData, getUsersData]);
+
+  useEffect(() => {
+    if (newItemModal) {
+      createItemModalRef.current?.open();
+    }
+  }, [newItemModal]);
+
+  const newItemCallbackFunction = useCallback(
+    async (inputName: string) => {
+      switch (inputName as CreatableSelects) {
+        case 'customer':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateCustomerForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar um novo cliente no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar novo cliente',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+        case 'user':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateUserForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar novo funcionário no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar novo funcionário',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+      }
+    },
+    [handleCloseNewItemModal],
+  );
+
   return (
-    <FormGrid onSubmit={handleSubmit(onSubmit)}>
+    <FormGrid
+      onSubmit={handleSubmit(onSubmit)}
+      newItemDialogContent={newItemModal?.newItemDialogContent}
+      newItemDialogDescription={newItemModal?.newItemDialogDescription}
+      newItemDialogTitle={newItemModal?.newItemDialogTitle}
+      newItemDialogRef={newItemModal?.newItemDialogRef}
+    >
       <ControlledSelect
         label="Cliente"
         name="customer"
@@ -428,6 +498,8 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         emptyLabel="Sem clientes cadastrados"
         isRequired
         menuPosition="bottom"
+        newItemLabel="Criar um novo cliente?"
+        newItemCallbackFunction={newItemCallbackFunction}
       />
 
       <ControlledInput
@@ -459,6 +531,8 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         emptyLabel="Sem funcionários cadastrados"
         isRequired
         menuPosition="bottom"
+        newItemLabel="Criar um novo funcionário?"
+        newItemCallbackFunction={newItemCallbackFunction}
       />
 
       <div className="col-start-1 col-end-2 flex flex-col items-center justify-between pb-2 sm:col-end-3 sm:flex-row">

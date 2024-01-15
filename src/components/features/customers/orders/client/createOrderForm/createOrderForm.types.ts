@@ -1,3 +1,7 @@
+import { ReactNode } from 'react';
+
+import { RefModalProps } from '@components/shared/table/table.types';
+
 export type OrderFormProps = {
   handleCloseModal: () => void;
 };
@@ -55,4 +59,14 @@ export type Employee = {
 export type User = {
   id: number;
   employee: Employee;
+};
+
+export type CreatableSelects = 'customer' | 'user';
+
+export type NewItemModal = {
+  newItemDialogTitle: string;
+  newItemDialogDescription: string;
+  newItemDialogContent: ReactNode;
+  newItemDialogRef: (ref: RefModalProps) => void | undefined;
+  newItemName: CreatableSelects;
 };

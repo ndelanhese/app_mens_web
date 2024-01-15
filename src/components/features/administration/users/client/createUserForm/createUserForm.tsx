@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
 
@@ -8,24 +8,35 @@ import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { PasswordInput } from '@components/ui/inputs/passwordInput';
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { RefModalProps } from '@components/shared/table/table.types';
+import { CreateEmployeeForm } from '@components/features/employees/employees/client/createEmployeeForm/createEmployeeForm';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { getEmployees } from '../api/apiData';
 import {
   CreateUserFormSchema,
   createUserFormSchema,
 } from './createUserForm.schema';
-import { CreateUserFormProps, Employees } from './createUserForm.types';
-import { getEmployees } from '../api/apiData';
-import { twJoin } from 'tailwind-merge';
+import {
+  CreatableSelects,
+  CreateUserFormProps,
+  Employees,
+  NewItemModal,
+} from './createUserForm.types';
 
 export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
+
+  const createItemModalRef = useRef<RefModalProps | null>(null);
+  const [newItemModal, setNewItemModal] = useState<NewItemModal | undefined>(
+    undefined,
+  );
 
   const [employees, setEmployees] = useState<Employees[] | undefined>(
     undefined,
@@ -84,8 +95,47 @@ export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
     return [];
   }, [employees]);
 
+  const handleCloseNewItemModal = useCallback(async () => {
+    await getEmployeesData();
+    setNewItemModal(undefined);
+    createItemModalRef.current?.close();
+  }, [getEmployeesData]);
+
+  useEffect(() => {
+    if (newItemModal) {
+      createItemModalRef.current?.open();
+    }
+  }, [newItemModal]);
+
+  const newItemCallbackFunction = useCallback(
+    async (inputName: string) => {
+      setNewItemModal({
+        newItemDialogContent: (
+          <CreateEmployeeForm
+            handleCloseModal={async () => {
+              await handleCloseNewItemModal();
+            }}
+          />
+        ),
+        newItemDialogDescription: 'Criar novo funcionário no sistema.',
+        newItemDialogRef: ref => {
+          createItemModalRef.current = ref;
+        },
+        newItemDialogTitle: 'Criar novo funcionário',
+        newItemName: inputName as CreatableSelects,
+      });
+    },
+    [handleCloseNewItemModal],
+  );
+
   return (
-    <FormGrid onSubmit={handleSubmit(onSubmit)}>
+    <FormGrid
+      onSubmit={handleSubmit(onSubmit)}
+      newItemDialogContent={newItemModal?.newItemDialogContent}
+      newItemDialogDescription={newItemModal?.newItemDialogDescription}
+      newItemDialogTitle={newItemModal?.newItemDialogTitle}
+      newItemDialogRef={newItemModal?.newItemDialogRef}
+    >
       <ControlledSelect
         label="Funcionário"
         name="employee"
@@ -97,6 +147,9 @@ export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
         emptyLabel="Sem funcionários cadastrados"
         isRequired
         menuPosition="bottom"
+        newItemLabel="Criar um novo funcionário?"
+        newItemCallbackFunction={newItemCallbackFunction}
+        isSmallDropdown
       />
 
       <ControlledInput

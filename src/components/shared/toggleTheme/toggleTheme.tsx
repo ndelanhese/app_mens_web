@@ -1,6 +1,8 @@
 'use client';
 
-import * as React from 'react';
+import { useEffect, useState } from 'react';
+
+import { useSidebarDrawer } from '@hooks/useSidebarDrawer/useSidebarDrawer';
 
 import {
   DropdownMenu,
@@ -15,6 +17,18 @@ import { useTheme } from 'next-themes';
 
 export function ToggleTheme() {
   const { setTheme } = useTheme();
+  const { open } = useSidebarDrawer();
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const isMobileWidth = window.innerWidth < 768;
+    setIsMobile(isMobileWidth);
+  }, []);
+
+  if (isMobile && open) {
+    return undefined;
+  }
 
   return (
     <DropdownMenu>

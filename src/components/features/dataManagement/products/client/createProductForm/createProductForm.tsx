@@ -1,15 +1,19 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { api } from '@axios';
 
+import { CreateBrandForm } from '@components/features/dataManagement/brands/client/createBrandForm/createBrandForm';
+import { CreateCategoryForm } from '@components/features/dataManagement/categories/client/createCategoryForm/createCategoryForm';
+import { CreateSupplierForm } from '@components/features/employees/suppliers/client/createSupplierForm/createSupplierForm';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { RefModalProps } from '@components/shared/table/table.types';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
+import { NumberInput } from '@components/ui/inputs/numberInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
-import { NumberInput } from '@components/ui/inputs/numberInput';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
@@ -24,6 +28,8 @@ import {
   CategoriesResponse,
   Category,
   ComboboxOption,
+  CreatableSelects,
+  NewItemModal,
   ProductFormProps,
   Supplier,
   SuppliersResponse,
@@ -33,6 +39,11 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
   const { toast } = useToast();
 
   const { token } = parseCookies();
+
+  const createItemModalRef = useRef<RefModalProps | null>(null);
+  const [newItemModal, setNewItemModal] = useState<NewItemModal | undefined>(
+    undefined,
+  );
 
   const [categories, setCategories] = useState<Category[] | undefined>(
     undefined,
@@ -171,8 +182,87 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
     }
   };
 
+  const handleCloseNewItemModal = useCallback(async () => {
+    await getCategories();
+    await getBrands();
+    await getSuppliers();
+    setNewItemModal(undefined);
+    createItemModalRef.current?.close();
+  }, [getBrands, getCategories, getSuppliers]);
+
+  useEffect(() => {
+    if (newItemModal) {
+      createItemModalRef.current?.open();
+    }
+  }, [newItemModal]);
+
+  const newItemCallbackFunction = useCallback(
+    async (inputName: string) => {
+      switch (inputName as CreatableSelects) {
+        case 'category':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateCategoryForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar nova categoria no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar nova categoria',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+        case 'brand':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateBrandForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar nova marca no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar nova marca',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+        case 'supplier':
+          setNewItemModal({
+            newItemDialogContent: (
+              <CreateSupplierForm
+                handleCloseModal={async () => {
+                  await handleCloseNewItemModal();
+                }}
+              />
+            ),
+            newItemDialogDescription: 'Criar novo fornecedor no sistema.',
+            newItemDialogRef: ref => {
+              createItemModalRef.current = ref;
+            },
+            newItemDialogTitle: 'Criar novo fornecedor',
+            newItemName: inputName as CreatableSelects,
+          });
+          break;
+      }
+    },
+    [handleCloseNewItemModal],
+  );
+
   return (
-    <FormGrid onSubmit={handleSubmit(onSubmit)}>
+    <FormGrid
+      onSubmit={handleSubmit(onSubmit)}
+      newItemDialogContent={newItemModal?.newItemDialogContent}
+      newItemDialogDescription={newItemModal?.newItemDialogDescription}
+      newItemDialogTitle={newItemModal?.newItemDialogTitle}
+      newItemDialogRef={newItemModal?.newItemDialogRef}
+    >
       <ControlledInput
         id="name"
         label="Nome"
@@ -189,8 +279,6 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         placeholder="Descrição do produto"
         isRequired
       />
-      {/* TODO -> add masked input */}
-
       <NumberInput
         id="purchase_price"
         label="Preço de compra"
@@ -202,7 +290,6 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         inputMode="decimal"
         type="number"
       />
-
       <NumberInput
         id="price"
         label="Preço"
@@ -213,8 +300,8 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         prefix="R$"
         inputMode="decimal"
         type="number"
+        isRequired
       />
-
       <ControlledInput
         id="size"
         label="Tamanho"
@@ -240,17 +327,21 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         isRequired
         min={0}
       />
-      <ControlledSelect
-        label="Categoria"
-        name="category"
-        control={control}
-        errorMessage={errors.category?.message}
-        options={memorizedCategoriesOptions}
-        placeHolder="Selecione uma categoria"
-        searchLabel="Pesquisar categoria"
-        emptyLabel="Sem categorias cadastradas"
-        isRequired
-      />
+      {memorizedCategoriesOptions && memorizedCategoriesOptions.length > 0 && (
+        <ControlledSelect
+          label="Categoria"
+          name="category"
+          control={control}
+          errorMessage={errors.category?.message}
+          options={memorizedCategoriesOptions}
+          placeHolder="Selecione uma categoria"
+          searchLabel="Pesquisar categoria"
+          emptyLabel="Sem categorias cadastradas"
+          isRequired
+          newItemLabel="Criar uma nova categoria?"
+          newItemCallbackFunction={newItemCallbackFunction}
+        />
+      )}
       <ControlledSelect
         label="Marca"
         name="brand"
@@ -261,6 +352,8 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         searchLabel="Pesquisar marca"
         emptyLabel="Sem marcas cadastradas"
         isRequired
+        newItemLabel="Criar uma nova marca?"
+        newItemCallbackFunction={newItemCallbackFunction}
       />
       <ControlledSelect
         label="Fornecer"
@@ -272,6 +365,8 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
         searchLabel="Pesquisar fornecedor"
         emptyLabel="Sem fornecedores cadastradas"
         isRequired
+        newItemLabel="Criar um novo fornecedor?"
+        newItemCallbackFunction={newItemCallbackFunction}
       />
 
       <Button disabled={isSubmitting} type="submit" className="sm:col-start-2">

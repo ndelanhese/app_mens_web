@@ -1,3 +1,7 @@
+import { ReactNode } from 'react';
+
+import { RefModalProps } from '@components/shared/table/table.types';
+
 import { Sale } from '../table/table.types';
 
 export type SaleFormProps = {
@@ -74,4 +78,14 @@ export type DiscountType = {
 export type MethodOfPayment = {
   id: number;
   name: string;
+};
+
+export type CreatableSelects = 'customer' | 'user';
+
+export type NewItemModal = {
+  newItemDialogTitle: string;
+  newItemDialogDescription: string;
+  newItemDialogContent: ReactNode;
+  newItemDialogRef: (ref: RefModalProps) => void | undefined;
+  newItemName: CreatableSelects;
 };

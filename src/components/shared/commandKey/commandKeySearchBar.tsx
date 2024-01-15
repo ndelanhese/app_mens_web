@@ -18,7 +18,7 @@ export const CommandKeySearchBar = () => {
       <Input
         className="bg-white border border-black-10 pl-8 pr-11 dark:border-white-10 dark:bg-zinc-950"
         placeholder="Pesquisar..."
-        onClick={() => setOpen(true)}
+        onClick={() => setOpen(open => !open)}
       />
       <div className="absolute right-2 flex flex-row items-center gap-1">
         <CommandKey open={open} setOpen={setOpen} />

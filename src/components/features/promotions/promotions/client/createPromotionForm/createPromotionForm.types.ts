@@ -1,3 +1,7 @@
+import { ReactNode } from 'react';
+
+import { RefModalProps } from '@components/shared/table/table.types';
+
 export type Promotion = {
   id: number;
   name: string;
@@ -40,11 +44,21 @@ export type ProductTable = {
   name: string;
   partNumber: string;
   description: string;
-  price: number;
+  price: string;
   size: string;
   color: string;
   quantity: number;
   category: Category;
   brand: Brand;
   supplier: Supplier;
+};
+
+export type CreatableSelects = 'category';
+
+export type NewItemModal = {
+  newItemDialogTitle: string;
+  newItemDialogDescription: string;
+  newItemDialogContent: ReactNode;
+  newItemDialogRef: (ref: RefModalProps) => void | undefined;
+  newItemName: CreatableSelects;
 };

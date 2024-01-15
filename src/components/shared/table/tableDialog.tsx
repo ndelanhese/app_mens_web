@@ -18,6 +18,7 @@ const TableDialogComponent = ({
   dialogRef,
   title,
   trigger,
+  isTriggered = true,
   actionCallback,
   row,
   type,
@@ -48,10 +49,10 @@ const TableDialogComponent = ({
         setOpen(isOpen);
       }}
     >
-      <DialogTrigger>{trigger ?? 'Abrir Modal'}</DialogTrigger>
+      {isTriggered && <DialogTrigger>{trigger ?? 'Abrir Modal'}</DialogTrigger>}
       <DialogContent
         className={twMerge(
-          'flex h-full w-full flex-col gap-4 sm:h-auto sm:w-auto sm:min-w-[60rem]',
+          'flex h-full w-full flex-col gap-4 bg-white-100 sm:h-auto sm:w-auto sm:min-w-[60rem]',
           className,
         )}
       >
