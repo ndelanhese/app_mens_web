@@ -18,6 +18,7 @@ import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { CreateCategoryForm } from '@components/features/promotions/promotionCategories/client/createPromotionCategoryForm/createCategoryForm';
 import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 
 import { currentDateString, getNextDay } from '@utils/helpers/date';
 
@@ -255,6 +256,12 @@ const CreatePromotionFormComponent = ({
     },
     [handleCloseNewItemModal],
   );
+
+  const isLoading = !memoizedCategories || !status || !discountType;
+
+  if (isLoading) {
+    return <FormGridSkeleton qtyOfInputs={9} />;
+  }
 
   return (
     <FormGrid

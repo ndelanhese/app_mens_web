@@ -18,6 +18,7 @@ import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash } from 'lucide-react';
@@ -295,12 +296,13 @@ const EditPromotionFormComponent = ({
     [handleCloseNewItemModal],
   );
 
-  const isLoading = !memoizedCategories || !discountType || !status;
+  const isLoading =
+    !memoizedCategories || !discountType || !status || !promotion;
 
   if (isLoading) {
-    // TODO -> add skeleton
-    return <h1>loading...</h1>;
+    return <FormGridSkeleton qtyOfInputs={10} />;
   }
+
   return (
     <FormGrid
       onSubmit={handleSubmit(onSubmit)}
