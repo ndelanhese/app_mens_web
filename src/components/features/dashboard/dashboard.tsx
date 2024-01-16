@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@components/ui/shadcn/button';
 import {
@@ -9,6 +9,8 @@ import {
   TabsList,
   TabsTrigger,
 } from '@components/ui/shadcn/tabs';
+import { TableDialog } from '@components/shared/table/tableDialog';
+import { RefModalProps } from '@components/shared/table/table.types';
 
 import { CalendarDateRangePicker } from './components/dateRangePicker';
 import { OverviewTab } from './components/tabs/overViewTab';
@@ -16,9 +18,25 @@ import { Download } from 'lucide-react';
 import { AnalyticsTab } from './components/tabs/analyticsTab';
 import { ReportsTab } from './components/tabs/reportsTab';
 import { NotificationsTab } from './components/tabs/notificationsTab';
+import { parseCookies } from 'nookies';
+import { ProductsStockResponse } from './dashboard.types';
 
 export const Dashboard = () => {
+  const productsStockModalRef = useRef<RefModalProps | null>(null);
+
   const [value, setValue] = useState<string>('overview');
+
+  useEffect(() => {
+    const { 'stock-notifications-mens-modas': stockNotifications } =
+      parseCookies();
+    const productsWithLowQty: ProductsStockResponse =
+      JSON.parse(stockNotifications);
+
+    if (productsWithLowQty && productsWithLowQty.data.length > 0) {
+      productsStockModalRef.current?.open();
+      console.log(productsWithLowQty);
+    }
+  }, []);
 
   return (
     <div>
@@ -63,6 +81,17 @@ export const Dashboard = () => {
           </Tabs>
         </div>
       </div>
+      {
+        <TableDialog
+          dialogRef={ref => {
+            productsStockModalRef.current = ref;
+          }}
+          content={<h1>teste</h1>}
+          description="Produtos com estoque menor ou igual a 3 unidades."
+          title="Produtos com estoque baixo."
+          isTriggered={false}
+        />
+      }
     </div>
   );
 };
