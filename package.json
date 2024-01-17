@@ -56,6 +56,7 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.5.2",
     "@rocketseat/eslint-config": "2.1.0",
     "@storybook/addon-essentials": "7.6.7",
     "@storybook/addon-interactions": "7.6.7",
