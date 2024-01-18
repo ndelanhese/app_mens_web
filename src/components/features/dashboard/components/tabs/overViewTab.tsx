@@ -35,6 +35,11 @@ export const OverviewTab = () => {
 		return "à mais ";
 	};
 
+	if (!overviewData) {
+		return <h1>Loading...</h1>;
+		// TODO -> add overview skeleton
+	}
+
 	return (
 		<div className="space-y-4">
 			<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
