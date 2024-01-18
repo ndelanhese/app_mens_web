@@ -20,9 +20,10 @@ export function OverviewChart({
 				<YAxis
 					stroke="#888888"
 					fontSize={12}
-					dx={16}
 					tickLine={false}
 					axisLine={false}
+					// dx={12}
+					width={80}
 					tickFormatter={(value) =>
 						value.toLocaleString("pt-BR", {
 							style: "currency",

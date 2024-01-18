@@ -121,7 +121,7 @@ export const OverviewTab = () => {
 							Overview
 						</CardTitle>
 					</CardHeader>
-					<CardContent className="pl-0 sm:pl-2">
+					<CardContent>
 						<OverviewChart data={overviewData?.overview} />
 					</CardContent>
 				</Card>
