@@ -12,6 +12,7 @@ import { OverviewChart } from "../overviewChart";
 import { RecentSales } from "../recentSales";
 import { getOverview } from "./api/api";
 import { OverviewResponse } from "./api/api.types";
+import { OverviewTabSkeleton } from "./components/overviewTabSkeleton";
 
 export const OverviewTab = () => {
 	const [overviewData, setOverviewData] = useState<
@@ -36,8 +37,7 @@ export const OverviewTab = () => {
 	};
 
 	if (!overviewData) {
-		return <h1>Loading...</h1>;
-		// TODO -> add overview skeleton
+		return <OverviewTabSkeleton />;
 	}
 
 	return (
@@ -122,7 +122,7 @@ export const OverviewTab = () => {
 						</CardTitle>
 					</CardHeader>
 					<CardContent className="pl-0 sm:pl-2">
-						{overviewData && <OverviewChart data={overviewData.overview} />}
+						<OverviewChart data={overviewData?.overview} />
 					</CardContent>
 				</Card>
 				<Card className="col-span-3">

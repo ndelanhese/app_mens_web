@@ -4,7 +4,9 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 export function OverviewChart({
 	data,
-}: { data: Array<{ month_name: string; total_revenue: number }> }) {
+}: {
+	data: Array<{ month_name: string; total_revenue: number }> | undefined;
+}) {
 	return (
 		<ResponsiveContainer width="100%" height={350}>
 			<BarChart data={data}>
