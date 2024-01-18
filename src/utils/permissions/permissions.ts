@@ -58,7 +58,7 @@ export const validateIfTheUseCanSeeThePath = (
 			permissionName = "suppliers_read";
 			break;
 		case "/promotions/promotion-categories":
-			permissionName = "promotion_categories_read";
+			permissionName = "promotions_categories_read";
 			break;
 		case "/promotions/promotions":
 			permissionName = "promotions_read";
