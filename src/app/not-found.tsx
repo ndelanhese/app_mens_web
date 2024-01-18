@@ -1,13 +1,17 @@
-import Link from 'next/link';
+import { Button } from "@components/ui/shadcn/button";
+import Link from "next/link";
 
 const NotFound = () => {
-  return (
-    <div>
-      <h2>Not Found</h2>
-      <p>Could not find requested resource</p>
-      <Link href="/">Return Home</Link>
-    </div>
-  );
+	return (
+		<div className="flex items-center flex-col justify-center flex-1">
+			<h1 className="text-xl font-bold tracking-tight text-center">
+				Página não encontrada!
+			</h1>
+			<Button className="mt-5">
+				<Link href="/dashboard">Voltar para a Dashboard</Link>
+			</Button>
+		</div>
+	);
 };
 
 export default NotFound;
