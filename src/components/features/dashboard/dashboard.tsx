@@ -80,9 +80,9 @@ export const Dashboard = () => {
 					>
 						<TabsList className="w-full sm:w-auto">
 							<TabsTrigger value="overview">Overview</TabsTrigger>
-							<TabsTrigger value="analytics">Analytics</TabsTrigger>
-							<TabsTrigger value="reports">Reports</TabsTrigger>
-							<TabsTrigger value="notifications">Notifications</TabsTrigger>
+							<TabsTrigger value="analytics">Dados Analíticos</TabsTrigger>
+							<TabsTrigger value="reports">Relatórios</TabsTrigger>
+							<TabsTrigger value="notifications">Notificações</TabsTrigger>
 						</TabsList>
 						<TabsContent value="overview">
 							<OverviewTab />
