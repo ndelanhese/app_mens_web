@@ -17,7 +17,6 @@ import { destroyCookie, parseCookies } from "nookies";
 import { twJoin } from "tailwind-merge";
 import { CalendarDateRangePicker } from "./components/dateRangePicker";
 import { ProductsWithLowStockTable } from "./components/producsWithLowStockTable";
-import { AnalyticsTab } from "./components/tabs/analyticsTab";
 import { NotificationsTab } from "./components/tabs/notificationsTab";
 import { OverviewTab } from "./components/tabs/overViewTab";
 import { ReportsTab } from "./components/tabs/reportsTab";
@@ -58,10 +57,10 @@ export const Dashboard = () => {
 						<div
 							className={twJoin(
 								"flex w-full items-center justify-between sm:w-auto sm:space-x-2",
-								value !== "analytics" && value !== "reports" && "sm:py-5",
+								value !== "reports" && "sm:py-5",
 							)}
 						>
-							{(value === "analytics" || value === "reports") && (
+							{value === "reports" && (
 								<>
 									<CalendarDateRangePicker />
 									<Button className="inline-flex gap-2">
@@ -78,17 +77,13 @@ export const Dashboard = () => {
 						onValueChange={setValue}
 						className="space-y-4"
 					>
-						<TabsList className="w-full sm:w-auto">
+						<TabsList>
 							<TabsTrigger value="overview">Overview</TabsTrigger>
-							<TabsTrigger value="analytics">Dados Analíticos</TabsTrigger>
 							<TabsTrigger value="reports">Relatórios</TabsTrigger>
 							<TabsTrigger value="notifications">Notificações</TabsTrigger>
 						</TabsList>
 						<TabsContent value="overview">
 							<OverviewTab />
-						</TabsContent>
-						<TabsContent value="analytics">
-							<AnalyticsTab />
 						</TabsContent>
 						<TabsContent value="reports">
 							<ReportsTab />

@@ -5,12 +5,12 @@ import { Sale } from "./tabs/api/api.types";
 export function RecentSales({ data }: { data: Sale[] }) {
 	return (
 		<div className="space-y-8">
-			{data.map((sale) => {
+			{data.map((sale, index) => {
 				const productsList = sale?.products
 					?.map((product) => product?.name)
 					.join(", ");
 				return (
-					<div className="flex items-center">
+					<div className="flex items-center" key={`sale-${index}`}>
 						<Avatar className="h-9 w-9">
 							<AvatarFallback>
 								{getInitialsFromName(sale.customer.name)}
