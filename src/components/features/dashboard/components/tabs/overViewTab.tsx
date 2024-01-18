@@ -31,9 +31,9 @@ export const OverviewTab = () => {
 	const percentageCaption = (percentage: string | undefined) => {
 		if (!percentage) return "";
 		if (percentage.startsWith("-")) {
-			return "à menos ";
+			return "Decréscimo de ";
 		}
-		return "à mais ";
+		return "Crescimento de ";
 	};
 
 	if (!overviewData) {
@@ -53,11 +53,11 @@ export const OverviewTab = () => {
 							{overviewData?.total_revenue}
 						</div>
 						<p className="text-muted-foreground text-xs">
-							{overviewData?.total_revenue_difference_from_last_month}{" "}
 							{percentageCaption(
 								overviewData?.total_revenue_difference_from_last_month,
 							)}
-							que o mês passado
+							{overviewData?.total_revenue_difference_from_last_month} no último
+							mês
 						</p>
 					</CardContent>
 				</Card>
@@ -68,14 +68,14 @@ export const OverviewTab = () => {
 					</CardHeader>
 					<CardContent>
 						<div className="text-2xl font-bold">
-							+{overviewData?.customers_qty}
+							{overviewData?.customers_qty}
 						</div>
 						<p className="text-muted-foreground text-xs">
-							{overviewData?.customers_qty_difference_from_last_month}{" "}
 							{percentageCaption(
 								overviewData?.customers_qty_difference_from_last_month,
 							)}
-							que o mês passado
+							{overviewData?.customers_qty_difference_from_last_month} no último
+							mês
 						</p>
 					</CardContent>
 				</Card>
@@ -85,13 +85,12 @@ export const OverviewTab = () => {
 						<CreditCard className="h-4 w-4" />
 					</CardHeader>
 					<CardContent>
-						<div className="text-2xl font-bold">+{overviewData?.sales_qty}</div>
+						<div className="text-2xl font-bold">{overviewData?.sales_qty}</div>
 						<p className="text-muted-foreground text-xs">
-							{overviewData?.sales_qty_difference_from_last_month}{" "}
 							{percentageCaption(
 								overviewData?.sales_qty_difference_from_last_month,
 							)}
-							que o mês passado
+							{overviewData?.sales_qty_difference_from_last_month} no último mês
 						</p>
 					</CardContent>
 				</Card>
@@ -101,15 +100,13 @@ export const OverviewTab = () => {
 						<ShoppingBag className="h-4 w-4" />
 					</CardHeader>
 					<CardContent>
-						<div className="text-2xl font-bold">
-							+{overviewData?.orders_qty}
-						</div>
+						<div className="text-2xl font-bold">{overviewData?.orders_qty}</div>
 						<p className="text-muted-foreground text-xs">
-							{overviewData?.orders_qty_difference_from_last_month}{" "}
 							{percentageCaption(
 								overviewData?.orders_qty_difference_from_last_month,
 							)}
-							que o mês passado
+							{overviewData?.orders_qty_difference_from_last_month} no último
+							mês
 						</p>
 					</CardContent>
 				</Card>

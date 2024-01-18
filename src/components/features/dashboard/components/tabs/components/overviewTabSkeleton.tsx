@@ -20,8 +20,8 @@ export const OverviewTabSkeleton = () => (
 						<Skeleton className="h-12" />
 					</div>
 					<div className="text-muted-foreground text-xs inline-flex items-center gap-2 pt-2.5">
-						<Skeleton className="h-3 w-[3.75rem]" />
-						que o mês passado
+						<Skeleton className="h-3 w-28" />
+						no último mês
 					</div>
 				</CardContent>
 			</Card>
@@ -35,8 +35,8 @@ export const OverviewTabSkeleton = () => (
 						<Skeleton className="h-12" />
 					</div>
 					<div className="text-muted-foreground text-xs inline-flex items-center gap-2 pt-2.5">
-						<Skeleton className="h-3 w-[3.75rem]" />
-						que o mês passado
+						<Skeleton className="h-3 w-28" />
+						no último mês
 					</div>
 				</CardContent>
 			</Card>
@@ -50,8 +50,8 @@ export const OverviewTabSkeleton = () => (
 						<Skeleton className="h-12" />
 					</div>
 					<div className="text-muted-foreground text-xs inline-flex items-center gap-2 pt-2.5">
-						<Skeleton className="h-3 w-[3.75rem]" />
-						que o mês passado
+						<Skeleton className="h-3 w-28" />
+						no último mês
 					</div>
 				</CardContent>
 			</Card>
@@ -65,8 +65,8 @@ export const OverviewTabSkeleton = () => (
 						<Skeleton className="h-12" />
 					</div>
 					<div className="text-muted-foreground text-xs inline-flex items-center gap-2 pt-2.5">
-						<Skeleton className="h-3 w-[3.75rem]" />
-						que o mês passado
+						<Skeleton className="h-3 w-28" />
+						no último mês
 					</div>
 				</CardContent>
 			</Card>
