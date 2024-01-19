@@ -48,7 +48,7 @@ export const OverviewTab = () => {
             <CardTitle className="text-sm font-medium">Receita total</CardTitle>
             <DollarSign className="h-4 w-4" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="overflow-x-auto">
             <div className="text-2xl font-bold">
               {overviewData?.total_revenue}
             </div>
@@ -66,7 +66,7 @@ export const OverviewTab = () => {
             <CardTitle className="text-sm font-medium">Clientes</CardTitle>
             <Users className="h-4 w-4" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="overflow-x-auto">
             <div className="text-2xl font-bold">
               {overviewData?.customers_qty}
             </div>
@@ -84,7 +84,7 @@ export const OverviewTab = () => {
             <CardTitle className="text-sm font-medium">Vendas</CardTitle>
             <CreditCard className="h-4 w-4" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="overflow-x-auto">
             <div className="text-2xl font-bold">{overviewData?.sales_qty}</div>
             <p className="text-muted-foreground text-xs">
               {percentageCaption(
@@ -99,7 +99,7 @@ export const OverviewTab = () => {
             <CardTitle className="text-sm font-medium">Pedidos</CardTitle>
             <ShoppingBag className="h-4 w-4" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="overflow-x-auto">
             <div className="text-2xl font-bold">{overviewData?.orders_qty}</div>
             <p className="text-muted-foreground text-xs">
               {percentageCaption(
