@@ -1,10 +1,8 @@
 'use client';
 
-import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
-
 import { Spinner } from '@components/icons/spinner';
-
 import { useTheme } from 'next-themes';
+import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const button = tv({

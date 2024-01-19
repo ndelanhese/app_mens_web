@@ -1,8 +1,8 @@
 'use client';
 
 import { Checkbox } from '@components/ui/shadcn/checkbox';
-
 import { twJoin } from 'tailwind-merge';
+
 import { CheckboxItemProps } from './checkboxItem.types';
 
 export const CheckboxItem = ({

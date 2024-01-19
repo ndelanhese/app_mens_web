@@ -1,6 +1,5 @@
-import { cookies } from 'next/headers';
-
 import { api } from '@axios';
+import { cookies } from 'next/headers';
 
 import { Orders } from './page.types';
 

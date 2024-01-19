@@ -1,10 +1,8 @@
 'use client';
 
-import * as React from 'react';
-
-import { cn } from '@shadcn-utils';
-
 import * as PopoverPrimitive from '@radix-ui/react-popover';
+import { cn } from '@shadcn-utils';
+import * as React from 'react';
 
 const Popover = PopoverPrimitive.Root;
 
@@ -29,4 +27,4 @@ const PopoverContent = React.forwardRef<
 ));
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
-export { Popover, PopoverTrigger, PopoverContent };
+export { Popover, PopoverContent, PopoverTrigger };

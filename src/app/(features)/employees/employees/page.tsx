@@ -1,9 +1,8 @@
+import { api } from '@axios';
+import { EmployeesTable } from '@features-components/employees/employees/client/table/table';
 import { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
-
-import { api } from '@axios';
-import { EmployeesTable } from '@features-components/employees/employees/client/table/table';
 
 import { Employees } from './page.types';
 

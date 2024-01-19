@@ -1,17 +1,15 @@
+import { api } from '@axios';
+import { toast } from '@components/ui/shadcn/toast/use-toast';
+import { parseCookies } from 'nookies';
 import { cache } from 'react';
 
-import { api } from '@axios';
-
-import { toast } from '@components/ui/shadcn/toast/use-toast';
-
-import { parseCookies } from 'nookies';
 import {
-  Products,
   CustomersResponse,
   OrdersStatusResponse,
-  UsersResponse,
+  Products,
   SalesDiscountTypeResponse,
   SalesMethodsOfPaymentsResponse,
+  UsersResponse,
 } from './apiData.types';
 
 const { token } = parseCookies();

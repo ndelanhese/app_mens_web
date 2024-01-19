@@ -1,20 +1,18 @@
 'use client';
 
-import * as React from 'react';
-
-import { cn } from '@/lib/utils';
-
+import { Button } from '@components/ui/shadcn/button';
+import { Calendar } from '@components/ui/shadcn/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@components/ui/shadcn/popover';
-import { Button } from '@components/ui/shadcn/button';
-import { Calendar } from '@components/ui/shadcn/calendar';
-
 import { addDays, format } from 'date-fns';
 import { CalendarDays } from 'lucide-react';
+import * as React from 'react';
 import type { DateRange } from 'react-day-picker';
+
+import { cn } from '@/lib/utils';
 
 export function CalendarDateRangePicker({
   className,

@@ -1,12 +1,8 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
-
 import { api } from '@axios';
-
-import { Table } from '@components/shared/table/table';
 import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
+import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,
   TableActionCallbackOptions,
@@ -15,9 +11,11 @@ import {
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-
 import { Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+
 import { ViewCategoryForm } from '../../server/viewCategoryForm/viewCategoryForm';
 import { CreateCategoryForm } from '../createCategoryForm/createCategoryForm';
 import { EditCategoryForm } from '../ediCategoryForm/editCategoryForm';

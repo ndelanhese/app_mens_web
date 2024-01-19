@@ -1,50 +1,49 @@
-import { Metadata } from "next";
+import { SalesTable } from '@components/features/customers/sales/client/table/table';
+import { Metadata } from 'next';
 
-import { SalesTable } from "@components/features/customers/sales/client/table/table";
-
-import { getSales } from "./api";
-import { Sales as SalesResponse } from "./page.types";
+import { getSales } from './api';
+import { Sales as SalesResponse } from './page.types';
 
 const iterateResponse = (sales: SalesResponse | undefined) => {
-	if (!sales) return [];
+  if (!sales) return [];
 
-	return sales.data.map((sale) => {
-		const productsList = sale?.products
-			?.map((product) => product?.name)
-			.join(", ");
+  return sales.data.map(sale => {
+    const productsList = sale?.products
+      ?.map(product => product?.name)
+      .join(', ');
 
-		const methodsOfPayments = sale.methods_of_payments.map((method) => ({
-			id: method.id,
-			installment: method.installment,
-			name: method.method.name,
-			method_id: method.method.id,
-		}));
+    const methodsOfPayments = sale.methods_of_payments.map(method => ({
+      id: method.id,
+      installment: method.installment,
+      name: method.method.name,
+      method_id: method.method.id,
+    }));
 
-		const methodsList = methodsOfPayments
-			?.map((method) => method?.name)
-			.join(", ");
+    const methodsList = methodsOfPayments
+      ?.map(method => method?.name)
+      .join(', ');
 
-		return {
-			...sale,
-			methods_of_payments: methodsOfPayments,
-			methodsList,
-			productsList: productsList
-				? productsList.length > 25
-					? `${productsList.substring(0, 25)}...`
-					: productsList
-				: "",
-		};
-	});
+    return {
+      ...sale,
+      methods_of_payments: methodsOfPayments,
+      methodsList,
+      productsList: productsList
+        ? productsList.length > 25
+          ? `${productsList.substring(0, 25)}...`
+          : productsList
+        : '',
+    };
+  });
 };
 
 export const metadata: Metadata = {
-	title: "Vendas",
+  title: 'Vendas',
 };
 
 const Sales = async () => {
-	const sales = await getSales();
-	const rows = iterateResponse(sales);
-	return <SalesTable rows={rows} />;
+  const sales = await getSales();
+  const rows = iterateResponse(sales);
+  return <SalesTable rows={rows} />;
 };
 
 export default Sales;

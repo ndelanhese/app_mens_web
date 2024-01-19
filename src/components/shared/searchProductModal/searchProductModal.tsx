@@ -1,7 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
+import { CreateProductForm } from '@components/features/dataManagement/products/client/createProductForm/createProductForm';
 import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,
@@ -10,13 +9,13 @@ import {
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 import { TableDialog } from '@components/shared/table/tableDialog';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-import { CreateProductForm } from '@components/features/dataManagement/products/client/createProductForm/createProductForm';
-
 import { Plus } from 'lucide-react';
-import { Products } from './api/apiData.types';
-import { Product, SearchProductModalProps } from './searchProductModal.types';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
 // eslint-disable-next-line import/namespace
 import { getProducts } from './api/apiData';
+import { Products } from './api/apiData.types';
+import { Product, SearchProductModalProps } from './searchProductModal.types';
 
 export const SearchProductModal = ({
   triggerIcon,

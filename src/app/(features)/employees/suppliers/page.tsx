@@ -1,10 +1,8 @@
+import { api } from '@axios';
+import { SuppliersTable } from '@components/features/employees/suppliers/client/table/table';
 import { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
-
-import { api } from '@axios';
-
-import { SuppliersTable } from '@components/features/employees/suppliers/client/table/table';
 
 import { Suppliers } from './page.types';
 

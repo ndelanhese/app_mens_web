@@ -1,6 +1,5 @@
-import { ReactNode } from 'react';
-
 import { RefModalProps } from '@components/shared/table/table.types';
+import { ReactNode } from 'react';
 
 import { Order } from '../table/table.types';
 

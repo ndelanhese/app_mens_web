@@ -1,10 +1,9 @@
 'use client';
 
 import { FC, InputHTMLAttributes } from 'react';
-
-import { tv, type VariantProps } from 'tailwind-variants';
-import { FieldValue, FieldValues, Controller, Control } from 'react-hook-form';
+import { Control, Controller, FieldValue, FieldValues } from 'react-hook-form';
 import InputMask from 'react-input-mask';
+import { tv, type VariantProps } from 'tailwind-variants';
 
 const controlledInput = tv({
   base: 'flex flex-col transition-colors',

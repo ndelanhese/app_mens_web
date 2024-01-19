@@ -1,11 +1,7 @@
 'use client';
 
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-
 import { api } from '@axios';
-
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,
@@ -13,15 +9,17 @@ import {
   TableColumn,
 } from '@components/shared/table/table.types';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
-
-import { User, UserTableProps } from './table.types';
-import { parseCookies } from 'nookies';
 import { Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { parseCookies } from 'nookies';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+
 import { ViewUserForm } from '../../server/viewUserForm/viewUserForm';
-import { EditUserForm } from '../editUserForm/editUserForm';
 import { CreateUserForm } from '../createUserForm/createUserForm';
+import { EditUserForm } from '../editUserForm/editUserForm';
+import { User, UserTableProps } from './table.types';
 
 export const UserTable = ({ rows }: UserTableProps) => {
   const router = useRouter();

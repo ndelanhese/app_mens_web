@@ -1,7 +1,6 @@
 'use client';
 
-import { useContext } from 'react';
-
 import { SidebarDrawerContext } from '@contexts/sidebarDrawer/sidebarDrawer.context';
+import { useContext } from 'react';
 
 export const useSidebarDrawer = () => useContext(SidebarDrawerContext);

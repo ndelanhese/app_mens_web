@@ -1,12 +1,8 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
-
 import { api } from '@axios';
-
-import { Table } from '@components/shared/table/table';
 import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
+import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,
   TableActionCallbackOptions,
@@ -15,13 +11,15 @@ import {
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-
 import { Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
-import { CategoriesTableProps, Category } from './table.types';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+
+import { ViewCategoryForm } from '../../server/viewPromotionCategoryForm/viewCategoryForm';
 import { CreateCategoryForm } from '../createPromotionCategoryForm/createCategoryForm';
 import { EditCategoryForm } from '../editPromotionCategoryForm/editCategoryForm';
-import { ViewCategoryForm } from '../../server/viewPromotionCategoryForm/viewCategoryForm';
+import { CategoriesTableProps, Category } from './table.types';
 
 const CategoriesTableComponents = ({ rows }: CategoriesTableProps) => {
   const router = useRouter();

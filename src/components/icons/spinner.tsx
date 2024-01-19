@@ -1,4 +1,5 @@
 import { twMerge } from 'tailwind-merge';
+
 import { IconProps } from './icons.types';
 
 export const Spinner = ({ className, fillColor }: IconProps) => {

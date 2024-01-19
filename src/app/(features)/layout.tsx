@@ -1,7 +1,6 @@
-import { ReactNode } from 'react';
-
 import { Header } from '@components/shared/header/header';
 import { Sidebar } from '@components/shared/sidebar/sidebar';
+import { ReactNode } from 'react';
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (

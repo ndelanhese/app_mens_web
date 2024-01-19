@@ -1,6 +1,6 @@
 import { TableDialog } from '@components/shared/table/tableDialog';
-
 import { twMerge } from 'tailwind-merge';
+
 import { FormGridProps } from './formGrid.types';
 
 export const FormGrid = ({

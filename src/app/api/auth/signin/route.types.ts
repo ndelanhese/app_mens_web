@@ -1,9 +1,9 @@
 export type Permission = {
-	id: number;
-	name: string;
-	description: string;
+  id: number;
+  name: string;
+  description: string;
 };
 
 export type PermissionsResponse = {
-	data: Array<Permission>;
+  data: Array<Permission>;
 };

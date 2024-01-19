@@ -1,10 +1,8 @@
+import { api } from '@axios';
+import { PromotionsTable } from '@components/features/promotions/promotions/client/table/table';
+import { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
-import { Metadata } from 'next';
-
-import { api } from '@axios';
-
-import { PromotionsTable } from '@components/features/promotions/promotions/client/table/table';
 
 import { PromotionsResponse } from './page.types';
 

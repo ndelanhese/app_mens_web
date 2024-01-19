@@ -1,10 +1,8 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-
 import { api } from '@axios';
-
 import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
@@ -14,14 +12,13 @@ import {
 } from '@components/ui/inputs/postalCodeInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
-import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
-
+import { zodResolver } from '@hookform/resolvers/zod';
 import { convertDateFormat } from '@utils/helpers/date';
 import { convertStringToSlug } from '@utils/helpers/stringManipulation';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 import { parseCookies } from 'nookies';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
 import { getCities, getStates } from '../../api/apiData';
 import {
   CustomerFormSchema,

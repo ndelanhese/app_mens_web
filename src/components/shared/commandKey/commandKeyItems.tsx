@@ -2,7 +2,6 @@ import {
   CommandGroup,
   CommandSeparator,
 } from '@components/ui/shadcn/command/command';
-
 import {
   Contact,
   Container,
@@ -17,8 +16,9 @@ import {
   Users,
   WalletCards,
 } from 'lucide-react';
-import { CommandKeyItem } from './commandKeyItem';
+
 import { CommandKeyItemsProps } from './commandKey.types';
+import { CommandKeyItem } from './commandKeyItem';
 
 export const CommandKeyItems = ({ setOpen }: CommandKeyItemsProps) => (
   <>

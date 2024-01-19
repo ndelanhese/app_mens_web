@@ -1,9 +1,8 @@
+import { RolesTable } from '@components/features/administration/roles/client/table/table';
 import { Metadata } from 'next';
 
-import { RolesTable } from '@components/features/administration/roles/client/table/table';
-
-import { Roles } from './page.types';
 import { getRoles } from './api';
+import { Roles } from './page.types';
 
 export const metadata: Metadata = {
   title: 'Perfis de acesso',

@@ -1,7 +1,6 @@
-import { ReactNode, RefObject } from 'react';
-
 // eslint-disable-next-line import/named
 import { Column } from '@tanstack/react-table';
+import { ReactNode, RefObject } from 'react';
 
 export type TableColumnHeaderProps = {
   column: Column<any>;

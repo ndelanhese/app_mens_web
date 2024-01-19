@@ -1,19 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
-import { useSidebarDrawer } from '@hooks/useSidebarDrawer/useSidebarDrawer';
-
+import { Button } from '@components/ui/shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@components/ui/shadcn/dropdownMenu';
-import { Button } from '@components/ui/shadcn/button';
-
+import { useSidebarDrawer } from '@hooks/useSidebarDrawer/useSidebarDrawer';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 export function ToggleTheme() {
   const { setTheme } = useTheme();

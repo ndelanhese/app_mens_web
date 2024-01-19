@@ -2,6 +2,22 @@
 /* eslint-disable camelcase */
 'use client';
 
+import { api } from '@axios';
+import { CreateRoleForm } from '@components/features/administration/roles/client/createRoleForm/createRoleForm';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
+import { RefModalProps } from '@components/shared/table/table.types';
+import { Button } from '@components/ui/buttons/button';
+import { ControlledInput } from '@components/ui/inputs/controlledInput';
+import { PasswordInput } from '@components/ui/inputs/passwordInput';
+import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import {
+  SelectGroupedOption,
+  SelectOption,
+} from '@components/ui/selects/controlledSelect.types';
+import { toast } from '@components/ui/shadcn/toast/use-toast';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { parseCookies } from 'nookies';
 import {
   CSSProperties,
   useCallback,
@@ -10,27 +26,9 @@ import {
   useRef,
   useState,
 } from 'react';
-
-import { api } from '@axios';
-
-import {
-  SelectGroupedOption,
-  SelectOption,
-} from '@components/ui/selects/controlledSelect.types';
-import { FormGrid } from '@components/shared/formGrid/formGrid';
-import { Button } from '@components/ui/buttons/button';
-import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { PasswordInput } from '@components/ui/inputs/passwordInput';
-import { ControlledSelect } from '@components/ui/selects/controlledSelect';
-import { toast } from '@components/ui/shadcn/toast/use-toast';
-import { RefModalProps } from '@components/shared/table/table.types';
-import { CreateRoleForm } from '@components/features/administration/roles/client/createRoleForm/createRoleForm';
-import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
-
-import { zodResolver } from '@hookform/resolvers/zod';
-import { parseCookies } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import type { GroupBase } from 'react-select';
+
 import { getEmployees, getPermissions, getRoles } from '../api/apiData';
 import { EditUserFormSchema, editUserFormSchema } from './editUserForm.schema';
 import {

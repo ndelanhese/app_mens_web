@@ -1,12 +1,11 @@
-import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { DataTable } from '@components/shared/dataTable';
+import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { TableRow, TableCell } from '@components/ui/shadcn/table';
-
+import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { formatMoneyByCurrencySymbol } from '@utils/helpers';
+import { nanoid } from 'nanoid';
 
 import { PromotionPreviewProps } from './viewPromotionForm.types';
-import { nanoid } from 'nanoid';
 
 export const ViewPromotionForm = ({ promotion }: PromotionPreviewProps) => {
   const columns = ['Código', 'Nome', 'Part Number', 'Preço', 'Quantidade'];

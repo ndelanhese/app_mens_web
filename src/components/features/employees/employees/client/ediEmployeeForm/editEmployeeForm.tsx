@@ -1,26 +1,23 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-
 import { api } from '@axios';
-
+import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
+import {
+  PostalCodeInput,
+  ViacepResponseData,
+} from '@components/ui/inputs/postalCodeInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
-import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
-import {
-  ViacepResponseData,
-  PostalCodeInput,
-} from '@components/ui/inputs/postalCodeInput';
-
-import { convertStringToSlug } from '@utils/helpers/stringManipulation';
-import { convertDateFormat } from '@utils/helpers/date';
-
 import { zodResolver } from '@hookform/resolvers/zod';
+import { convertDateFormat } from '@utils/helpers/date';
+import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 import { parseCookies } from 'nookies';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
 import { getCities, getStates } from '../../api/apiData';
 import {
   EmployeeFormSchema,
@@ -121,8 +118,9 @@ const EditEmployeeFormComponent = ({
       const stateValue = memorizedStates.find(
         item => item.label === state.label,
       )?.label;
-      const cityValue = memorizedCities.find(item => item.label === city?.label)
-        ?.label;
+      const cityValue = memorizedCities.find(
+        item => item.label === city?.label,
+      )?.label;
 
       await api.put(
         `/employees/${employee?.id}`,

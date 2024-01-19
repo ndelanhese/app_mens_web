@@ -1,7 +1,7 @@
 import { api, nextApi } from '@axios';
+import { parseCookies } from 'nookies';
 
 import { ProductsStockResponse } from './api.types';
-import { parseCookies } from 'nookies';
 
 export const signin = async (email: string, password: string) => {
   return await nextApi.post('/auth/signin', {

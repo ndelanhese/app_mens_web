@@ -1,18 +1,16 @@
 'use client';
 
-import { memo, useMemo } from 'react';
-
 import { DataTable } from '@components/shared/dataTable';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { TableCell, TableRow } from '@components/ui/shadcn/table';
-
 import {
   calculateInstallment,
   formatMoneyByCurrencySymbol,
 } from '@utils/helpers';
-
 import { nanoid } from 'nanoid';
+import { memo, useMemo } from 'react';
+
 import { SaleFormProps } from './viewSaleForm.types';
 
 const ViewSaleFormComponent = ({ sale }: SaleFormProps) => {

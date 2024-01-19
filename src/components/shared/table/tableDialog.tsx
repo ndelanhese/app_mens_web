@@ -1,5 +1,3 @@
-import { memo, useEffect, useState } from 'react';
-
 import {
   Dialog,
   DialogContent,
@@ -8,9 +6,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@components/ui/shadcn/dialog';
+import { memo, useEffect, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 import { RefModalProps, tableDialogProps } from './table.types';
-import { twMerge } from 'tailwind-merge';
 
 const TableDialogComponent = ({
   content,

@@ -1,4 +1,5 @@
 import { twMerge } from 'tailwind-merge';
+
 import { StyledDiveProps } from './styledDiv.types';
 
 export const StyledDiv = ({ children, className }: StyledDiveProps) => (

@@ -1,7 +1,7 @@
-import { formatMoneyByCurrencySymbol } from '@/utils/helpers';
-
-import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { ControlledInput } from '@components/ui/inputs/controlledInput';
+
+import { formatMoneyByCurrencySymbol } from '@/utils/helpers';
 
 import { ProductPreviewProps } from './viewProductForm.types';
 

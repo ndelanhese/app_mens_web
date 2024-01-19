@@ -1,12 +1,9 @@
 'use client';
 
-import * as React from 'react';
-
-import { cn } from '@shadcn-utils';
-
 import { buttonVariants } from '@components/ui/shadcn/button';
-
+import { cn } from '@shadcn-utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import * as React from 'react';
 import { DayPicker } from 'react-day-picker';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;

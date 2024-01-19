@@ -1,9 +1,8 @@
 'use client';
 
+import { Button } from '@components/ui/shadcn/button';
 import Link from 'next/link';
 import { memo } from 'react';
-
-import { Button } from '@components/ui/shadcn/button';
 
 import { SidebarLinkProps } from './sidebarLink.types';
 

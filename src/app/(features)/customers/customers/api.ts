@@ -1,7 +1,6 @@
+import { api } from '@axios';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
-
-import { api } from '@axios';
 
 import { Customers } from './page.types';
 

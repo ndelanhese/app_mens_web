@@ -1,10 +1,7 @@
 'use client';
 
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-
 import { api } from '@axios';
-
+import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,
@@ -14,14 +11,15 @@ import {
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
-
-import { Customer, CustomersTableProps } from './table.types';
-import { parseCookies } from 'nookies';
 import { Plus } from 'lucide-react';
-import { EditCustomerForm } from '../ediCustomerForm/editCustomerForm';
+import { useRouter } from 'next/navigation';
+import { parseCookies } from 'nookies';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+
 import { CreateCustomerForm } from '../createCustomerForm/createCustomerForm';
+import { EditCustomerForm } from '../ediCustomerForm/editCustomerForm';
 import { ViewCustomerForm } from '../viewCustomerForm/viewCustomerForm';
+import { Customer, CustomersTableProps } from './table.types';
 
 const CustomersTableComponent = ({ rows }: CustomersTableProps) => {
   const router = useRouter();

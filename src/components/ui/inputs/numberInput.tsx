@@ -1,11 +1,11 @@
 'use client';
 
 import { ChangeEvent, FC, InputHTMLAttributes } from 'react';
+import { Control, Controller, FieldValue, FieldValues } from 'react-hook-form';
+import { tv, type VariantProps } from 'tailwind-variants';
 
 import { mask, setMask } from '@/utils/mask';
 
-import { Control, Controller, FieldValue, FieldValues } from 'react-hook-form';
-import { tv, type VariantProps } from 'tailwind-variants';
 import { Input } from './input';
 
 const controlledInput = tv({

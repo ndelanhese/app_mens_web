@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
+
 import { ControlledInput as Input } from './controlledInput';
 
 const meta: Meta = {

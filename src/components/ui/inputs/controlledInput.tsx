@@ -1,10 +1,10 @@
 'use client';
 
 import { ComponentType, FC, InputHTMLAttributes, ReactNode } from 'react';
-
-import { tv, type VariantProps } from 'tailwind-variants';
-import { Input } from './input';
 import { FieldValue, FieldValues, UseFormRegister } from 'react-hook-form';
+import { tv, type VariantProps } from 'tailwind-variants';
+
+import { Input } from './input';
 
 const controlledInput = tv({
   base: 'flex flex-col transition-colors',

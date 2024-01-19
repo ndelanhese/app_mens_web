@@ -1,12 +1,6 @@
 'use client';
 
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-
 import { api } from '@axios';
-
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
-import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
 import {
@@ -15,13 +9,17 @@ import {
   TableColumn,
 } from '@components/shared/table/table.types';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
-
-import { Promotion, PromotionsTableProps } from './table.types';
-import { parseCookies } from 'nookies';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { Plus } from 'lucide-react';
-import { ViewPromotionForm } from '../viewPromotionForm/viewPromotionForm';
+import { useRouter } from 'next/navigation';
+import { parseCookies } from 'nookies';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+
 import { CreatePromotionForm } from '../createPromotionForm/createPromotionForm';
 import { EditPromotionForm } from '../editPromotionForm/editPromotionForm';
+import { ViewPromotionForm } from '../viewPromotionForm/viewPromotionForm';
+import { Promotion, PromotionsTableProps } from './table.types';
 
 const PromotionsTableComponent = ({ rows }: PromotionsTableProps) => {
   const router = useRouter();

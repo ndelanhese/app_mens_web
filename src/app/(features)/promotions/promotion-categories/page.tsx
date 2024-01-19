@@ -1,9 +1,8 @@
-import { cookies } from 'next/headers';
-import { cache } from 'react';
-import { Metadata } from 'next';
-
 import { api } from '@axios';
 import { CategoriesTable } from '@features-components/promotions/promotionCategories/client/table/table';
+import { Metadata } from 'next';
+import { cookies } from 'next/headers';
+import { cache } from 'react';
 
 import { Categories } from './page.types';
 
