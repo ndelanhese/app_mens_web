@@ -86,3 +86,25 @@ export type OverviewResponse = {
   recent_sales: Sale[];
   last_month_sales_qty: number;
 };
+
+export type ReportsResponse = {
+  id: number;
+  name: string;
+  description?: string;
+  quantity: number;
+};
+
+export type ReportsResponseData = {
+  data: Array<ReportsResponse> | undefined;
+};
+
+export type PaginationProps = {
+  page?: string;
+  per_page?: string;
+  direction?: 'ASC' | 'DESC';
+};
+
+export type GetReportProps = PaginationProps & {
+  initial_date?: string;
+  final_date?: string;
+};

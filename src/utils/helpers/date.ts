@@ -95,3 +95,18 @@ export const convertDateFormat = (inputDate: string): string => {
 
   return `${convertedYear}-${convertedMonth}-${convertedDay}`;
 };
+
+export const revertDateFormat = (isoDate: string): string => {
+  const [day, month, year] = isoDate.split('/');
+
+  const revertedDate = new Date(
+    Date.UTC(Number(year), Number(month) - 1, Number(day), 23, 59),
+  );
+  const revertedDay = revertedDate.getUTCDate().toString().padStart(2, '0');
+  const revertedMonth = (revertedDate.getUTCMonth() + 1)
+    .toString()
+    .padStart(2, '0');
+  const revertedYear = revertedDate.getUTCFullYear();
+
+  return `${revertedYear}-${revertedMonth}-${revertedDay}`;
+};
