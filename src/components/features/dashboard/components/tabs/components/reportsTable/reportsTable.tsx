@@ -14,7 +14,11 @@ import { ReportsResponseData } from '../../api/api.types';
 import { ReportsTableFilters } from './reportsTableFilters';
 import { ReportsTableRow } from './reportsTableRow';
 
-export const ReportsTable = ({ data }: ReportsResponseData) => {
+export const ReportsTable = ({
+  data,
+}: {
+  data: ReportsResponseData | undefined;
+}) => {
   const { get: getSearchParam } = useSearchParams();
 
   const subTab = getSearchParam('sub_tab');
@@ -35,7 +39,7 @@ export const ReportsTable = ({ data }: ReportsResponseData) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.map((row, index) => (
+            {data?.data?.map((row, index) => (
               <ReportsTableRow
                 key={`${index}-row`}
                 id={row.id}
@@ -47,7 +51,11 @@ export const ReportsTable = ({ data }: ReportsResponseData) => {
           </TableBody>
         </Table>
       </div>
-      <Pagination pageIndex={0} perPage={8} totalCount={10} />
+      <Pagination
+        pageIndex={data?.page ?? 1}
+        perPage={data?.per_page ?? 8}
+        totalCount={data?.total ?? 1}
+      />
     </div>
   );
 };

@@ -29,5 +29,5 @@ export const BrandsTab = () => {
     getBrandsReportData();
   }, [getBrandsReportData]);
 
-  return <ReportsTable data={brandsReportData?.data} />;
+  return <ReportsTable data={brandsReportData} />;
 };

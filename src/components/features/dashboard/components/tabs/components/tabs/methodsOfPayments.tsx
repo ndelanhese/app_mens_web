@@ -33,5 +33,5 @@ export const MethodsOfPaymentsTab = () => {
     getMethodsOfPaymentsReportData();
   }, [getMethodsOfPaymentsReportData]);
 
-  return <ReportsTable data={methodsOfPaymentsReportData?.data} />;
+  return <ReportsTable data={methodsOfPaymentsReportData} />;
 };

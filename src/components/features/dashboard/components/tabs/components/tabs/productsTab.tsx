@@ -27,6 +27,7 @@ export const ProductsTab = () => {
       page,
       per_page: perPage,
     });
+
     setProductsReportData(response);
   }, [finalDate, initialDate, page, perPage]);
 
@@ -34,5 +35,5 @@ export const ProductsTab = () => {
     getProductsReportData();
   }, [getProductsReportData]);
 
-  return <ReportsTable data={productsReportData?.data} />;
+  return <ReportsTable data={productsReportData} />;
 };

@@ -29,5 +29,5 @@ export const CategoriesTab = () => {
     getCategoriesReportData();
   }, [getCategoriesReportData]);
 
-  return <ReportsTable data={categoriesReportData?.data} />;
+  return <ReportsTable data={categoriesReportData} />;
 };

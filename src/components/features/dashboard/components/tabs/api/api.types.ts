@@ -96,6 +96,11 @@ export type ReportsResponse = {
 
 export type ReportsResponseData = {
   data: Array<ReportsResponse> | undefined;
+  total: number;
+  page: number;
+  per_page: number;
+  from: number;
+  to: number;
 };
 
 export type PaginationProps = {
