@@ -30,8 +30,13 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
+import {
+  validateIfTheUseCanSeeThePath,
+  validateIfTheUserHasPermission,
+} from '@utils/permissions';
 import { Eye, Pencil, Search, Trash } from 'lucide-react';
-import { useState } from 'react';
+import { parseCookies } from 'nookies';
+import { useMemo, useState } from 'react';
 import { twJoin } from 'tailwind-merge';
 
 import { TableSkeleton } from '../skeleton/tableSkeleton/tableSkeleton';
@@ -59,6 +64,7 @@ export function Table<T>({
   deleteItemTitle,
   rowIsClickable,
   handleRowClick,
+  permissionPrefix,
 }: UserTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -104,6 +110,40 @@ export function Table<T>({
     </StyledDiv>
   );
 
+  const userHasPermission = useMemo(() => {
+    const can = {
+      toCreate: true,
+      toEdit: true,
+      toDelete: true,
+    };
+    if (!permissionPrefix) return can;
+    const createPermissionName = `${permissionPrefix}_create`;
+    const editPermissionName = `${permissionPrefix}_update`;
+    const deletePermissionName = `${permissionPrefix}_delete`;
+
+    const { permission: userPermissions } = parseCookies();
+
+    const userCanCreate = validateIfTheUserHasPermission(
+      createPermissionName,
+      userPermissions,
+    );
+    can.toCreate = userCanCreate;
+
+    const userCanEdit = validateIfTheUserHasPermission(
+      editPermissionName,
+      userPermissions,
+    );
+    can.toEdit = userCanEdit;
+
+    const userCanDelete = validateIfTheUserHasPermission(
+      deletePermissionName,
+      userPermissions,
+    );
+    can.toDelete = userCanDelete;
+
+    return can;
+  }, [permissionPrefix]);
+
   if (!rows) {
     return <TableSkeleton />;
   }
@@ -129,7 +169,7 @@ export function Table<T>({
             newItemDialogContent ? 'justify-between' : 'justify-end',
           )}
         >
-          {newItemDialogContent && (
+          {newItemDialogContent && userHasPermission?.toCreate && (
             <TableDialog
               dialogRef={newItemDialogRef}
               trigger={newItemTrigger}
@@ -226,7 +266,7 @@ export function Table<T>({
                         type="view"
                       />
                     )}
-                    {editItemDialogContent && (
+                    {editItemDialogContent && userHasPermission?.toEdit && (
                       <TableDialog
                         dialogRef={editItemDialogRef}
                         trigger={EDIT_ITEM_TRIGGER}
@@ -238,7 +278,7 @@ export function Table<T>({
                         type="edit"
                       />
                     )}
-                    {deleteItemTitle && (
+                    {deleteItemTitle && userHasPermission?.toDelete && (
                       <AlertDialog
                         actionLabel="Confirmar"
                         cancelLabel="Cancelar"

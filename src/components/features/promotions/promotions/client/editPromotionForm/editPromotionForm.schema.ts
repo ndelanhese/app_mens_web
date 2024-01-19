@@ -95,8 +95,7 @@ export const promotionFormSchema = z
           path: ['final_date'],
         });
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
       ctx.addIssue({
         code: 'custom',
         message: 'Data final inválida',

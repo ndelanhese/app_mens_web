@@ -58,7 +58,6 @@ export const promotionFormSchema = z
           ?.replaceAll('%', '')
           ?.replaceAll('R$', '')
           ?.replaceAll(' ', '');
-        console.log(replacedValue);
         return value ? Number(replacedValue) : null;
       }),
     discount_type: z.object({

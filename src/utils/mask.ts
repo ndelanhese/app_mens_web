@@ -212,7 +212,6 @@ export function percentage(value: string): string {
   valuePercentage = valuePercentage.substring(0, 3);
   valuePercentage = Number(valuePercentage).toFixed(0);
   valuePercentage = valuePercentage.replace(/(\d{1})/, '$1');
-  console.log(valuePercentage);
   if (valuePercentage === '0') return '';
 
   return valuePercentage;

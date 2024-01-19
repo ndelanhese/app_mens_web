@@ -77,7 +77,5 @@ export const getProducts = cache(async () => {
       },
     });
     return data;
-  } catch (error: Error | any) {
-    console.log(error?.response?.data?.message);
-  }
+  } catch {}
 });

@@ -9,6 +9,7 @@ export const validateIfTheUserHasPermission = (
   permissionName: string,
   userPermissions: string,
 ) => {
+  if (!userPermissions) return false;
   const permissions = convertPermissionsToJSON(userPermissions);
 
   return permissions.some(permission => permission.name === permissionName);

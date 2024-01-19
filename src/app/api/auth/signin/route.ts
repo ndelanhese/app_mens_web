@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     )}; Path=/; Max-Age=${expirationTimeInSeconds};`;
     const PERMISSION_COOKIE = `permission=${JSON.stringify(
       permissionsResponse,
-    )}; Path=/; Max-Age=${expirationTimeInSeconds}; HttpOnly;`;
+    )}; Path=/; Max-Age=${expirationTimeInSeconds};`;
     const header = new Headers();
     header.append('Set-Cookie', TOKEN_COOKIE);
     header.append('Set-Cookie', USER_COOKIE);

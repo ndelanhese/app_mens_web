@@ -66,7 +66,6 @@ export const convertStringToDate = (dateString: string): Date | null => {
 
   // Check if the components are valid
   if (Number.isNaN(day) || Number.isNaN(month) || Number.isNaN(year)) {
-    console.error('Invalid date string format');
     return null;
   }
 
@@ -75,7 +74,6 @@ export const convertStringToDate = (dateString: string): Date | null => {
 
   // Check if the Date object is valid
   if (Number.isNaN(parsedDate.getTime())) {
-    console.error('Invalid date');
     return null;
   }
 

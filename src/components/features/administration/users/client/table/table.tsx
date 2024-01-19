@@ -1,7 +1,6 @@
 'use client';
 
 import { api } from '@axios';
-import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,
@@ -14,7 +13,7 @@ import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { ViewUserForm } from '../../server/viewUserForm/viewUserForm';
 import { CreateUserForm } from '../createUserForm/createUserForm';
@@ -158,6 +157,7 @@ export const UserTable = ({ rows }: UserTableProps) => {
       }
       deleteItemTitle="Excluir usuário"
       deleteItemDescription="Deseja realmente excluir o usuário?"
+      permissionPrefix="users"
     />
   );
 };
