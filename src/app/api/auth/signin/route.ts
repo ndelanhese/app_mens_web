@@ -16,6 +16,13 @@ export async function POST(request: Request) {
       email,
       password,
     });
+
+    const permissions = JSON.stringify(data.permissions);
+    const splitIndex = Math.floor(permissions.length / 2);
+
+    const firstPermissions = permissions.slice(0, splitIndex);
+    const secondPermissions = permissions.slice(splitIndex, permissions.length);
+
     const currentDate = new Date();
     currentDate.setHours(currentDate.getHours() + 24);
     const expirationTimeInSeconds = Math.floor(
@@ -25,11 +32,14 @@ export async function POST(request: Request) {
     const USER_COOKIE = `user=${JSON.stringify(
       data.user_data,
     )}; Path=/; Max-Age=${expirationTimeInSeconds};`;
-    // const PERMISSION_COOKIE = `permission=${JSON.stringify(data.permissions)}; Path=/; Max-Age=${expirationTimeInSeconds};`;
+
+    const PERMISSION_ONE_COOKIE = `permission_one=${firstPermissions}; Path=/; Max-Age=${expirationTimeInSeconds};`;
+    const PERMISSION_TWO_COOKIE = `permission_two=${secondPermissions}; Path=/; Max-Age=${expirationTimeInSeconds};`;
     const header = new Headers();
     header.append('Set-Cookie', TOKEN_COOKIE);
     header.append('Set-Cookie', USER_COOKIE);
-    // header.append('Set-Cookie', PERMISSION_COOKIE);
+    header.append('Set-Cookie', PERMISSION_ONE_COOKIE);
+    header.append('Set-Cookie', PERMISSION_TWO_COOKIE);
     return Response.json(
       { message: 'Login realizado com sucesso!' },
       {
