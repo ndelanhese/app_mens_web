@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:20.11.0-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -42,6 +42,5 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT 3000
-# ENV HOSTNAME localhost
 
 CMD ["node", "server.js"]
