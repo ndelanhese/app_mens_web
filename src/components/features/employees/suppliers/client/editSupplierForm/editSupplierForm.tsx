@@ -62,9 +62,16 @@ const EditSupplierFormComponent = ({
     if (state) {
       const response = await getCities(state.value);
       setCities(response);
-      setValue('address.city', null);
+      if (watch('address.state').label === supplier?.addresses[0].state) {
+        setValue('address.city', {
+          value: convertStringToSlug(supplier?.addresses[0].city ?? ''),
+          label: supplier?.addresses[0].city ?? '',
+        });
+      } else {
+        setValue('address.city', null);
+      }
     }
-  }, [setValue, watch]);
+  }, [setValue, supplier?.addresses, watch]);
 
   useEffect(() => {
     stateResponse();
@@ -73,7 +80,14 @@ const EditSupplierFormComponent = ({
   useEffect(() => {
     if (watch('address.state')) {
       handleSelectState();
-      setValue('address.city', null);
+      if (watch('address.state').label === supplier?.addresses[0].state) {
+        setValue('address.city', {
+          value: convertStringToSlug(supplier?.addresses[0].city ?? ''),
+          label: supplier?.addresses[0].city ?? '',
+        });
+      } else {
+        setValue('address.city', null);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSelectState, watch('address.state')]);
@@ -290,7 +304,7 @@ const EditSupplierFormComponent = ({
               disabled={isLoadingPostalCode}
             />
           )}
-          {memorizedStates && memorizedCities && (
+          {memorizedStates && memorizedCities && memorizedCities.length > 0 && (
             <ControlledSelect
               label="Cidade"
               name="address.city"

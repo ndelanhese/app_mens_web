@@ -54,6 +54,14 @@ const EditCustomerFormComponent = ({
     formState: { errors, isSubmitting },
   } = useForm<CustomerFormSchema>({
     resolver: zodResolver(customerFormSchema),
+    defaultValues: {
+      address: {
+        city: {
+          value: convertStringToSlug(customer?.addresses[0].city ?? ''),
+          label: customer?.addresses[0].city ?? '',
+        },
+      },
+    },
   });
 
   const stateResponse = useCallback(async () => {
@@ -74,10 +82,17 @@ const EditCustomerFormComponent = ({
   }, [stateResponse]);
 
   useEffect(() => {
-    if (watch('address.state')?.value) {
+    if (watch('address.state')) {
       setSelectedState(true);
       handleSelectState();
-      setValue('address.city', null);
+      if (watch('address.state').label === customer?.addresses[0].state) {
+        setValue('address.city', {
+          value: convertStringToSlug(customer?.addresses[0].city ?? ''),
+          label: customer?.addresses[0].city ?? '',
+        });
+      } else {
+        setValue('address.city', null);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSelectState, watch('address.state')]);
@@ -322,8 +337,7 @@ const EditCustomerFormComponent = ({
           {memorizedStates &&
             memorizedStates.length > 0 &&
             memorizedCities &&
-            memorizedCities.length > 0 &&
-            selectedState && (
+            memorizedCities.length > 0 && (
               <ControlledSelect
                 label="Cidade"
                 name="address.city"

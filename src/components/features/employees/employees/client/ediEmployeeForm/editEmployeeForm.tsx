@@ -65,9 +65,16 @@ const EditEmployeeFormComponent = ({
     if (state) {
       const response = await getCities(state);
       setCities(response);
-      setValue('address.city', null);
+      if (watch('address.state').label === employee?.addresses[0].state) {
+        setValue('address.city', {
+          value: convertStringToSlug(employee?.addresses[0].city ?? ''),
+          label: employee?.addresses[0].city ?? '',
+        });
+      } else {
+        setValue('address.city', null);
+      }
     }
-  }, [setValue, watch]);
+  }, [employee?.addresses, setValue, watch]);
 
   useEffect(() => {
     stateResponse();
@@ -77,7 +84,14 @@ const EditEmployeeFormComponent = ({
     if (watch('address.state')?.value) {
       setSelectedState(true);
       handleSelectState();
-      setValue('address.city', null);
+      if (watch('address.state').label === employee?.addresses[0].state) {
+        setValue('address.city', {
+          value: convertStringToSlug(employee?.addresses[0].city ?? ''),
+          label: employee?.addresses[0].city ?? '',
+        });
+      } else {
+        setValue('address.city', null);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSelectState, watch('address.state')]);
@@ -362,7 +376,7 @@ const EditEmployeeFormComponent = ({
               disabled={isLoadingPostalCode}
             />
           )}
-          {memorizedStates && memorizedCities && selectedState && (
+          {memorizedStates && memorizedCities && memorizedCities.length > 0 && (
             <ControlledSelect
               label="Cidade"
               name="address.city"
