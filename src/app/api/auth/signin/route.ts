@@ -37,7 +37,6 @@ export async function POST(request: NextRequest) {
       },
     );
   } catch (error: any) {
-    console.log(error);
     return NextResponse.json(
       {
         message: error?.response?.data?.message ?? 'Erro ao realizar o login',
