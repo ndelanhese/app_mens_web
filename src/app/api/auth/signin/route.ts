@@ -1,5 +1,4 @@
 import { api } from '@axios';
-import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const signInBodySchema = z.object({
@@ -7,7 +6,9 @@ const signInBodySchema = z.object({
   password: z.string(),
 });
 
-export async function POST(request: NextRequest) {
+export const dynamic = 'force-dynamic';
+
+export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { email, password } = signInBodySchema.parse(body);
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
     header.append('Set-Cookie', TOKEN_COOKIE);
     header.append('Set-Cookie', USER_COOKIE);
     header.append('Set-Cookie', PERMISSION_COOKIE);
-    return NextResponse.json(
+    return Response.json(
       { message: 'Login realizado com sucesso!' },
       {
         status: 200,
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
       },
     );
   } catch (error: any) {
-    return NextResponse.json(
+    return Response.json(
       {
         message: error?.response?.data?.message ?? 'Erro ao realizar o login',
       },
