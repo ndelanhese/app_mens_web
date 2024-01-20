@@ -22,15 +22,18 @@ RUN yarn build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
+ENV NODE_ENV production
 
 
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001 
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 
+# Set the correct permission for prerender cache
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
