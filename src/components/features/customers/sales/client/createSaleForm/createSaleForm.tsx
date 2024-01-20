@@ -586,7 +586,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           }
           disabled={!discountTypeSelected}
           mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
-          prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
+          prefix={discountTypeSelected === 'fixed' ? 'R$' : '%'}
           inputMode="numeric"
         />
       )}
