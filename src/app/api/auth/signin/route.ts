@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       '/auth/permissions',
       {
         headers: {
-          Authorization: `Bearer ${data.token}`,
+          Authorization: `Bearer ${data?.token}`,
         },
       },
     );
