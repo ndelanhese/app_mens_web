@@ -10,14 +10,14 @@ import {
 } from '@components/ui/shadcn/tabs';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { destroyCookie, parseCookies } from 'nookies';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 
 import { ProductsWithLowStockTable } from './components/producsWithLowStockTable';
 import { OverviewTab } from './components/tabs/overViewTab';
 import { ReportsTab } from './components/tabs/reportsTab';
 import { ProductsStockResponse } from './dashboard.types';
 
-export const Dashboard = () => {
+const DashboardComponent = () => {
   const { get: getSearchParam, entries } = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -104,3 +104,9 @@ export const Dashboard = () => {
     </>
   );
 };
+
+export const Dashboard = () => (
+  <Suspense>
+    <DashboardComponent />
+  </Suspense>
+);
