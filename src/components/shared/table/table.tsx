@@ -30,10 +30,7 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
-import {
-  validateIfTheUseCanSeeThePath,
-  validateIfTheUserHasPermission,
-} from '@utils/permissions';
+import { validateIfTheUserHasPermission } from '@utils/permissions';
 import { Eye, Pencil, Search, Trash } from 'lucide-react';
 import { parseCookies } from 'nookies';
 import { useMemo, useState } from 'react';
@@ -66,7 +63,9 @@ export function Table<T>({
   handleRowClick,
   permissionPrefix,
 }: UserTableProps<T>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: 'id', desc: true },
+  ]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
