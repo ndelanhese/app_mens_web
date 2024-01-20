@@ -84,7 +84,10 @@ const EditEmployeeFormComponent = ({
     if (watch('address.state')?.value) {
       setSelectedState(true);
       handleSelectState();
-      if (watch('address.state').label === employee?.addresses[0].state) {
+      if (
+        watch('address.state').label === employee?.addresses[0].state &&
+        employee?.addresses[0].postalCode === watch('address.postal_code')
+      ) {
         setValue('address.city', {
           value: convertStringToSlug(employee?.addresses[0].city ?? ''),
           label: employee?.addresses[0].city ?? '',

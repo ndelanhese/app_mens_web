@@ -85,7 +85,10 @@ const EditCustomerFormComponent = ({
     if (watch('address.state')) {
       setSelectedState(true);
       handleSelectState();
-      if (watch('address.state').label === customer?.addresses[0].state) {
+      if (
+        watch('address.state').label === customer?.addresses[0].state &&
+        customer?.addresses[0].postal_code === watch('address.postal_code')
+      ) {
         setValue('address.city', {
           value: convertStringToSlug(customer?.addresses[0].city ?? ''),
           label: customer?.addresses[0].city ?? '',

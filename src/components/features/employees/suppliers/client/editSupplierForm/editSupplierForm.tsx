@@ -80,7 +80,10 @@ const EditSupplierFormComponent = ({
   useEffect(() => {
     if (watch('address.state')) {
       handleSelectState();
-      if (watch('address.state').label === supplier?.addresses[0].state) {
+      if (
+        watch('address.state').label === supplier?.addresses[0].state &&
+        supplier?.addresses[0].postalCode === watch('address.postal_code')
+      ) {
         setValue('address.city', {
           value: convertStringToSlug(supplier?.addresses[0].city ?? ''),
           label: supplier?.addresses[0].city ?? '',
