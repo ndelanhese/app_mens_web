@@ -58,6 +58,7 @@ export const config = {
   matcher: [
     '/',
     '/dashboard/:path*',
+    '/dashboard-fallback/:path*',
     '/signin/:path*',
     '/administration/users/:path*',
     '/administration/roles-permissions/:path*',

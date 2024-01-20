@@ -4,6 +4,4 @@ export type Permission = {
   description: string;
 };
 
-export type Permissions = {
-  data: Array<Permission>;
-};
+export type Permissions = Array<Permission>;

@@ -1,8 +1,7 @@
 import { Permissions } from './permissions.types';
 
 const convertPermissionsToJSON = (permissions: string) => {
-  const { data } = JSON.parse(permissions) as Permissions;
-  return data;
+  return JSON.parse(permissions) as Permissions;
 };
 
 export const validateIfTheUserHasPermission = (
