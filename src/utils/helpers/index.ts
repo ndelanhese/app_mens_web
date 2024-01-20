@@ -22,7 +22,9 @@ export const formatMoneyByCurrencySymbol = (
  */
 
 export const convertMoneyStringToNumber = (moneyString: string) => {
-  const cleanedMoneyString = moneyString.replace(/[^\d,.-]/g, '');
+  const cleanedMoneyString = moneyString.replace(/[^\d,-]/g, '');
+
+  console.log(cleanedMoneyString);
 
   const dotFormattedString = cleanedMoneyString.replace(',', '.');
 

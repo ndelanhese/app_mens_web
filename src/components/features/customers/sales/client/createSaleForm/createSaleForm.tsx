@@ -195,7 +195,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           </TableRow>
         ))
       : undefined;
-
   const onSubmit: SubmitHandler<SaleFormSchema> = async data => {
     try {
       if (!products || (products && products?.length < 1)) {
