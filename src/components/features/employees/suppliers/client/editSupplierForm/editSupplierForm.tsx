@@ -62,9 +62,16 @@ const EditSupplierFormComponent = ({
     if (state) {
       const response = await getCities(state.value);
       setCities(response);
-      setValue('address.city', null);
+      if (watch('address.state').label === supplier?.addresses[0].state) {
+        setValue('address.city', {
+          value: convertStringToSlug(supplier?.addresses[0].city ?? ''),
+          label: supplier?.addresses[0].city ?? '',
+        });
+      } else {
+        setValue('address.city', null);
+      }
     }
-  }, [setValue, watch]);
+  }, [setValue, supplier?.addresses, watch]);
 
   useEffect(() => {
     stateResponse();
@@ -73,7 +80,17 @@ const EditSupplierFormComponent = ({
   useEffect(() => {
     if (watch('address.state')) {
       handleSelectState();
-      setValue('address.city', null);
+      if (
+        watch('address.state').label === supplier?.addresses[0].state &&
+        supplier?.addresses[0].postalCode === watch('address.postal_code')
+      ) {
+        setValue('address.city', {
+          value: convertStringToSlug(supplier?.addresses[0].city ?? ''),
+          label: supplier?.addresses[0].city ?? '',
+        });
+      } else {
+        setValue('address.city', null);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSelectState, watch('address.state')]);
@@ -228,6 +245,7 @@ const EditSupplierFormComponent = ({
             defaultValue={supplier?.cnpj}
             placeholder="Ex. 12.345.678/9012-34"
             mask="99.999.999/9999-99"
+            inputMode="numeric"
           />
           <PostalCodeInput
             id="address.postal_code"
@@ -240,6 +258,7 @@ const EditSupplierFormComponent = ({
             handleSearchCep={handleSearchCep}
             disabled={isLoadingPostalCode}
             defaultValue={supplier?.addresses?.[0]?.postalCode}
+            inputMode="numeric"
           />
 
           <ControlledInput
@@ -288,7 +307,7 @@ const EditSupplierFormComponent = ({
               disabled={isLoadingPostalCode}
             />
           )}
-          {memorizedStates && memorizedCities && (
+          {memorizedStates && memorizedCities && memorizedCities.length > 0 && (
             <ControlledSelect
               label="Cidade"
               name="address.city"
@@ -310,7 +329,7 @@ const EditSupplierFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Alterar fornecedor
+        Editar
       </Button>
     </form>
   );

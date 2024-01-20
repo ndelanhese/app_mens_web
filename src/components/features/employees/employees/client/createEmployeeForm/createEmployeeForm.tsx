@@ -213,6 +213,7 @@ const CreateEmployeeFormComponent = ({
         errorMessage={errors.cpf?.message}
         placeholder="Ex. 123.456.789-10"
         mask="999.999.999-99"
+        inputMode="numeric"
       />
       <MaskedInput
         id="rg"
@@ -221,6 +222,7 @@ const CreateEmployeeFormComponent = ({
         errorMessage={errors.rg?.message}
         placeholder="Ex. 12.345.678-9"
         mask="99.999.999-9"
+        inputMode="numeric"
       />
       <MaskedInput
         id="birth_date"
@@ -230,6 +232,7 @@ const CreateEmployeeFormComponent = ({
         errorMessage={errors.birth_date?.message}
         placeholder="Ex. 01/01/2000"
         mask="99/99/9999"
+        inputMode="numeric"
       />
       <MaskedInput
         id="phone"
@@ -239,6 +242,7 @@ const CreateEmployeeFormComponent = ({
         errorMessage={errors.phone?.message}
         placeholder="Ex. (11) 99999-9999"
         mask="(99) 99999-9999"
+        inputMode="tel"
       />
       <MaskedInput
         id="pis_pasep"
@@ -248,6 +252,7 @@ const CreateEmployeeFormComponent = ({
         errorMessage={errors.pis_pasep?.message}
         placeholder="Ex. 123.45678.91-0"
         mask="999.99999.99-9"
+        inputMode="numeric"
       />
       <MaskedInput
         id="admission_date"
@@ -257,6 +262,7 @@ const CreateEmployeeFormComponent = ({
         errorMessage={errors.admission_date?.message}
         placeholder="Ex. 01/01/2000"
         mask="99/99/9999"
+        inputMode="numeric"
       />
       <MaskedInput
         id="resignation_date"
@@ -265,6 +271,7 @@ const CreateEmployeeFormComponent = ({
         errorMessage={errors.resignation_date?.message}
         placeholder="Ex. 01/01/2000"
         mask="99/99/9999"
+        inputMode="numeric"
       />
       <PostalCodeInput
         id="address.postal_code"
@@ -276,6 +283,7 @@ const CreateEmployeeFormComponent = ({
         mask="99999-999"
         handleSearchCep={handleSearchCep}
         disabled={isLoadingPostalCode}
+        inputMode="numeric"
       />
       <ControlledInput
         id="address.address"
@@ -335,7 +343,7 @@ const CreateEmployeeFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Criar novo funcionário
+        Criar
       </Button>
     </FormGrid>
   );

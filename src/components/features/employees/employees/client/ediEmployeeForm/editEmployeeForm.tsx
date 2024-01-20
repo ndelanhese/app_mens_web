@@ -65,9 +65,16 @@ const EditEmployeeFormComponent = ({
     if (state) {
       const response = await getCities(state);
       setCities(response);
-      setValue('address.city', null);
+      if (watch('address.state').label === employee?.addresses[0].state) {
+        setValue('address.city', {
+          value: convertStringToSlug(employee?.addresses[0].city ?? ''),
+          label: employee?.addresses[0].city ?? '',
+        });
+      } else {
+        setValue('address.city', null);
+      }
     }
-  }, [setValue, watch]);
+  }, [employee?.addresses, setValue, watch]);
 
   useEffect(() => {
     stateResponse();
@@ -77,7 +84,17 @@ const EditEmployeeFormComponent = ({
     if (watch('address.state')?.value) {
       setSelectedState(true);
       handleSelectState();
-      setValue('address.city', null);
+      if (
+        watch('address.state').label === employee?.addresses[0].state &&
+        employee?.addresses[0].postalCode === watch('address.postal_code')
+      ) {
+        setValue('address.city', {
+          value: convertStringToSlug(employee?.addresses[0].city ?? ''),
+          label: employee?.addresses[0].city ?? '',
+        });
+      } else {
+        setValue('address.city', null);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSelectState, watch('address.state')]);
@@ -236,6 +253,7 @@ const EditEmployeeFormComponent = ({
             defaultValue={employee?.cpf}
             placeholder="Ex. 123.456.789-10"
             mask="999.999.999-99"
+            inputMode="numeric"
           />
           <MaskedInput
             id="rg"
@@ -245,6 +263,7 @@ const EditEmployeeFormComponent = ({
             defaultValue={employee?.rg}
             placeholder="Ex. 12.345.678-9"
             mask="99.999.999-9"
+            inputMode="numeric"
           />
           <MaskedInput
             id="birth_date"
@@ -255,6 +274,7 @@ const EditEmployeeFormComponent = ({
             defaultValue={employee?.birthDate}
             placeholder="Ex. 01/01/2000"
             mask="99/99/9999"
+            inputMode="numeric"
           />
           <MaskedInput
             id="phone"
@@ -265,6 +285,7 @@ const EditEmployeeFormComponent = ({
             defaultValue={employee?.phone}
             placeholder="Ex. (11) 99999-9999"
             mask="(99) 99999-9999"
+            inputMode="tel"
           />
           <MaskedInput
             id="pis_pasep"
@@ -275,6 +296,7 @@ const EditEmployeeFormComponent = ({
             defaultValue={employee?.pisPasep}
             placeholder="Ex. 123.45678.91-0"
             mask="999.99999.99-9"
+            inputMode="numeric"
           />
           <MaskedInput
             id="admission_date"
@@ -285,6 +307,7 @@ const EditEmployeeFormComponent = ({
             defaultValue={employee?.admissionDate}
             placeholder="Ex. 01/01/2000"
             mask="99/99/9999"
+            inputMode="numeric"
           />
           <MaskedInput
             id="resignation_date"
@@ -294,6 +317,7 @@ const EditEmployeeFormComponent = ({
             defaultValue={employee?.resignationDate ?? undefined}
             placeholder="Ex. 01/01/2000"
             mask="99/99/9999"
+            inputMode="numeric"
           />
 
           <PostalCodeInput
@@ -307,6 +331,7 @@ const EditEmployeeFormComponent = ({
             handleSearchCep={handleSearchCep}
             disabled={isLoadingPostalCode}
             defaultValue={employee?.addresses?.[0]?.postalCode}
+            inputMode="numeric"
           />
 
           <ControlledInput
@@ -354,7 +379,7 @@ const EditEmployeeFormComponent = ({
               disabled={isLoadingPostalCode}
             />
           )}
-          {memorizedStates && memorizedCities && selectedState && (
+          {memorizedStates && memorizedCities && memorizedCities.length > 0 && (
             <ControlledSelect
               label="Cidade"
               name="address.city"
@@ -376,7 +401,7 @@ const EditEmployeeFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Alterar funcionário
+        Editar
       </Button>
     </form>
   );

@@ -1,7 +1,6 @@
 'use client';
 
 import { api } from '@axios';
-import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,

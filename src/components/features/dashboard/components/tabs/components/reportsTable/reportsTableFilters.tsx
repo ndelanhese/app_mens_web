@@ -89,23 +89,25 @@ export const ReportsTableFilters = () => {
 
   return (
     <form
-      className="flex items-center gap-2"
+      className="flex flex-col gap-2 sm:flex-row sm:items-center"
       onSubmit={handleSubmit(handleFilter)}
     >
       <span className="text-sm font-semibold">Filtros:</span>
       <MaskedInput
         id="initial_date"
         control={control}
-        placeholder="Ex. 10/01/2019"
+        placeholder="Data inicial"
         mask="99/99/9999"
         className="h-8"
+        inputMode="numeric"
       />
       <MaskedInput
         id="final_date"
         control={control}
-        placeholder="Ex. 10/01/2019"
+        placeholder="Data final"
         mask="99/99/9999"
         className="h-8"
+        inputMode="numeric"
       />
 
       <Button type="submit" variant="secondary" size="xs">

@@ -35,7 +35,7 @@ export const ReportsTable = ({
               {subTab === 'products' && (
                 <TableHead className="w-44">Descrição</TableHead>
               )}
-              <TableHead className="w-36">Quantidade</TableHead>
+              <TableHead className="w-36">Qtd.</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

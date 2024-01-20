@@ -211,10 +211,14 @@ export function percentage(value: string): string {
   valuePercentage = valuePercentage.replace(/\D/g, '');
   valuePercentage = valuePercentage.substring(0, 3);
   valuePercentage = Number(valuePercentage).toFixed(0);
+  valuePercentage =
+    Number(valuePercentage) <= 99
+      ? valuePercentage
+      : `${valuePercentage.slice(0, 1)}${valuePercentage.slice(2, 3)}`;
   valuePercentage = valuePercentage.replace(/(\d{1})/, '$1');
   if (valuePercentage === '0') return '';
 
-  return valuePercentage;
+  return `%${valuePercentage}`;
 }
 
 /**

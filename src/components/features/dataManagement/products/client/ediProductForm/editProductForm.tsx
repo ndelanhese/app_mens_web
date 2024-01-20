@@ -346,51 +346,57 @@ const EditProductFormComponent = ({
         type="number"
         min={0}
       />
-      <ControlledSelect
-        label="Categoria"
-        name="category"
-        control={control}
-        errorMessage={errors.category?.message}
-        options={memorizedCategoriesOptions}
-        defaultValue={product?.category.id.toString()}
-        placeHolder="Selecione uma categoria"
-        searchLabel="Pesquisar categoria"
-        emptyLabel="Sem categorias cadastradas"
-        newItemLabel="Criar uma nova categoria?"
-        newItemCallbackFunction={newItemCallbackFunction}
-      />
-      <ControlledSelect
-        label="Marca"
-        name="brand"
-        control={control}
-        errorMessage={errors.brand?.message}
-        options={memorizedBrandsOptions}
-        defaultValue={product?.brand.id.toString()}
-        placeHolder="Selecione uma marca"
-        searchLabel="Pesquisar marca"
-        emptyLabel="Sem marcas cadastradas"
-        newItemLabel="Criar uma nova marca?"
-        newItemCallbackFunction={newItemCallbackFunction}
-      />
-      <ControlledSelect
-        label="Fornecer"
-        name="supplier"
-        control={control}
-        errorMessage={errors.supplier?.message}
-        options={memorizedSuppliersOptions}
-        defaultValue={product?.supplier.id.toString()}
-        placeHolder="Selecione um fornecedor"
-        searchLabel="Pesquisar fornecedor"
-        emptyLabel="Sem fornecedores cadastradas"
-        newItemLabel="Criar um novo fornecedor?"
-        newItemCallbackFunction={newItemCallbackFunction}
-      />
+      {memorizedCategoriesOptions && memorizedCategoriesOptions.length > 0 && (
+        <ControlledSelect
+          label="Categoria"
+          name="category"
+          control={control}
+          errorMessage={errors.category?.message}
+          options={memorizedCategoriesOptions}
+          defaultValue={product?.category.id.toString()}
+          placeHolder="Selecione uma categoria"
+          searchLabel="Pesquisar categoria"
+          emptyLabel="Sem categorias cadastradas"
+          newItemLabel="Criar uma nova categoria?"
+          newItemCallbackFunction={newItemCallbackFunction}
+        />
+      )}
+      {memorizedBrandsOptions && memorizedBrandsOptions.length > 0 && (
+        <ControlledSelect
+          label="Marca"
+          name="brand"
+          control={control}
+          errorMessage={errors.brand?.message}
+          options={memorizedBrandsOptions}
+          defaultValue={product?.brand.id.toString()}
+          placeHolder="Selecione uma marca"
+          searchLabel="Pesquisar marca"
+          emptyLabel="Sem marcas cadastradas"
+          newItemLabel="Criar uma nova marca?"
+          newItemCallbackFunction={newItemCallbackFunction}
+        />
+      )}
+      {memorizedSuppliersOptions && memorizedSuppliersOptions.length > 0 && (
+        <ControlledSelect
+          label="Fornecer"
+          name="supplier"
+          control={control}
+          errorMessage={errors.supplier?.message}
+          options={memorizedSuppliersOptions}
+          defaultValue={product?.supplier.id.toString()}
+          placeHolder="Selecione um fornecedor"
+          searchLabel="Pesquisar fornecedor"
+          emptyLabel="Sem fornecedores cadastradas"
+          newItemLabel="Criar um novo fornecedor?"
+          newItemCallbackFunction={newItemCallbackFunction}
+        />
+      )}
       <Button
         disabled={isSubmitting}
         type="submit"
         className="h-fit self-end sm:col-start-2"
       >
-        Alterar Produto
+        Editar
       </Button>
     </FormGrid>
   );
