@@ -120,10 +120,10 @@ export function Table<T>({
     const editPermissionName = `${permissionPrefix}_update`;
     const deletePermissionName = `${permissionPrefix}_delete`;
 
-    const { permission_one: permissionsOne, permissions_two: permissionTwo } =
+    const { permission_one: permissionsOne, permission_two: permissionsTwo } =
       parseCookies();
 
-    const userPermissions = permissionsOne.concat(permissionTwo ?? '');
+    const userPermissions = `${permissionsOne ?? ''}${permissionsTwo ?? ''}`;
 
     const userCanCreate = validateIfTheUserHasPermission(
       createPermissionName,
