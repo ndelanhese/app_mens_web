@@ -3,9 +3,9 @@
 import { Button } from '@components/ui/buttons/button';
 import { Input } from '@components/ui/inputs/input';
 import { PasswordInput } from '@components/ui/inputs/passwordInput';
-import { toast, useToast } from '@components/ui/shadcn/toast/use-toast';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { parseCookies, setCookie } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
