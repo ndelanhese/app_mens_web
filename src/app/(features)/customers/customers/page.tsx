@@ -1,6 +1,5 @@
-import { Metadata } from 'next';
-
 import { CustomersTable } from '@features-components/customers/customers/client/table/table';
+import { Metadata } from 'next';
 
 import { getCustomers } from './api';
 import { Customers } from './page.types';

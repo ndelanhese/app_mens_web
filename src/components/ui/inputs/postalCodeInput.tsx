@@ -1,13 +1,13 @@
 'use client';
 
-import { cache, ChangeEvent, FC, InputHTMLAttributes } from 'react';
-
 import { api } from '@axios';
+import { cache, ChangeEvent, FC, InputHTMLAttributes } from 'react';
+import { Control, Controller, FieldValue, FieldValues } from 'react-hook-form';
+import InputMask from 'react-input-mask';
+import { tv, type VariantProps } from 'tailwind-variants';
+
 import { nextApi } from '@/services/fetchApi';
 
-import { tv, type VariantProps } from 'tailwind-variants';
-import { FieldValue, FieldValues, Controller, Control } from 'react-hook-form';
-import InputMask from 'react-input-mask';
 import { toast } from '../shadcn/toast/use-toast';
 
 const controlledInput = tv({

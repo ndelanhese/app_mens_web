@@ -1,13 +1,12 @@
 'use client';
 
-import { memo } from 'react';
-
 import { DataTable } from '@components/shared/dataTable';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { TableCell, TableRow } from '@components/ui/shadcn/table';
-
 import { nanoid } from 'nanoid';
+import { memo } from 'react';
+
 import { OrderFormProps } from './viewOrderForm.types';
 
 const ViewOrderFormComponent = ({ order }: OrderFormProps) => {

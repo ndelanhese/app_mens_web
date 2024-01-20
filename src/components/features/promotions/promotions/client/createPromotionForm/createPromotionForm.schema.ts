@@ -1,11 +1,11 @@
+import { z } from 'zod';
+
 import {
   convertStringToDate,
   currentDate,
   currentDateString,
   getNextDay,
 } from '@/utils/helpers/date';
-
-import { z } from 'zod';
 
 const isValidDate = (value?: string | undefined) => {
   if (!value) return true;
@@ -49,7 +49,8 @@ export const promotionFormSchema = z
       .transform(({ value }) => value),
     discount_amount: z
       .string()
-      .min(1, 'O valor de desconto é obrigatório')
+      .nullable()
+      .default(null)
       .transform(value => {
         const replacedValue = value
           ?.replaceAll('.', '')
@@ -57,19 +58,12 @@ export const promotionFormSchema = z
           ?.replaceAll('%', '')
           ?.replaceAll('R$', '')
           ?.replaceAll(' ', '');
-        return value ? Number(replacedValue) : undefined;
+        return value ? Number(replacedValue) : null;
       }),
-    discount_type: z
-      .object(
-        {
-          value: z.string().min(1, 'O tipo do desconto é obrigatório'),
-          label: z.string().min(1, 'O tipo do desconto é obrigatório'),
-        },
-        {
-          invalid_type_error: 'O tipo do desconto é obrigatório',
-        },
-      )
-      .transform(({ value }) => value),
+    discount_type: z.object({
+      value: z.string().min(1, 'O tipo do desconto é obrigatório'),
+      label: z.string().min(1, 'O tipo do desconto é obrigatório'),
+    }),
   })
   .superRefine(({ initial_date: initialDate, final_date: finalDate }, ctx) => {
     if (!initialDate && finalDate) {
@@ -101,7 +95,7 @@ export const promotionFormSchema = z
           path: ['final_date'],
         });
       }
-    } catch (error) {
+    } catch {
       ctx.addIssue({
         code: 'custom',
         message: 'Data final inválida',

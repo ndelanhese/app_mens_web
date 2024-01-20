@@ -1,6 +1,6 @@
 import { Button } from '@components/ui/shadcn/button';
-
 import { ArrowUpDown } from 'lucide-react';
+
 import { TableColumnHeaderProps } from './table.types';
 
 export const TableColumnHeader = ({

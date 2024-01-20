@@ -1,6 +1,5 @@
-import { ComponentProps, ReactNode } from 'react';
-
 import { motion } from 'framer-motion';
+import { ComponentProps, ReactNode } from 'react';
 
 export type Variant =
   | 'fadeIn'

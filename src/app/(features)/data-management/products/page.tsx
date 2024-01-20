@@ -1,9 +1,8 @@
-import { cookies } from 'next/headers';
-import { cache } from 'react';
-import { Metadata } from 'next';
-
 import { api } from '@axios';
 import { ProductsTable } from '@features-components/dataManagement/products/client/table/table';
+import { Metadata } from 'next';
+import { cookies } from 'next/headers';
+import { cache } from 'react';
 
 import { Products } from './page.types';
 
@@ -36,9 +35,7 @@ const getProducts = cache(async () => {
       },
     });
     return data;
-  } catch (error: Error | any) {
-    console.log(error?.response?.data?.message);
-  }
+  } catch {}
 });
 
 export const metadata: Metadata = {

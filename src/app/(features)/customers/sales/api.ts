@@ -1,6 +1,5 @@
-import { cookies } from 'next/headers';
-
 import { api } from '@axios';
+import { cookies } from 'next/headers';
 
 import { Sales } from './page.types';
 
@@ -14,7 +13,5 @@ export const getSales = async () => {
       },
     });
     return data;
-  } catch (error: Error | any) {
-    console.log(error?.response?.data?.message);
-  }
+  } catch {}
 };

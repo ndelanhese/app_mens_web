@@ -1,9 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
-
-import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,
@@ -11,12 +7,14 @@ import {
 } from '@components/shared/table/table.types';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-
 import { Plus } from 'lucide-react';
-import { SalesTableProps, Sale } from './table.types';
+import { useRouter } from 'next/navigation';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+
 import { CreateSaleForm } from '../createSaleForm/createSaleForm';
 import { EditSaleForm } from '../editSaleForm/editSaleForm';
 import { ViewSaleForm } from '../viewSaleForm/viewSaleForm';
+import { Sale, SalesTableProps } from './table.types';
 
 const SalesTableComponent = ({ rows }: SalesTableProps) => {
   const router = useRouter();

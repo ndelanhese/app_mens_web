@@ -1,11 +1,11 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
 import { api } from '@axios';
-
+import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
+import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
 import { DataTable } from '@components/shared/dataTable';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
 import { RefModalProps } from '@components/shared/table/table.types';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
@@ -17,17 +17,14 @@ import { Button as ShadCnButton } from '@components/ui/shadcn/button';
 import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
-import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
-import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
-
-import { convertDateFormat, currentDateString } from '@utils/helpers/date';
-
 import { zodResolver } from '@hookform/resolvers/zod';
+import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { parseCookies } from 'nookies';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
 import { getCustomers, getStatus, getUsers } from '../../api/apiData';
 import { OrderFormSchema, orderFormSchema } from './editOrderForm.schema';
 import {

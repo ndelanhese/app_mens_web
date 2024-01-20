@@ -1,9 +1,8 @@
 import { api } from '@axios';
-
 import { toast } from '@components/ui/shadcn/toast/use-toast';
-
-import { StatesResponse, CitiesResponse } from './apiData.types';
 import { parseCookies } from 'nookies';
+
+import { CitiesResponse, StatesResponse } from './apiData.types';
 
 const { token } = parseCookies();
 

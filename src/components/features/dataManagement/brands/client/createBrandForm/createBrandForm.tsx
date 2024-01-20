@@ -1,18 +1,16 @@
 'use client';
 
-import { memo } from 'react';
-
 import { api } from '@axios';
-
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
-
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { parseCookies } from 'nookies';
+import { memo } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
 import { BrandFormSchema, brandFormSchema } from './createBrandForm.schema';
 import { BrandFormProps } from './createBrandForm.types';
-import { parseCookies } from 'nookies';
 
 export const CreateBrandFormComponent = ({
   handleCloseModal,

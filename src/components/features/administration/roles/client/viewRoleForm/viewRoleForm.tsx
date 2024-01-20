@@ -1,12 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-
-import { generateRandomNumber } from '@/utils/helpers';
-import { CheckboxTree } from '@/components/shared/checkboxTree';
-
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
+import { useCallback, useEffect, useState } from 'react';
+
+import { CheckboxTree } from '@/components/shared/checkboxTree';
+import { generateRandomNumber } from '@/utils/helpers';
 
 import { getPermissions, getRole } from '../../api';
 import { PermissionGroup, Role } from '../../api/apiData.types';
@@ -56,8 +55,8 @@ export const ViewRoleForm = ({ role }: RoleData) => {
           const treeChildren = permissionsChildren.map(child => child.label);
           const treeChildrenIds = permissionsChildren.map(child => child.id);
           const intersection =
-            treeChildrenIds?.filter(
-              value => roleData?.permissions?.includes(value),
+            treeChildrenIds?.filter(value =>
+              roleData?.permissions?.includes(value),
             ) || [];
 
           return (

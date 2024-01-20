@@ -1,38 +1,36 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
 import { api } from '@axios';
-
+import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
+import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
 import { DataTable } from '@components/shared/dataTable';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
+import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
 import { RefModalProps } from '@components/shared/table/table.types';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
+import { NumberInput } from '@components/ui/inputs/numberInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { Button as ShadCnButton } from '@components/ui/shadcn/button';
 import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
-import { NumberInput } from '@components/ui/inputs/numberInput';
-import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
-import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
-import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
-
-import { convertDateFormat, currentDateString } from '@utils/helpers/date';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   calculateInstallments,
   convertMoneyStringToNumber,
   formatMoneyByCurrencySymbol,
 } from '@utils/helpers';
-
-import { zodResolver } from '@hookform/resolvers/zod';
+import { convertDateFormat, currentDateString } from '@utils/helpers/date';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { nanoid } from 'nanoid';
-import { SubmitHandler, set, useForm } from 'react-hook-form';
+import { parseCookies } from 'nookies';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { set, SubmitHandler, useForm } from 'react-hook-form';
+
 import {
   getCustomers,
   getDiscountType,
@@ -42,19 +40,18 @@ import {
 } from '../../api/apiData';
 import { SaleFormSchema, saleFormSchema } from './editSaleForm.schema';
 import {
+  CreatableSelects,
   Customer,
-  SaleFormProps,
-  Product,
-  ProductTable,
-  Status,
-  User,
   DiscountType,
   DiscountTypeEnum,
   MethodOfPayment,
   NewItemModal,
-  CreatableSelects,
+  Product,
+  ProductTable,
+  SaleFormProps,
+  Status,
+  User,
 } from './editSaleForm.types';
-import { parseCookies } from 'nookies';
 
 const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   const { toast } = useToast();

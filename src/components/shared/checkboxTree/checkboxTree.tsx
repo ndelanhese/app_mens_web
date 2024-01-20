@@ -1,10 +1,9 @@
 'use client';
 
+import { CheckboxItem } from '@components/shared/checkboxItem';
+import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
 
-import { CheckboxItem } from '@components/shared/checkboxItem';
-
-import { nanoid } from 'nanoid';
 import { CheckboxTreeProps } from './checkboxTree.types';
 
 export const CheckboxTree = ({

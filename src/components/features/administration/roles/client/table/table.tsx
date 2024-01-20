@@ -1,10 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useCallback, useMemo, useRef, useState } from 'react';
-
 import { api } from '@axios';
-
 import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
 import {
@@ -15,12 +11,14 @@ import {
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-
 import { Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
-import { ViewRoleForm } from '../viewRoleForm/viewRoleForm';
+import { useCallback, useMemo, useRef, useState } from 'react';
+
 import { CreateRoleForm } from '../createRoleForm/createRoleForm';
 import { EditRoleForm } from '../editRoleForm/editRoleForm';
+import { ViewRoleForm } from '../viewRoleForm/viewRoleForm';
 import { Role, RolesTableProps } from './table.types';
 
 export const RolesTable = ({ rows }: RolesTableProps) => {

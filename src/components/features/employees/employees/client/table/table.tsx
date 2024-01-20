@@ -1,10 +1,7 @@
 'use client';
 
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-
 import { api } from '@axios';
-
+import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,
@@ -14,14 +11,15 @@ import {
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
-
-import { Employee, EmployeesTableProps } from './table.types';
-import { ViewEmployeeForm } from '../../server/viewEmployeeForm/viewEmployeeForm';
-import { parseCookies } from 'nookies';
 import { Plus } from 'lucide-react';
-import { EditEmployeeForm } from '../ediEmployeeForm/editEmployeeForm';
+import { useRouter } from 'next/navigation';
+import { parseCookies } from 'nookies';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+
+import { ViewEmployeeForm } from '../../server/viewEmployeeForm/viewEmployeeForm';
 import { CreateEmployeeForm } from '../createEmployeeForm/createEmployeeForm';
+import { EditEmployeeForm } from '../ediEmployeeForm/editEmployeeForm';
+import { Employee, EmployeesTableProps } from './table.types';
 
 const EmployeesTableComponent = ({ rows }: EmployeesTableProps) => {
   const router = useRouter();

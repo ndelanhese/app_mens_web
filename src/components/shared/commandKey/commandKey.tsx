@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import {
   CommandDialog,
   CommandEmpty,
@@ -9,6 +7,7 @@ import {
   CommandList,
   CommandSeparator,
 } from '@components/ui/shadcn/command/command';
+import { useEffect } from 'react';
 
 import { CommandKeyProps } from './commandKey.types';
 import { CommandKeyItems } from './commandKeyItems';

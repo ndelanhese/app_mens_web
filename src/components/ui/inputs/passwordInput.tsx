@@ -1,10 +1,10 @@
 'use client';
 
-import { FC, InputHTMLAttributes, useState } from 'react';
-
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { FC, InputHTMLAttributes, useState } from 'react';
 import { FieldValue, FieldValues, UseFormRegister } from 'react-hook-form';
 import { tv, type VariantProps } from 'tailwind-variants';
+
 import { Input } from './input';
 
 const passwordInput = tv({

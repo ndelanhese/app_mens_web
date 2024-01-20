@@ -1,7 +1,6 @@
-import { ReactNode, RefObject } from 'react';
-
 // eslint-disable-next-line import/named
 import { Column } from '@tanstack/react-table';
+import { ReactNode } from 'react';
 
 export type TableColumnHeaderProps = {
   column: Column<any>;
@@ -55,6 +54,7 @@ export type UserTableProps<T> =
       deleteItemDescription?: string;
       rowIsClickable?: true;
       handleRowClick: (row: T) => void;
+      permissionPrefix?: string;
     }
   | {
       rows: Array<T>;
@@ -78,6 +78,7 @@ export type UserTableProps<T> =
       deleteItemDescription?: string;
       rowIsClickable?: false;
       handleRowClick?: () => void;
+      permissionPrefix?: string;
     };
 
 export type tableDialogProps = {

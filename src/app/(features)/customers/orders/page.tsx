@@ -1,6 +1,5 @@
-import { Metadata } from 'next';
-
 import { OrdersTable } from '@components/features/customers/orders/client/table/table';
+import { Metadata } from 'next';
 
 import { getOrders } from './api';
 import { Orders } from './page.types';

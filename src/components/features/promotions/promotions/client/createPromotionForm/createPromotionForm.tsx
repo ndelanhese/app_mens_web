@@ -1,31 +1,33 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
 import { api } from '@axios';
-
-import { TableCell, TableRow } from '@components/ui/shadcn/table';
-import { RefModalProps } from '@components/shared/table/table.types';
+import { CreateCategoryForm } from '@components/features/promotions/promotionCategories/client/createPromotionCategoryForm/createCategoryForm';
 import { DataTable } from '@components/shared/dataTable';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
+import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
+import { RefModalProps } from '@components/shared/table/table.types';
+import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
 import { NumberInput } from '@components/ui/inputs/numberInput';
 import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
-import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-import { CreateCategoryForm } from '@components/features/promotions/promotionCategories/client/createPromotionCategoryForm/createCategoryForm';
-import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
-import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
-
-import { currentDateString, getNextDay } from '@utils/helpers/date';
-
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  convertDateFormat,
+  currentDateString,
+  getNextDay,
+} from '@utils/helpers/date';
+import { Trash } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { parseCookies } from 'nookies';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
 import { getCategories, getDiscountType, getStatus } from '../../api/apiData';
 import {
   DiscountType,
@@ -44,7 +46,6 @@ import {
   PromotionCategory,
   PromotionFormProps,
 } from './createPromotionForm.types';
-import { Trash } from 'lucide-react';
 
 const CreatePromotionFormComponent = ({
   handleCloseModal,
@@ -69,7 +70,7 @@ const CreatePromotionFormComponent = ({
   );
   const [discountTypeSelected, setDiscountTypeSelected] = useState<
     DiscountTypeEnum | undefined
-  >('percentage');
+  >(undefined);
   const [products, setProducts] = useState<Product[] | undefined>(undefined);
 
   const columns = ['Código', 'Nome', 'Part Number', ''];
@@ -128,7 +129,9 @@ const CreatePromotionFormComponent = ({
   });
 
   useEffect(() => {
-    setDiscountTypeSelected(watch('discount_type') as DiscountTypeEnum);
+    if (watch('discount_type')) {
+      setDiscountTypeSelected(watch('discount_type').value as DiscountTypeEnum);
+    }
   }, [watch('discount_type')]);
 
   const getCategoriesData = useCallback(async () => {
@@ -164,9 +167,21 @@ const CreatePromotionFormComponent = ({
         return;
       }
       const selectedProducts = products.map(product => ({ id: product.id }));
+      const {
+        discount_type: discountType,
+        final_date: finalDate,
+        initial_date: initialDate,
+        ...rest
+      } = data;
       await api.post(
         '/promotions',
-        { ...data, products: selectedProducts },
+        {
+          ...rest,
+          products: selectedProducts,
+          discount_type: discountType?.value,
+          final_date: convertDateFormat(finalDate),
+          initial_date: convertDateFormat(initialDate),
+        },
         { headers: { Authorization: `Bearer ${token}` } },
       );
       handleCloseModal();
@@ -174,7 +189,7 @@ const CreatePromotionFormComponent = ({
         title: 'Promoção criada com sucesso',
         variant: 'default',
       });
-    } catch (error: Error | any) {
+    } catch (error: any) {
       const errorMessage =
         error?.response?.data?.message ?? 'Erro desconhecido';
       toast({
@@ -218,7 +233,7 @@ const CreatePromotionFormComponent = ({
 
   useEffect(() => {
     if (watch('discount_type')) {
-      setValue('discount_amount', undefined);
+      setValue('discount_amount', null);
     }
   }, [watch('discount_type')]);
 
@@ -344,20 +359,21 @@ const CreatePromotionFormComponent = ({
         emptyLabel="Sem resultados"
         isRequired
       />
-      <NumberInput
-        id="discount_amount"
-        label="Valor do desconto"
-        control={control}
-        errorMessage={errors.discount_amount?.message}
-        placeholder={
-          discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
-        }
-        disabled={!discountTypeSelected}
-        mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
-        prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
-        isRequired
-      />
-
+      {discountTypeSelected && (
+        <NumberInput
+          id="discount_amount"
+          label="Valor do desconto"
+          control={control}
+          errorMessage={errors.discount_amount?.message}
+          placeholder={
+            discountTypeSelected === 'percentage' ? 'Ex. 10%' : 'Ex. R$ 50,99'
+          }
+          disabled={!discountTypeSelected}
+          mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
+          prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
+          isRequired
+        />
+      )}
       <div className="col-start-1 col-end-2 flex flex-col items-center justify-between sm:col-end-3 sm:flex-row">
         <h1 className="mb-2 text-black-80 dark:text-white-80 sm:mb-0">
           Produtos

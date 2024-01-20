@@ -1,13 +1,13 @@
 'use client';
 
-import { memo, useMemo } from 'react';
-import { type } from 'os';
-
 import { useTheme } from 'next-themes';
+import { type } from 'os';
+import { memo, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 import type { StylesConfig } from 'react-select';
 import Select from 'react-select';
 import { twMerge } from 'tailwind-merge';
+
 import {
   SelectGroupedOption,
   SelectOption,

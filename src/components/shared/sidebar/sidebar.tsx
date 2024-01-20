@@ -1,25 +1,15 @@
 'use client';
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-
-import { useSidebarDrawer } from '@hooks/useSidebarDrawer/useSidebarDrawer';
-
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@components/ui/shadcn/accordion';
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@components/ui/shadcn/avatar';
+import { Avatar, AvatarImage } from '@components/ui/shadcn/avatar';
 import { Button } from '@components/ui/shadcn/button';
-
+import { useSidebarDrawer } from '@hooks/useSidebarDrawer/useSidebarDrawer';
 import { getFirstName } from '@utils/helpers/stringManipulation';
-
 import {
   Contact,
   Container,
@@ -36,7 +26,10 @@ import {
   WalletCards,
   X,
 } from 'lucide-react';
+import Link from 'next/link';
 import { parseCookies } from 'nookies';
+import { useEffect, useState } from 'react';
+
 import { SidebarLink } from './sidebarLink';
 
 export const Sidebar = () => {
@@ -63,7 +56,6 @@ export const Sidebar = () => {
                 src="https://source.unsplash.com/random/24x24"
                 alt="@ndelanhese"
               />
-              <AvatarFallback></AvatarFallback>
             </Avatar>
             <span className="text-lg font-re dark:text-white-100">
               {userName}
@@ -80,12 +72,13 @@ export const Sidebar = () => {
         </div>
         <div className="overflow-y-auto sm:mt-6 sm:h-[calc(100vh-13rem)] ">
           <Link href="/" passHref>
-            <nav
-              className="rounded p-4 font-medium hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
+            <button
+              type="button"
+              className="w-full rounded p-4 text-start font-medium hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
               onClick={() => isMobile && handleToggleSidebar()}
             >
               Dashboard
-            </nav>
+            </button>
           </Link>
           <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
@@ -209,22 +202,11 @@ export const Sidebar = () => {
     </>
   );
 
-  if (!open) {
-    return (
-      <aside
-        className={
-          'absolute z-20 hidden h-[100dvh] w-screen border-r border-black-10 bg-white-100 px-4 py-3 transition-all duration-700 ease-in-out dark:border-white-10 dark:bg-zinc-950 sm:relative sm:w-56'
-        }
-      >
-        {CHILDREN}
-      </aside>
-    );
-  }
-
   return (
     <aside
+      data-open={open}
       className={
-        'absolute z-20 h-[100dvh] w-screen border-r border-black-10 bg-white-100 px-4 py-3 transition-all duration-700 ease-in-out dark:border-white-10 dark:bg-zinc-950 sm:relative sm:w-56'
+        'absolute z-20 h-[100dvh] w-screen transform-gpu border-r border-black-10 bg-white-100 px-4 py-3 ease-in-out data-[open=false]:hidden dark:border-white-10 dark:bg-zinc-950 sm:relative sm:w-56'
       }
     >
       {CHILDREN}

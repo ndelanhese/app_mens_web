@@ -1,6 +1,5 @@
-import { ReactNode } from 'react';
-
 import { RefModalProps } from '@components/shared/table/table.types';
+import { ReactNode } from 'react';
 
 export type SaleFormProps = {
   handleCloseModal: () => void;

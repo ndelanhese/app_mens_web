@@ -1,9 +1,7 @@
 'use client';
 
-import { useSidebarDrawer } from '@hooks/useSidebarDrawer/useSidebarDrawer';
-
 import { Button } from '@components/ui/shadcn/button';
-
+import { useSidebarDrawer } from '@hooks/useSidebarDrawer/useSidebarDrawer';
 import { SidebarClose, SidebarOpen } from 'lucide-react';
 
 export const SidebarToggle = () => {

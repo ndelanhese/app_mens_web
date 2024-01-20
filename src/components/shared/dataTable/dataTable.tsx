@@ -6,8 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from '@components/ui/shadcn/table';
-
 import { nanoid } from 'nanoid';
+
 import { DataTableProps } from './dataTable.types';
 
 const invoices = [

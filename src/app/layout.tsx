@@ -1,12 +1,11 @@
-import { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import { ReactNode } from 'react';
 import './globals.css';
 
 import { Toaster } from '@components/ui/shadcn/toast/toaster';
-
-import { ThemeProvider } from '@contexts/theme';
 import { SidebarDrawerProvider } from '@contexts/sidebarDrawer/sidebarDrawer.context';
+import { ThemeProvider } from '@contexts/theme';
+import { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { ReactNode } from 'react';
 
 const inter = Inter({
   subsets: ['latin'],

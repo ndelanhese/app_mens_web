@@ -1,9 +1,8 @@
+import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { Skeleton } from '@components/ui/shadcn/skeleton';
 import React from 'react';
 
 import { Button } from '@/components/ui/buttons/button';
-
-import { FormGrid } from '@components/shared/formGrid/formGrid';
-import { Skeleton } from '@components/ui/shadcn/skeleton';
 
 import { FormGridSkeletonProps } from './formGridSkeleton.types';
 

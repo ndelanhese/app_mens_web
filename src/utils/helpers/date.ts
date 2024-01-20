@@ -65,17 +65,15 @@ export const convertStringToDate = (dateString: string): Date | null => {
   const [day, month, year] = dateString.split('/').map(Number);
 
   // Check if the components are valid
-  if (isNaN(day) || isNaN(month) || isNaN(year)) {
-    console.error('Invalid date string format');
+  if (Number.isNaN(day) || Number.isNaN(month) || Number.isNaN(year)) {
     return null;
   }
 
   // Month is zero-based in Date objects, so subtract 1
-  const parsedDate = new Date(year, month - 1, day);
+  const parsedDate = new Date(year, month - 1, day, 23, 59, 59);
 
   // Check if the Date object is valid
-  if (isNaN(parsedDate.getTime())) {
-    console.error('Invalid date');
+  if (Number.isNaN(parsedDate.getTime())) {
     return null;
   }
 
@@ -96,4 +94,19 @@ export const convertDateFormat = (inputDate: string): string => {
   const convertedYear = convertedDate.getUTCFullYear();
 
   return `${convertedYear}-${convertedMonth}-${convertedDay}`;
+};
+
+export const revertDateFormat = (isoDate: string): string => {
+  const [day, month, year] = isoDate.split('/');
+
+  const revertedDate = new Date(
+    Date.UTC(Number(year), Number(month) - 1, Number(day), 23, 59),
+  );
+  const revertedDay = revertedDate.getUTCDate().toString().padStart(2, '0');
+  const revertedMonth = (revertedDate.getUTCMonth() + 1)
+    .toString()
+    .padStart(2, '0');
+  const revertedYear = revertedDate.getUTCFullYear();
+
+  return `${revertedYear}-${revertedMonth}-${revertedDay}`;
 };

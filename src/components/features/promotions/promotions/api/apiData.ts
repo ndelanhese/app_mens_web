@@ -1,15 +1,13 @@
+import { api } from '@axios';
+import { toast } from '@components/ui/shadcn/toast/use-toast';
+import { parseCookies } from 'nookies';
 import { cache } from 'react';
 
-import { api } from '@axios';
-
-import { toast } from '@components/ui/shadcn/toast/use-toast';
-
-import { parseCookies } from 'nookies';
 import {
   Products,
   PromotionDiscountTypeResponse,
-  PromotionStatusResponse,
   PromotionsCategoriesResponse,
+  PromotionStatusResponse,
 } from './apiData.types';
 
 const { token } = parseCookies();
@@ -79,7 +77,5 @@ export const getProducts = cache(async () => {
       },
     });
     return data;
-  } catch (error: Error | any) {
-    console.log(error?.response?.data?.message);
-  }
+  } catch {}
 });

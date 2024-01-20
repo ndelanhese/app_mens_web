@@ -1,34 +1,31 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-
 import { api } from '@axios';
-
-import { ControlledSelect } from '@components/ui/selects/controlledSelect';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { MaskedInput } from '@components/ui/inputs/maskedInput';
 import {
   PostalCodeInput,
   ViacepResponseData,
 } from '@components/ui/inputs/postalCodeInput';
-
-import { convertStringToSlug } from '@utils/helpers/stringManipulation';
-
+import { ControlledSelect } from '@components/ui/selects/controlledSelect';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { convertStringToSlug } from '@utils/helpers/stringManipulation';
 import { parseCookies } from 'nookies';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { getCities, getStates } from '../../api/apiData';
 import {
   SupplierFormSchema,
   supplierFormSchema,
 } from './createSupplierForm.schema';
 import {
   CityResponse,
-  SupplierFormProps,
   StateResponse,
+  SupplierFormProps,
 } from './createSupplierForm.types';
-import { getCities, getStates } from '../../api/apiData';
 
 const CreateSupplierFormComponent = ({
   handleCloseModal,
@@ -111,8 +108,9 @@ const CreateSupplierFormComponent = ({
       const stateValue = memorizedStates.find(
         item => item.label === state.label,
       )?.label;
-      const cityValue = memorizedCities.find(item => item.label === city?.label)
-        ?.label;
+      const cityValue = memorizedCities.find(
+        item => item.label === city?.label,
+      )?.label;
 
       const newSupplier = {
         ...restData,

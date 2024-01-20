@@ -1,7 +1,8 @@
 'use client';
 
-import { AnimationProps } from './animation.types';
 import { motion } from 'framer-motion';
+
+import { AnimationProps } from './animation.types';
 
 /**
  * CAUTION! This component requires framer motion's

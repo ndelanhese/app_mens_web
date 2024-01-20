@@ -1,24 +1,21 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-
 import { api } from '@axios';
-
 import { CheckboxTree } from '@components/shared/checkboxTree';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 import { Button } from '@components/ui/buttons/button';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
 import { toast } from '@components/ui/shadcn/toast/use-toast';
-import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
-
-import { generateRandomNumber } from '@utils/helpers';
-
 import { zodResolver } from '@hookform/resolvers/zod';
+import { generateRandomNumber } from '@utils/helpers';
 import { parseCookies } from 'nookies';
+import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { EditRoleFormSchema, editRoleFormSchema } from './editRoleForm.schema';
+
 import { getPermissions, getRole } from '../../api';
 import { PermissionGroup, Role } from '../../api/apiData.types';
+import { EditRoleFormSchema, editRoleFormSchema } from './editRoleForm.schema';
 import { EditRoleFormProps } from './editRoleForm.types';
 
 export const EditRoleForm = ({ role, handleCloseModal }: EditRoleFormProps) => {
@@ -156,8 +153,8 @@ export const EditRoleForm = ({ role, handleCloseModal }: EditRoleFormProps) => {
           const treeChildren = permissionsChildren.map(child => child.label);
           const treeChildrenIds = permissionsChildren.map(child => child.id);
           const intersection =
-            treeChildrenIds?.filter(
-              value => roleData?.permissions?.includes(value),
+            treeChildrenIds?.filter(value =>
+              roleData?.permissions?.includes(value),
             ) || [];
 
           return (

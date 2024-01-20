@@ -1,10 +1,8 @@
+import { api } from '@axios';
+import { SuppliersTable } from '@components/features/employees/suppliers/client/table/table';
 import { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
-
-import { api } from '@axios';
-
-import { SuppliersTable } from '@components/features/employees/suppliers/client/table/table';
 
 import { Suppliers } from './page.types';
 
@@ -38,9 +36,7 @@ const getSuppliers = cache(async () => {
       },
     });
     return data;
-  } catch (error: Error | any) {
-    console.log(error?.response?.data?.message);
-  }
+  } catch {}
 });
 
 export const metadata: Metadata = {

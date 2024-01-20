@@ -1,9 +1,8 @@
-import { cookies } from 'next/headers';
-import { cache } from 'react';
-import { Metadata } from 'next';
-
 import { api } from '@axios';
 import { BrandsTable } from '@features-components/dataManagement/brands/client/table/table';
+import { Metadata } from 'next';
+import { cookies } from 'next/headers';
+import { cache } from 'react';
 
 import { Brands } from './page.types';
 
@@ -25,9 +24,7 @@ const getBrands = cache(async () => {
       },
     });
     return data;
-  } catch (error: Error | any) {
-    console.log(error?.response?.data?.message);
-  }
+  } catch {}
 });
 
 export const metadata: Metadata = {

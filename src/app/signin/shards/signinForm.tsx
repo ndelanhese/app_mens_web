@@ -1,16 +1,15 @@
 'use client';
 
-import { redirect, useRouter } from 'next/navigation';
-
 import { Button } from '@components/ui/buttons/button';
 import { Input } from '@components/ui/inputs/input';
 import { PasswordInput } from '@components/ui/inputs/passwordInput';
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
-
+import { toast, useToast } from '@components/ui/shadcn/toast/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { redirect, useRouter } from 'next/navigation';
 import { parseCookies, setCookie } from 'nookies';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { signin, getProductsStock as getProductsStockData } from './api';
+
+import { getProductsStock as getProductsStockData, signin } from './api';
 import { SigninSchema, signinSchema } from './signinForm.schema';
 
 export const SigninForm = () => {
@@ -25,13 +24,18 @@ export const SigninForm = () => {
     resolver: zodResolver(signinSchema),
   });
 
-  const redirect = () => {
-    const { redirectTo } = parseCookies();
-    if (!redirectTo) {
+  const redirect = async () => {
+    try {
+      await getProductsStock();
+      const { redirectTo } = parseCookies();
+      if (!redirectTo) {
+        router.push('/dashboard');
+        return;
+      }
+      router.push(redirectTo);
+    } catch {
       router.push('/dashboard');
-      return;
     }
-    router.push(redirectTo);
   };
 
   const getProductsStock = async () => {
@@ -51,10 +55,8 @@ export const SigninForm = () => {
     const { email, password } = data;
     try {
       await signin(email.toLowerCase().trim(), password);
-      await getProductsStock();
-      redirect();
+      await redirect();
     } catch (error: Error | any) {
-      console.log(error);
       const message = error?.response?.data?.message;
       if (message) {
         toast({

@@ -1,9 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
-import { cn } from '@shadcn-utils';
-
 import { Button } from '@components/ui/shadcn/button';
 import {
   Command,
@@ -17,8 +13,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@components/ui/shadcn/popover';
-
+import { cn } from '@shadcn-utils';
 import { Check, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+
 import { SelectProps } from './select.types';
 
 export const Combobox = ({

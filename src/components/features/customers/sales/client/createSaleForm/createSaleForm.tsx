@@ -1,13 +1,11 @@
 'use client';
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
 import { api } from '@axios';
-
 import { CreateUserForm } from '@components/features/administration/users/client/createUserForm/createUserForm';
 import { CreateCustomerForm } from '@components/features/customers/customers/client/createCustomerForm/createCustomerForm';
 import { DataTable } from '@components/shared/dataTable';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
+import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
 import { SearchProductModal } from '@components/shared/searchProductModal/searchProductModal';
 import { RefModalProps } from '@components/shared/table/table.types';
 import { AlertDialog } from '@components/ui/alertDialog/alertDialog';
@@ -20,20 +18,19 @@ import { Button as ShadCnButton } from '@components/ui/shadcn/button';
 import { TableCell, TableRow } from '@components/ui/shadcn/table';
 import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-import { FormGridSkeleton } from '@components/shared/formGridSkeleton';
-
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   calculateInstallments,
   convertMoneyStringToNumber,
   formatMoneyByCurrencySymbol,
 } from '@utils/helpers';
 import { convertDateFormat, currentDateString } from '@utils/helpers/date';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { parseCookies } from 'nookies';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
 import {
   getCustomers,
   getDiscountType,
@@ -198,7 +195,6 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           </TableRow>
         ))
       : undefined;
-
   const onSubmit: SubmitHandler<SaleFormSchema> = async data => {
     try {
       if (!products || (products && products?.length < 1)) {

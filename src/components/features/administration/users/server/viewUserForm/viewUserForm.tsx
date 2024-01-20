@@ -1,12 +1,11 @@
-import { TableCell, TableRow } from '@/components/ui/shadcn/table';
-
 import { DataTable } from '@components/shared/dataTable';
 import { FormGrid } from '@components/shared/formGrid/formGrid';
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-
 import { convertStatus } from '@utils/status';
-
 import { nanoid } from 'nanoid';
+
+import { TableCell, TableRow } from '@/components/ui/shadcn/table';
+
 import { UserData } from './viewUserForm.types';
 
 export const ViewUserForm = ({ user }: UserData) => {

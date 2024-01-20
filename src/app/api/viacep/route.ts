@@ -1,7 +1,5 @@
-import { NextResponse, type NextRequest } from 'next/server';
-
 import { api } from '@axios';
-
+import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 export const GET = async (request: NextRequest) => {

@@ -1,7 +1,6 @@
+import { api } from '@axios';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
-
-import { api } from '@axios';
 
 import { Customers } from './page.types';
 
@@ -17,7 +16,5 @@ export const getCustomers = cache(async () => {
       },
     });
     return data;
-  } catch (error: Error | any) {
-    console.log(error?.response?.data?.message);
-  }
+  } catch {}
 });

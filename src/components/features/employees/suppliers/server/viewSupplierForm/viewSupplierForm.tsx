@@ -1,5 +1,4 @@
 import { ControlledInput } from '@components/ui/inputs/controlledInput';
-
 import { convertStatus } from '@utils/status';
 
 import { SupplierPreviewProps } from './viewSupplierForm.types';

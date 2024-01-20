@@ -7,6 +7,7 @@ import { BreadcrumbMapping } from './breadcrumb.types';
 
 const breadcrumbMapping: BreadcrumbMapping = {
   '/dashboard': 'Dashboard',
+  '/dashboard-fallback': 'Dashboard',
   '/administration/users': 'Usuários',
   '/administration/roles-permissions': 'Papéis e permissões',
   '/data-management/brands': 'Marcas',

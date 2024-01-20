@@ -1,8 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
-
 import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
 import {
@@ -11,12 +8,14 @@ import {
 } from '@components/shared/table/table.types';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
-
 import { Plus } from 'lucide-react';
-import { OrdersTableProps, Order } from './table.types';
+import { useRouter } from 'next/navigation';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+
 import { CreateOrderForm } from '../createOrderForm/createOrderForm';
 import { EditOrderForm } from '../editOrderForm/editOrderForm';
 import { ViewOrderForm } from '../viewOrderForm/viewOrderForm';
+import { Order, OrdersTableProps } from './table.types';
 
 const OrdersTableComponent = ({ rows }: OrdersTableProps) => {
   const router = useRouter();

@@ -1,9 +1,8 @@
 'use client';
 
+import { CommandItem } from '@components/ui/shadcn/command/command';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
-import { CommandItem } from '@components/ui/shadcn/command/command';
 
 import { CommandKeyItemProps } from './commandKey.types';
 
