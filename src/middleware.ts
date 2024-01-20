@@ -3,7 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
-  const userPermissions = request.cookies.get('permission')?.value;
+  const permissionsOne = request.cookies.get('permission_one')?.value;
+  const permissionsTwo = request.cookies.get('permission_two')?.value;
+  const userPermissions = permissionsOne?.concat(permissionsTwo ?? '');
   const { pathname } = request.nextUrl;
   const ONE_MINUTE_IN_SECONDS = 60;
 
