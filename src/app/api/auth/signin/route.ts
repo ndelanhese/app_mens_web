@@ -7,16 +7,6 @@ const signInBodySchema = z.object({
   password: z.string(),
 });
 
-type Permission = {
-  id: number;
-  name: string;
-  description: string;
-};
-
-type PermissionsResponse = {
-  data: Array<Permission>;
-};
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -25,14 +15,6 @@ export async function POST(request: NextRequest) {
       email,
       password,
     });
-    // const { data: permissionsResponse } = await api.get<PermissionsResponse>(
-    //   '/auth/permissions',
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${data?.token}`,
-    //     },
-    //   },
-    // );
     const currentDate = new Date();
     currentDate.setHours(currentDate.getHours() + 24);
     const expirationTimeInSeconds = Math.floor(
@@ -42,9 +24,7 @@ export async function POST(request: NextRequest) {
     const USER_COOKIE = `user=${JSON.stringify(
       data.user_data,
     )}; Path=/; Max-Age=${expirationTimeInSeconds};`;
-    const PERMISSION_COOKIE = `permission=${JSON.stringify({
-      permissionsResponse: '',
-    })}; Path=/; Max-Age=${expirationTimeInSeconds};`;
+    const PERMISSION_COOKIE = `permission=${JSON.stringify(data.permissions)}; Path=/; Max-Age=${expirationTimeInSeconds};`;
     const header = new Headers();
     header.append('Set-Cookie', TOKEN_COOKIE);
     header.append('Set-Cookie', USER_COOKIE);
