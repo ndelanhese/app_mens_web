@@ -82,7 +82,7 @@ export const saleFormSchema = z
         return;
       }
 
-      if (!!discountAmount && discountType) {
+      if (!discountAmount && discountType) {
         ctx.addIssue({
           code: 'custom',
           message: 'Informe também o valor do desconto',

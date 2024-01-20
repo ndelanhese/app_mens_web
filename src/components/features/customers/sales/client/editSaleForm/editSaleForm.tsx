@@ -29,7 +29,7 @@ import { Minus, Plus, Trash } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { parseCookies } from 'nookies';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { set, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   getCustomers,
@@ -104,6 +104,18 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     </StyledDiv>
   );
 
+  const installmentsLabel = useMemo(() => {
+    const installmentsCalculated = calculateInstallments(
+      sale?.final_value ?? 0,
+      12,
+    );
+    const currentInstallment =
+      installmentsCalculated[
+        (sale?.methods_of_payments[0].installment ?? 1) - 1
+      ];
+    return `${currentInstallment.installment}x - ${currentInstallment.amount}`;
+  }, [sale?.final_value, sale?.methods_of_payments]);
+
   const {
     register,
     handleSubmit,
@@ -116,8 +128,16 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
     defaultValues: {
       date: currentDateString(),
       status: 'completed',
-      discount_type: null,
-      installments: null,
+      discount_type: sale?.discount_type
+        ? {
+            value: sale.discount_type,
+            label: sale.discount_type === 'percentage' ? 'Porcentagem' : 'Fixo',
+          }
+        : null,
+      installments: {
+        label: installmentsLabel,
+        value: sale?.methods_of_payments[0].installment.toString() ?? '1',
+      },
     },
   });
 
@@ -633,17 +653,17 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         </DataTable>
       </div>
 
-      {discountType && (
+      {discountType && discountType.length > 0 && (
         <ControlledSelect
           label="Tipo de desconto"
           name="discount_type"
           control={control}
           errorMessage={errors.discount_type?.message}
+          defaultValue={sale?.discount_type}
           options={discountType}
           placeHolder="Selecione o tipo de desconto"
           searchLabel="Pesquisar tipo de desconto"
           emptyLabel="Sem resultados"
-          defaultValue={sale?.discount_type}
         />
       )}
       {discountType && discountTypeSelected && (
@@ -683,31 +703,32 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         readOnly
       />
 
-      {methodsOfPayments && memoizedMethodsOfPaymentsOptions && (
-        <ControlledSelect
-          label="Método de pagamento"
-          name="method_of_payment"
-          control={control}
-          errorMessage={errors.method_of_payment?.message}
-          options={memoizedMethodsOfPaymentsOptions}
-          defaultValue={sale?.methods_of_payments[0].method_id.toString()}
-          placeHolder="Selecione o método de pagamento"
-          searchLabel="Pesquisar método de pagamento"
-          emptyLabel="Sem resultados"
-          isRequired
-        />
-      )}
+      {methodsOfPayments &&
+        memoizedMethodsOfPaymentsOptions &&
+        memoizedMethodsOfPaymentsOptions.length > 0 && (
+          <ControlledSelect
+            label="Método de pagamento"
+            name="method_of_payment"
+            control={control}
+            errorMessage={errors.method_of_payment?.message}
+            options={memoizedMethodsOfPaymentsOptions}
+            defaultValue={sale?.methods_of_payments[0].method_id.toString()}
+            placeHolder="Selecione o método de pagamento"
+            searchLabel="Pesquisar método de pagamento"
+            emptyLabel="Sem resultados"
+            isRequired
+          />
+        )}
 
-      {memoizedInstallments && (
+      {memoizedInstallments && memoizedInstallments.length > 0 && (
         <ControlledSelect
           label="Parcelas"
           name="installments"
           control={control}
           errorMessage={errors.installments?.message}
           options={memoizedInstallments}
-          defaultValue={
-            sale?.methods_of_payments[0].installment.toString() ?? '1'
-          }
+          // defaultValue={installmentsLabel}
+          defaultValue={'8x - R$ 12,87'}
           placeHolder="Selecione o método de pagamento"
           searchLabel="Pesquisar método de pagamento"
           emptyLabel="Sem resultados"
