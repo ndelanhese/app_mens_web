@@ -67,7 +67,7 @@ export const CreateCategoryForm = ({ handleCloseModal }: CategoryFormProps) => {
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Criar categoria
+        Criar
       </Button>
     </FormGrid>
   );

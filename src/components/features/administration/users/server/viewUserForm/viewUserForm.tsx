@@ -27,6 +27,7 @@ export const ViewUserForm = ({ user }: UserData) => {
 
   return (
     <FormGrid>
+      <ControlledInput id="id" label="Código:" value={user?.id} readOnly />
       <ControlledInput
         id="name"
         label="Nome:"
@@ -43,28 +44,26 @@ export const ViewUserForm = ({ user }: UserData) => {
       />
 
       {roles && roles.length > 0 && (
-        <>
+        <div className="sm:col-start-1 sm:col-end-3">
           <h1 className="text-black-80 dark:text-white-80 ">Papéis</h1>
-          <div className="col-start-1 col-end-3">
-            <DataTable columns={columns} emptyMessage="Nenhum papel vinculado.">
-              {roles}
-            </DataTable>
-          </div>
-        </>
+
+          <DataTable columns={columns} emptyMessage="Nenhum papel vinculado.">
+            {roles}
+          </DataTable>
+        </div>
       )}
 
       {permissions && permissions.length > 0 && (
-        <>
+        <div className="sm:col-start-1 sm:col-end-3">
           <h1 className="text-black-80 dark:text-white-80 ">Permissões</h1>
-          <div className="col-start-1 col-end-3">
-            <DataTable
-              columns={columns}
-              emptyMessage="Nenhuma permissão vinculada."
-            >
-              {permissions}
-            </DataTable>
-          </div>
-        </>
+
+          <DataTable
+            columns={columns}
+            emptyMessage="Nenhuma permissão vinculada."
+          >
+            {permissions}
+          </DataTable>
+        </div>
       )}
     </FormGrid>
   );

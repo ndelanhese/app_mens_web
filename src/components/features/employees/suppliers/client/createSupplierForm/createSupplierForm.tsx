@@ -221,6 +221,7 @@ const CreateSupplierFormComponent = ({
         errorMessage={errors.cnpj?.message}
         placeholder="Ex. 12.345.678/9012-34"
         mask="99.999.999/9999-99"
+        inputMode="numeric"
       />
       <PostalCodeInput
         id="address.postal_code"
@@ -232,6 +233,7 @@ const CreateSupplierFormComponent = ({
         mask="99999-999"
         handleSearchCep={handleSearchCep}
         disabled={isLoadingPostalCode}
+        inputMode="numeric"
       />
       <ControlledInput
         id="address.address"
@@ -289,7 +291,7 @@ const CreateSupplierFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Criar novo fornecedor
+        Criar
       </Button>
     </form>
   );

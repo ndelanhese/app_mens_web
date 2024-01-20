@@ -226,6 +226,7 @@ const EditCustomerFormComponent = ({
             defaultValue={customer?.cpf}
             placeholder="Ex. 123.456.789-10"
             mask="999.999.999-99"
+            inputMode="numeric"
           />
           <MaskedInput
             id="rg"
@@ -235,6 +236,7 @@ const EditCustomerFormComponent = ({
             defaultValue={customer?.rg}
             placeholder="Ex. 12.345.678-9"
             mask="99.999.999-9"
+            inputMode="numeric"
           />
           <MaskedInput
             id="birth_date"
@@ -245,6 +247,7 @@ const EditCustomerFormComponent = ({
             defaultValue={customer?.birth_date}
             placeholder="Ex. 01/01/2000"
             mask="99/99/9999"
+            inputMode="numeric"
           />
           <MaskedInput
             id="phone"
@@ -255,6 +258,7 @@ const EditCustomerFormComponent = ({
             defaultValue={customer?.phone}
             placeholder="Ex. (11) 99999-9999"
             mask="(99) 99999-9999"
+            inputMode="tel"
           />
           <PostalCodeInput
             id="address.postal_code"
@@ -267,6 +271,7 @@ const EditCustomerFormComponent = ({
             handleSearchCep={handleSearchCep}
             disabled={isLoadingPostalCode}
             defaultValue={customer?.addresses?.[0]?.postal_code}
+            inputMode="numeric"
           />
 
           <ControlledInput
@@ -340,7 +345,7 @@ const EditCustomerFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Alterar cliente
+        Editar
       </Button>
     </FormGrid>
   );

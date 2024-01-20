@@ -347,7 +347,7 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
           type="submit"
           className="h-fit w-full sm:col-start-2 sm:mt-8"
         >
-          Editar Usuário
+          Editar
         </Button>
       </div>
     </FormGrid>

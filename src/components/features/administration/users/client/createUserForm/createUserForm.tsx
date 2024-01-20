@@ -197,7 +197,7 @@ export const CreateUserForm = ({ handleCloseModal }: CreateUserFormProps) => {
           type="submit"
           className="h-fit w-full sm:col-start-2 sm:mt-8"
         >
-          Criar Usuário
+          Criar
         </Button>
       </div>
     </FormGrid>

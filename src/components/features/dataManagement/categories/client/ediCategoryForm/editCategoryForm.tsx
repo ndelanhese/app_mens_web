@@ -78,7 +78,7 @@ const EditCategoryFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Alterar categoria
+        Editar
       </Button>
     </form>
   );

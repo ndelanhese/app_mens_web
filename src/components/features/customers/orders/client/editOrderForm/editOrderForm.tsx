@@ -412,6 +412,7 @@ const EditOrderFormComponent = ({
         mask="99/99/9999"
         defaultValue={order?.date}
         isRequired
+        inputMode="numeric"
       />
 
       {status && statusSelected && (
@@ -474,7 +475,7 @@ const EditOrderFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Atualizar pedido
+        Editar
       </Button>
     </FormGrid>
   );

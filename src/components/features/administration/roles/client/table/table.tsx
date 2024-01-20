@@ -9,7 +9,7 @@ import {
   TableColumn,
 } from '@components/shared/table/table.types';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
-import { useToast } from '@components/ui/shadcn/toast/use-toast';
+import { toast, useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -79,14 +79,21 @@ export const RolesTable = ({ rows }: RolesTableProps) => {
 
   const handleRowClick = useCallback(
     async (row: Role, action: TableActionCallbackOptions) => {
-      const { id } = row;
+      const { id, name } = row;
+
       setSelectRoles(row);
 
-      if (action === 'delete') {
+      if (action === 'delete' && name !== 'superadmin') {
         await handleDeleteItem(id);
+      } else {
+        toast({
+          title: 'Ação indisponível',
+          description: 'Não é possível deletar este papel',
+          variant: 'destructive',
+        });
       }
     },
-    [handleDeleteItem],
+    [handleDeleteItem, toast],
   );
 
   const NEW_USER_TRIGGER = (

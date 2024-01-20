@@ -390,7 +390,7 @@ const EditProductFormComponent = ({
         type="submit"
         className="h-fit self-end sm:col-start-2"
       >
-        Alterar Produto
+        Editar
       </Button>
     </FormGrid>
   );

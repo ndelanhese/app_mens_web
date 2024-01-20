@@ -69,8 +69,8 @@ const ViewOrderFormComponent = ({ order }: OrderFormProps) => {
         value={`${order?.employee.name} - ${order?.employee.cpf}`}
       />
       <h1 className="text-black-80 dark:text-white-80 ">Produtos</h1>
-      <div className="col-start-1 col-end-3 h-px bg-neutral-600 dark:bg-black-80" />
-      <div className="col-start-1 col-end-3">
+      <div className="h-px bg-neutral-600 dark:bg-black-80 sm:col-start-1 sm:col-end-3" />
+      <div className="sm:col-start-1 sm:col-end-3">
         <DataTable
           columns={columns}
           emptyMessage="Nenhum produto para essa promoção."

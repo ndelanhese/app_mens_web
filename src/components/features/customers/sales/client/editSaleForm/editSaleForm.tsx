@@ -589,6 +589,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         mask="99/99/9999"
         defaultValue={sale?.date}
         isRequired
+        inputMode="numeric"
       />
 
       {memorizedUsersOptions && employeeSelected && (
@@ -609,7 +610,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
         />
       )}
 
-      <div className="col-start-1 col-end-2 flex flex-col items-center justify-between sm:col-end-3 sm:flex-row">
+      <div className="flex flex-col items-center justify-between sm:col-start-1 sm:col-end-3 sm:flex-row">
         <h1 className="mb-2 text-black-80 dark:text-white-80 sm:mb-0">
           Produtos
         </h1>
@@ -621,9 +622,9 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           }}
         />
       </div>
-      <div className="col-start-1 col-end-2 h-px bg-neutral-600 dark:bg-black-80 sm:col-end-3" />
+      <div className="h-px bg-neutral-600 dark:bg-black-80 sm:col-start-1 sm:col-end-3" />
 
-      <div className="col-start-1 col-end-2 sm:col-end-3">
+      <div className="sm:col-start-1  sm:col-end-3">
         <DataTable
           columns={columns}
           emptyMessage="Nenhum produto para essa promoção."
@@ -658,6 +659,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
           prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
           defaultValue={sale?.formatted_discount}
+          inputMode="numeric"
         />
       )}
 

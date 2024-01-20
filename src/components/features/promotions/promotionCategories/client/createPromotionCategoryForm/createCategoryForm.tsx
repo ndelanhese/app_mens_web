@@ -71,7 +71,7 @@ const CreateCategoryFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Criar categoria
+        Criar
       </Button>
     </form>
   );

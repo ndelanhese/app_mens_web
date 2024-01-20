@@ -367,6 +367,7 @@ const EditPromotionFormComponent = ({
         placeholder="Ex. 10/01/2019"
         mask="99/99/9999"
         isRequired
+        inputMode="numeric"
       />
       <MaskedInput
         id="final_date"
@@ -376,6 +377,7 @@ const EditPromotionFormComponent = ({
         placeholder="Ex. 11/01/2019"
         mask="99/99/9999"
         isRequired
+        inputMode="numeric"
       />
       {status && (
         <ControlledSelect
@@ -420,6 +422,7 @@ const EditPromotionFormComponent = ({
           mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
           prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
           isRequired
+          inputMode="numeric"
         />
       )}
       <div className="col-start-1 col-end-2 flex flex-col items-center justify-between sm:col-end-3 sm:flex-row">
@@ -448,7 +451,7 @@ const EditPromotionFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Alterar promoção
+        Editar
       </Button>
     </FormGrid>
   );

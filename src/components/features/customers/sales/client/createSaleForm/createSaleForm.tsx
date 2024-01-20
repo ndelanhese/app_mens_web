@@ -524,6 +524,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         placeholder="Ex. 10/01/2019"
         mask="99/99/9999"
         isRequired
+        inputMode="numeric"
       />
 
       <ControlledSelect
@@ -586,6 +587,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
           disabled={!discountTypeSelected}
           mask={discountTypeSelected === 'percentage' ? 'percentage' : 'money'}
           prefix={discountTypeSelected === 'fixed' ? 'R$' : undefined}
+          inputMode="numeric"
         />
       )}
 
@@ -661,7 +663,7 @@ Neste ponto, será a sessão de pagamento, no pagamento o usuário seleciona o t
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Criar pedido
+        Criar
       </Button>
     </FormGrid>
   );

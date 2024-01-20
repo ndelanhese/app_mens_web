@@ -213,6 +213,7 @@ const CreateCustomerFormComponent = ({
         errorMessage={errors.cpf?.message}
         placeholder="Ex. 123.456.789-10"
         mask="999.999.999-99"
+        inputMode="numeric"
       />
       <MaskedInput
         id="rg"
@@ -221,6 +222,7 @@ const CreateCustomerFormComponent = ({
         errorMessage={errors.rg?.message}
         placeholder="Ex. 12.345.678-9"
         mask="99.999.999-9"
+        inputMode="numeric"
       />
       <MaskedInput
         id="birth_date"
@@ -230,6 +232,7 @@ const CreateCustomerFormComponent = ({
         errorMessage={errors.birth_date?.message}
         placeholder="Ex. 01/01/2000"
         mask="99/99/9999"
+        inputMode="numeric"
       />
       <MaskedInput
         id="phone"
@@ -239,6 +242,7 @@ const CreateCustomerFormComponent = ({
         errorMessage={errors.phone?.message}
         placeholder="Ex. (11) 99999-9999"
         mask="(99) 99999-9999"
+        inputMode="tel"
       />
       <PostalCodeInput
         id="address.postal_code"
@@ -250,6 +254,7 @@ const CreateCustomerFormComponent = ({
         mask="99999-999"
         handleSearchCep={handleSearchCep}
         disabled={isLoadingPostalCode}
+        inputMode="numeric"
       />
       <ControlledInput
         id="address.address"
@@ -309,7 +314,7 @@ const CreateCustomerFormComponent = ({
         type="submit"
         className="sm:col-start-2 sm:h-fit sm:self-end"
       >
-        Criar novo cliente
+        Criar
       </Button>
     </FormGrid>
   );

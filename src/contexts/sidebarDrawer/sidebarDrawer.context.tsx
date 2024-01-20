@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useCallback, useMemo, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import {
   SidebarDrawerContextData,
@@ -14,8 +20,14 @@ export const SidebarDrawerContext = createContext<SidebarDrawerContextData>(
 export const SidebarDrawerProvider = ({
   children,
 }: SidebarDrawerProviderProps) => {
-  const isMobileWidth = window?.innerWidth < 768;
-  const [open, setOpen] = useState<boolean>(!isMobileWidth);
+  const [open, setOpen] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (window) {
+      const isMobileWidth = window?.innerWidth < 768;
+      isMobileWidth && setOpen(false);
+    }
+  }, []);
 
   const handleToggleSidebar = useCallback(() => {
     setOpen(open => !open);

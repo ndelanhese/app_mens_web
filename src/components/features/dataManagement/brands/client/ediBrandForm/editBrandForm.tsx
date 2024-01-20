@@ -75,7 +75,7 @@ export const EditBrandForm = ({
         isRequired
       />
       <Button disabled={isSubmitting} type="submit" className="sm:col-start-2">
-        Alterar
+        Editar
       </Button>
     </FormGrid>
   );

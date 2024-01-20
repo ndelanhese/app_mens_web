@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentType, FC, InputHTMLAttributes, ReactNode } from 'react';
+import { FC, InputHTMLAttributes } from 'react';
 import { FieldValue, FieldValues, UseFormRegister } from 'react-hook-form';
 import { tv, type VariantProps } from 'tailwind-variants';
 

@@ -382,7 +382,7 @@ const CreateProductFormComponent = ({ handleCloseModal }: ProductFormProps) => {
       )}
 
       <Button disabled={isSubmitting} type="submit" className="sm:col-start-2">
-        Criar Produto
+        Criar
       </Button>
     </FormGrid>
   );

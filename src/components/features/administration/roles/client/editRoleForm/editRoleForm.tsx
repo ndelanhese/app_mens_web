@@ -174,13 +174,15 @@ export const EditRoleForm = ({ role, handleCloseModal }: EditRoleFormProps) => {
           );
         })}
 
-      <Button
-        disabled={isSubmitting}
-        type="submit"
-        className="sm:col-start-2 sm:self-end"
-      >
-        Salvar
-      </Button>
+      {role?.name !== 'superadmin' && (
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          className="sm:col-start-2 sm:self-end"
+        >
+          Salvar
+        </Button>
+      )}
     </FormGrid>
   );
 };
