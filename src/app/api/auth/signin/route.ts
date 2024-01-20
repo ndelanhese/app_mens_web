@@ -1,8 +1,21 @@
 import { api } from '@axios';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 
-import { signInBodySchema } from './route.schema';
-import { PermissionsResponse } from './route.types';
+const signInBodySchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+
+type Permission = {
+  id: number;
+  name: string;
+  description: string;
+};
+
+type PermissionsResponse = {
+  data: Array<Permission>;
+};
 
 export async function POST(request: NextRequest) {
   try {
