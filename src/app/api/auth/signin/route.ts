@@ -25,11 +25,11 @@ export async function POST(request: Request) {
     const USER_COOKIE = `user=${JSON.stringify(
       data.user_data,
     )}; Path=/; Max-Age=${expirationTimeInSeconds};`;
-    const PERMISSION_COOKIE = `permission=${JSON.stringify(data.permissions)}; Path=/; Max-Age=${expirationTimeInSeconds};`;
+    // const PERMISSION_COOKIE = `permission=${JSON.stringify(data.permissions)}; Path=/; Max-Age=${expirationTimeInSeconds};`;
     const header = new Headers();
     header.append('Set-Cookie', TOKEN_COOKIE);
     header.append('Set-Cookie', USER_COOKIE);
-    header.append('Set-Cookie', PERMISSION_COOKIE);
+    // header.append('Set-Cookie', PERMISSION_COOKIE);
     return Response.json(
       { message: 'Login realizado com sucesso!' },
       {
