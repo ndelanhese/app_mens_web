@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { parseCookies } from 'nookies';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 import { SidebarLink } from './sidebarLink';
 
