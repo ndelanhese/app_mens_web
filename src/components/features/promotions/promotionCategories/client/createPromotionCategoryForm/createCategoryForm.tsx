@@ -61,6 +61,7 @@ const CreateCategoryFormComponent = ({
       <ControlledInput
         id="name"
         label="Categoria"
+        placeholder="Categoria"
         register={register}
         errorMessage={errors.name?.message}
         isRequired

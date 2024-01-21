@@ -461,9 +461,12 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
       memoizedTotalValue &&
       watch('discount_amount')
     ) {
+      const replacedDiscountAmount = watch('discount_amount')
+        ?.toString()
+        ?.replaceAll('%', '');
       return (
         memoizedTotalValue -
-        (memoizedTotalValue * (watch('discount_amount') ?? 1)) / 100
+        (memoizedTotalValue * (Number(replacedDiscountAmount) ?? 1)) / 100
       );
     }
     if (memoizedTotalValue) {
