@@ -81,7 +81,7 @@ export function Table<T>({
     onColumnVisibilityChange: setColumnVisibility,
     initialState: {
       pagination: {
-        pageSize: 10,
+        pageSize: 9,
       },
     },
     state: {

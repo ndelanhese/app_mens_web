@@ -64,9 +64,9 @@ const CreateCustomerFormComponent = ({
   const handleSelectState = useCallback(async () => {
     const state = watch('address.state');
     if (state) {
+      setValue('address.city', null);
       const response = await getCities(state.value);
       response && setCities(convertCitiesToComboboxOptions(response));
-      setValue('address.city', null);
     }
   }, [setValue, watch]);
 
@@ -76,8 +76,8 @@ const CreateCustomerFormComponent = ({
 
   useEffect(() => {
     if (watch('address.state')) {
-      handleSelectState();
       setValue('address.city', null);
+      handleSelectState();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSelectState, watch('address.state')]);
