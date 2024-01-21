@@ -56,7 +56,7 @@ export const MaskedInput: FC<InputVariants> = ({
             maskPlaceholder={null}
             maskChar={null}
             className={twMerge(
-              'inline-flex items-center justify-between self-stretch rounded border border-black-10 px-4 py-3 font-re text-black-100 transition-colors placeholder:text-md placeholder:font-light placeholder:text-black-20 focus:border-black-40 focus:outline-none disabled:cursor-not-allowed data-[invalid=true]:border-red-500 dark:border-white-10 dark:bg-zinc-950 dark:text-white-100 dark:placeholder:text-white-20 dark:focus:border-white-40',
+              'inline-flex h-full items-center justify-between self-stretch rounded border border-black-10 px-4 py-3 font-re text-black-100 transition-colors placeholder:text-md placeholder:font-light placeholder:text-black-20 focus:border-black-40 focus:outline-none disabled:cursor-not-allowed data-[invalid=true]:border-red-500 dark:border-white-10 dark:bg-zinc-950 dark:text-white-100 dark:placeholder:text-white-20 dark:focus:border-white-40',
               className,
             )}
           />
