@@ -357,9 +357,11 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
   }, []);
 
   const memoizedTotalValue = useMemo(() => {
-    return products?.reduce(
-      (accumulator, current) => accumulator + current.value,
-      0,
+    return (
+      products?.reduce(
+        (accumulator, current) => accumulator + current.value,
+        0,
+      ) ?? 0
     );
   }, [products]);
 
@@ -378,7 +380,17 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
       const formattedDiscountAmount = convertMoneyStringToNumber(
         String(watch('discount_amount')) ?? '0',
       );
-      return memoizedTotalValue - formattedDiscountAmount;
+      const value = memoizedTotalValue - formattedDiscountAmount;
+
+      const finalAmount = value >= 0 ? value : 0;
+      setValue(
+        'final_amount',
+        finalAmount.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        }),
+      );
+      return finalAmount;
     }
     if (
       discountTypeSelected === 'percentage' &&
@@ -396,7 +408,7 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
     if (memoizedTotalValue) {
       return memoizedTotalValue;
     }
-    return undefined;
+    return 0;
   }, [discountTypeSelected, memoizedTotalValue, watch('discount_amount')]);
 
   useEffect(() => {
@@ -600,7 +612,10 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         placeholder="Ex. R$ 19,90"
         register={register}
         errorMessage={errors.total_amount?.message}
-        defaultValue={formatMoneyByCurrencySymbol(memoizedTotalValue)}
+        defaultValue={memoizedTotalValue?.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        })}
         readOnly
       />
 
@@ -610,7 +625,10 @@ const CreateSaleFormComponent = ({ handleCloseModal }: SaleFormProps) => {
         placeholder="Ex. R$ 19,90"
         register={register}
         errorMessage={errors.final_amount?.message}
-        defaultValue={formatMoneyByCurrencySymbol(memoizedFinalValue)}
+        defaultValue={memoizedFinalValue.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        })}
         readOnly
       />
 

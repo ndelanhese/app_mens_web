@@ -40,7 +40,7 @@ const ViewSaleFormComponent = ({ sale }: SaleFormProps) => {
       sale?.final_value ?? 0,
       method?.installment,
     );
-    return `${payment?.installment}x - ${payment?.amount}`;
+    return `${payment?.installment ?? 1}x - ${payment?.amount ?? 'R$ 0,00'}`;
   }, [sale?.final_value, sale?.methods_of_payments]);
 
   return (
