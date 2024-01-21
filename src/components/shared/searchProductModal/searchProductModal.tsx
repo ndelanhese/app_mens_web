@@ -185,7 +185,7 @@ export const SearchProductModal = ({
       }
       description={description ?? 'Encontre um produto já cadastrado'}
       title={title ?? 'Selecionar produto'}
-      className="w-screen sm:min-w-fit"
+      className="w-screen overflow-y-auto sm:h-[50rem] sm:max-w-fit"
     />
   );
 };
