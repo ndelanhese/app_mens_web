@@ -64,7 +64,7 @@ export function Table<T>({
   permissionPrefix,
 }: UserTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([
-    { id: 'id', desc: true },
+    { id: 'Código', desc: true },
   ]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -81,7 +81,7 @@ export function Table<T>({
     onColumnVisibilityChange: setColumnVisibility,
     initialState: {
       pagination: {
-        pageSize: 10,
+        pageSize: 9,
       },
     },
     state: {

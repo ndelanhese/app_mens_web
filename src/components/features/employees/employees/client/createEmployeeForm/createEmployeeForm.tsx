@@ -65,9 +65,9 @@ const CreateEmployeeFormComponent = ({
     const state = watch('address.state');
     if (state) {
       setIsLoadingCities(true);
+      setValue('address.city', null);
       const response = await getCities(state.value);
       response && setCities(convertCitiesToComboboxOptions(response));
-      setValue('address.city', null);
       setIsLoadingCities(false);
     }
   }, [setValue, watch]);
@@ -78,8 +78,8 @@ const CreateEmployeeFormComponent = ({
 
   useEffect(() => {
     if (watch('address.state')) {
-      handleSelectState();
       setValue('address.city', null);
+      handleSelectState();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleSelectState, watch('address.state')]);
