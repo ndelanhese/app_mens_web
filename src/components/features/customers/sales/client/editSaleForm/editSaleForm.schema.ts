@@ -38,6 +38,7 @@ export const saleFormSchema = z
           ?.replaceAll(',', '.')
           ?.replaceAll('%', '')
           ?.replaceAll('R$', '')
+          ?.replaceAll('%', '')
           ?.replaceAll(' ', '');
         return value ? Number(replacedValue) : null;
       }),
