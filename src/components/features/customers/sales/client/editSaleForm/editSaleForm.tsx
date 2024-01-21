@@ -433,9 +433,11 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
   }, [sale?.employee, memorizedUsersOptions]);
 
   const memoizedTotalValue = useMemo(() => {
-    return products?.reduce(
-      (accumulator, current) => accumulator + current.value,
-      0,
+    return (
+      products?.reduce(
+        (accumulator, current) => accumulator + current.value,
+        0,
+      ) ?? 0
     );
   }, [products]);
 
@@ -454,7 +456,17 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
       const formattedDiscountAmount = convertMoneyStringToNumber(
         String(watch('discount_amount')) ?? '0',
       );
-      return memoizedTotalValue - formattedDiscountAmount;
+      const value = memoizedTotalValue - formattedDiscountAmount;
+
+      const finalAmount = value >= 0 ? value : 0;
+      setValue(
+        'final_amount',
+        finalAmount.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        }),
+      );
+      return finalAmount;
     }
     if (
       discountTypeSelected === 'percentage' &&
@@ -730,8 +742,7 @@ const EditSaleFormComponent = ({ handleCloseModal, sale }: SaleFormProps) => {
           control={control}
           errorMessage={errors.installments?.message}
           options={memoizedInstallments}
-          // defaultValue={installmentsLabel}
-          defaultValue={'8x - R$ 12,87'}
+          defaultValue={installmentsLabel}
           placeHolder="Selecione o método de pagamento"
           searchLabel="Pesquisar método de pagamento"
           emptyLabel="Sem resultados"
