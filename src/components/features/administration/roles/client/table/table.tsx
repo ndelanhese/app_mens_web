@@ -1,7 +1,6 @@
 'use client';
 
 import { api } from '@axios';
-import { TableSkeleton } from '@components/shared/skeleton/tableSkeleton/tableSkeleton';
 import { Table } from '@components/shared/table/table';
 import {
   RefModalProps,
@@ -9,7 +8,7 @@ import {
   TableColumn,
 } from '@components/shared/table/table.types';
 import { TableColumnHeader } from '@components/shared/table/tableColumnHeader';
-import { toast, useToast } from '@components/ui/shadcn/toast/use-toast';
+import { useToast } from '@components/ui/shadcn/toast/use-toast';
 import { StyledDiv } from '@components/ui/styledDiv/styledDiv';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -83,14 +82,16 @@ export const RolesTable = ({ rows }: RolesTableProps) => {
 
       setSelectRoles(row);
 
-      if (action === 'delete' && name !== 'superadmin') {
-        await handleDeleteItem(id);
-      } else {
-        toast({
-          title: 'Ação indisponível',
-          description: 'Não é possível deletar este papel',
-          variant: 'destructive',
-        });
+      if (action === 'delete') {
+        if (name !== 'superadmin') {
+          await handleDeleteItem(id);
+        } else {
+          toast({
+            title: 'Ação indisponível',
+            description: 'Não é possível deletar este papel',
+            variant: 'destructive',
+          });
+        }
       }
     },
     [handleDeleteItem, toast],
