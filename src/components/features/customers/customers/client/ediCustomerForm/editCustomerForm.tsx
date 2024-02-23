@@ -64,6 +64,14 @@ const EditCustomerFormComponent = ({
     },
   });
 
+  useEffect(() => {
+    const foundedState = states?.find(
+      state => state.label === customer?.addresses[0].state,
+    );
+    if (!foundedState) return;
+    setValue('address.city', foundedState);
+  }, [customer?.addresses, setValue, states]);
+
   const stateResponse = useCallback(async () => {
     const response = await getStates();
     setStates(response);
@@ -337,24 +345,21 @@ const EditCustomerFormComponent = ({
               disabled={isLoadingPostalCode}
             />
           )}
-          {memorizedStates &&
-            memorizedStates.length > 0 &&
-            memorizedCities &&
-            memorizedCities.length > 0 && (
-              <ControlledSelect
-                label="Cidade"
-                name="address.city"
-                control={control}
-                isRequired
-                errorMessage={errors.address?.city?.message}
-                defaultValue={customer?.addresses?.[0]?.city}
-                options={memorizedCities}
-                placeHolder="Selecione uma cidade"
-                searchLabel="Pesquisar cidade"
-                emptyLabel="Sem cidades cadastrados"
-                disabled={isLoadingPostalCode}
-              />
-            )}
+          {memorizedStates.length !== 0 && memorizedCities.length !== 0 && (
+            <ControlledSelect
+              label="Cidade"
+              name="address.city"
+              control={control}
+              isRequired
+              errorMessage={errors.address?.city?.message}
+              defaultValue={customer?.addresses?.[0]?.city}
+              options={memorizedCities}
+              placeHolder="Selecione uma cidade"
+              searchLabel="Pesquisar cidade"
+              emptyLabel="Sem cidades cadastrados"
+              disabled={isLoadingPostalCode}
+            />
+          )}
         </>
       )}
       <Button
