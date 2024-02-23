@@ -24,7 +24,7 @@ const SignIn = () => {
           Loja Men&apos;s Modas
         </h1>
         <p className="text-md dark:text-white-40">
-          Entre com seu usuário e senha
+          Entre com seu e-mail e senha
         </p>
       </div>
       <SigninForm />
