@@ -53,7 +53,23 @@ const EditEmployeeFormComponent = ({
     formState: { errors, isSubmitting },
   } = useForm<EmployeeFormSchema>({
     resolver: zodResolver(employeeFormSchema),
+    defaultValues: {
+      address: {
+        city: {
+          value: convertStringToSlug(employee?.addresses[0].city ?? ''),
+          label: employee?.addresses[0].city ?? '',
+        },
+      },
+    },
   });
+
+  useEffect(() => {
+    const foundedState = states?.find(
+      state => state.label === employee?.addresses[0].state,
+    );
+    if (!foundedState) return;
+    setValue('address.city', foundedState);
+  }, [employee?.addresses, setValue, states]);
 
   const stateResponse = useCallback(async () => {
     const response = await getStates();
