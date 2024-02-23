@@ -254,21 +254,22 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
       newItemDialogTitle={newItemModal?.newItemDialogTitle}
       newItemDialogRef={newItemModal?.newItemDialogRef}
     >
-      {memorizedEmployeesOptions && (
-        <ControlledSelect
-          label="Funcionário"
-          name="employee"
-          control={control}
-          defaultValue={user?.employee?.id.toString()}
-          errorMessage={errors.employee?.message}
-          options={memorizedEmployeesOptions}
-          placeHolder="Selecione um Funcionário"
-          searchLabel="Pesquisar funcionário"
-          emptyLabel="Sem funcionários cadastrados"
-          isRequired
-          menuPosition="bottom"
-        />
-      )}
+      {memorizedEmployeesOptions &&
+        memorizedPermissionsOptions.length !== 0 && (
+          <ControlledSelect
+            label="Funcionário"
+            name="employee"
+            control={control}
+            defaultValue={user?.employee?.id.toString()}
+            errorMessage={errors.employee?.message}
+            options={memorizedEmployeesOptions}
+            placeHolder="Selecione um Funcionário"
+            searchLabel="Pesquisar funcionário"
+            emptyLabel="Sem funcionários cadastrados"
+            isRequired
+            menuPosition="bottom"
+          />
+        )}
 
       <ControlledInput
         id="user"
@@ -303,7 +304,7 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
         isRequired
       />
 
-      {memorizedRolesOptions && (
+      {memorizedRolesOptions && memorizedRolesOptions.length !== 0 && (
         <ControlledSelect
           label="Papéis"
           name="roles"
@@ -321,25 +322,26 @@ export const EditUserForm = ({ user, handleCloseModal }: EditUserFormProps) => {
         />
       )}
 
-      {memorizedPermissionsOptions && (
-        <ControlledSelect
-          label="Permissões"
-          name="permissions"
-          control={control}
-          defaultValue={memoizedUserPermissions}
-          errorMessage={errors.permissions?.message}
-          options={
-            memorizedPermissionsOptions as SelectOption[] &
-              SelectGroupedOption[]
-          }
-          formatGroupLabel={formatGroupLabel}
-          placeHolder="Selecione uma Permissão"
-          searchLabel="Pesquisar Permissões"
-          emptyLabel="Sem permissões cadastrados"
-          isMulti
-          menuPosition="top"
-        />
-      )}
+      {memorizedPermissionsOptions &&
+        memorizedPermissionsOptions.length !== 0 && (
+          <ControlledSelect
+            label="Permissões"
+            name="permissions"
+            control={control}
+            defaultValue={memoizedUserPermissions}
+            errorMessage={errors.permissions?.message}
+            options={
+              memorizedPermissionsOptions as SelectOption[] &
+                SelectGroupedOption[]
+            }
+            formatGroupLabel={formatGroupLabel}
+            placeHolder="Selecione uma Permissão"
+            searchLabel="Pesquisar Permissões"
+            emptyLabel="Sem permissões cadastrados"
+            isMulti
+            menuPosition="top"
+          />
+        )}
 
       <div className="flex">
         <Button
