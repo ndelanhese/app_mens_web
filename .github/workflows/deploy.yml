@@ -3,23 +3,26 @@ on:
   push:
     branches:
       - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v3
 
     - name: Setup SSH
       uses: webfactory/ssh-agent@v0.9
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+  - name: Clean up Docker system
+    run: |
+        ssh ubuntu@${{ secrets.VM_SSH_IP }} 'docker system prune -f'
+
     - name: Update VM and build
       run: |
         ssh ubuntu@${{ secrets.VM_SSH_IP }} 'cd /var/www/app_mens_web/ && git pull && make build latest'
 
-     - name: Clean up Docker system
-      run: |
-        ssh ubuntu@${{ secrets.VM_SSH_IP }} 'docker system prune -f'
+    
